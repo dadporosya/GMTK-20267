@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 14c56a72e02195d40a9b1c872fcbcc98
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 300643
+  packageName: VolFx - VFX Toolkit (Post Processing, Shaders, Timeline Tools)
+  packageVersion: 2.11.6
+  assetPath: Assets/VolFx/Readme_ScreenFx.pdf
+  uploadId: 910756
