@@ -61,10 +61,12 @@ Material:
     - _Contrast_Amount: 0
     - _Disslove: 1
     - _DissloveOutlinesthickness: 0.05
-    - _DissloveScale: 500
+    - _DissloveScale: 118
     - _DissloveTwirl: 0
-    - _DissloveTwirlStrength: 16.6
-    - _Dissolve_amount: 0.309
+    - _DissloveTwirlStrength: 20
+    - _DissolvePixelation: 23.6
+    - _DissolvePixelationShape: 1
+    - _Dissolve_amount: 0
     - _Distortion: 0
     - _DistortionScale: 10
     - _DistortionStrength: 1
@@ -79,7 +81,7 @@ Material:
     - _HueShiftAnimationSpeed: 1
     - _Negative: 0
     - _Negative_Amount: 0
-    - _OffsetTilling: 1
+    - _OffsetTilling: 0
     - _Outline: 0
     - _Outline_Thickness: 0
     - _Pixel_Resolution: -0.59

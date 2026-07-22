@@ -187,4 +187,11 @@ public class Talkable : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Talk();
+        }
+    }
 }
