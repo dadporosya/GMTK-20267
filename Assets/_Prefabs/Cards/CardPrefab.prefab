@@ -931,8 +931,11 @@ MonoBehaviour:
   countdown: 0
   titleText: {fileID: 9190375845582017650}
   descriptionText: {fileID: 5589938961515234598}
+  countDownText: {fileID: 0}
   frontFace: {fileID: 8397760802324866212}
   backFace: {fileID: 2832768547768142534}
+  dataParent: {fileID: 0}
+  activateAnimController: {fileID: 0}
   pickCollider: {fileID: 0}
   useFaceToggling: 0
   faceRotationOffset: {x: 0, y: 180, z: 0}
@@ -944,6 +947,14 @@ MonoBehaviour:
   hoverTweenDuration: 0.12
   placeDuration: 0.2
   placeEase: 9
+  masterMat: {fileID: 0}
+  burnFlipYAngle: 180
+  burnFlipDuration: 0.35
+  burnFlipEase: 10
+  burnDissolveDelay: 0.05
+  burnDissolveDuration: 0.8
+  burnDissolveEase: 5
+  burnDestroyDelay: 0
   handManager: {fileID: 0}
 --- !u!114 &3753440124336302830
 MonoBehaviour:
@@ -958,21 +969,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SquishAnimation
   disable: 0
-  type: 0
+  type: 12
   loop: 0
   playOnStart: 0
-  returningEasing: 0
-  returningTime: 0.3
+  returningEasing: 30
+  returningTime: 0.15
   customInitialState: 0
   returnToTheInittialState: 1
   onAnimationEnd:
     m_PersistentCalls:
       m_Calls: []
   animationSpeed: 1
-  squishes: []
+  squishes:
+  - {x: 0.1, y: -0.1, z: 0}
   durations: []
-  defaultDuration: 0.3
-  ease: 0
+  defaultDuration: 0.05
+  ease: 5
   initialState: {x: 1, y: 1, z: 1}
 --- !u!114 &1860111264258832675
 MonoBehaviour:
@@ -987,7 +999,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloatingAnimation
   disable: 0
-  type: 0
+  type: 12
   loop: 0
   playOnStart: 0
   returningEasing: 30
