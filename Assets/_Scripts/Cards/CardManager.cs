@@ -48,6 +48,12 @@ public class CardManager : MonoBehaviour
         {
             SpawnCard(pfbTest, card);
         }
+
+        foreach (var table in GameObject.FindGameObjectsWithTag("Table"))
+        {
+            if (!table.TryGetComponent(out PlacingArea placingArea)) return;
+            if (!targetTables.Contains(placingArea)) targetTables.Add(placingArea);
+        }
         
         RoundStart();
     }
@@ -122,7 +128,9 @@ public class CardManager : MonoBehaviour
     public void OnCardPlaced(Card placedCard)
     {
         currentPlacedCard = placedCard;
-
+        
+        h.Out("curernt placed card", placedCard);
+        
         foreach (Card card in CardsOnTargetTables())
         {
             if (!card || card == placedCard) continue;   // don't self-trigger the placed card
