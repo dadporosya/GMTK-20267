@@ -888,6 +888,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3520416763016050792}
   - component: {fileID: 6556123085242673732}
+  - component: {fileID: 3753440124336302830}
+  - component: {fileID: 1860111264258832675}
   m_Layer: 0
   m_Name: CardPrefab
   m_TagString: Untagged
@@ -943,6 +945,68 @@ MonoBehaviour:
   placeDuration: 0.2
   placeEase: 9
   handManager: {fileID: 0}
+--- !u!114 &3753440124336302830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8042637533860296657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d96af79463325459fac65a8bc39121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SquishAnimation
+  disable: 0
+  type: 0
+  loop: 0
+  playOnStart: 0
+  returningEasing: 0
+  returningTime: 0.3
+  customInitialState: 0
+  returnToTheInittialState: 1
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  squishes: []
+  durations: []
+  defaultDuration: 0.3
+  ease: 0
+  initialState: {x: 1, y: 1, z: 1}
+--- !u!114 &1860111264258832675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8042637533860296657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd533f4306c8b34bba6eb8f7199b8c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloatingAnimation
+  disable: 0
+  type: 0
+  loop: 0
+  playOnStart: 0
+  returningEasing: 30
+  returningTime: 0.15
+  customInitialState: 0
+  returnToTheInittialState: 1
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  directions:
+  - {x: 0, y: 0, z: -0.67}
+  distances: []
+  durations: []
+  defaultDuration: 0.05
+  sharpness: 1
+  ease: 5
+  randomPhase: 0
+  initialState: {x: 0, y: 0, z: 0}
 --- !u!1 &8397760802324866212
 GameObject:
   m_ObjectHideFlags: 0

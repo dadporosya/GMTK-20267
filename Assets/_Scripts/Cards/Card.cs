@@ -142,9 +142,11 @@ public class Card : MonoBehaviour
         titleText.text = cardData.GenerateTitle();
         descriptionText.text = cardData.GenerateDescription();
         countDownText.text = cardData.countdown.ToString();
-        
-        activateAnimController // TASK all animation bases for this controller, matching controller type
-        
+
+        // Play the activate animation. AnimationControllerBase already gathered, in its Awake,
+        // every AnimationBase under it whose type matches this controller's type (targetTypes),
+        // so PlayAnimations() runs exactly those matching animation bases.
+        if (activateAnimController) StartCoroutine(activateAnimController.PlayAnimations());
     }
     
     
@@ -253,5 +255,63 @@ public class Card : MonoBehaviour
         TableManager.Instance.AddScore(vp);
         TextAlertManager.Instance.CreateDamageAlert(vp, transform);
 
+    }
+
+    /// <summary>
+    /// Plays the burn animation and destroys the card at the end:
+    ///   1. flip the card 180° around its local Y,
+    ///   2. hide the data parent and the front mesh,
+    ///   3. drive the MasterMat3d dissolve from 0 up to 1,
+    ///   4. destroy the GameObject.
+    /// All timings/eases are the "Burn animation" inspector fields. Idempotent: a second call
+    /// while already burning is ignored. <paramref name="onComplete"/> (optional) runs just
+    /// before the card is destroyed.
+    /// </summary>
+    public void Burn(System.Action onComplete = null)
+    {
+        if (burning) return;
+        burning = true;
+
+        // The card is leaving play: stop it self-driving toward the hand pose, kill any
+        // in-flight tweens and make sure it can no longer be picked up or dragged.
+        state = CardState.OnTable;
+        Lock();
+        if (scaleTween.isAlive) scaleTween.Stop();
+        if (placeTween.isAlive) placeTween.Stop();
+        if (handManager) handManager.RemoveCard(this);
+
+        // Enable the dissolve feature and pin it at 0 so the flip shows the intact card
+        // before it starts burning away.
+        if (masterMat)
+        {
+            masterMat.SetDissolve(true);
+            masterMat.SetDissolveAmount(0f);
+        }
+
+        Quaternion flipTarget = transform.localRotation * Quaternion.Euler(0f, burnFlipYAngle, 0f);
+
+        // 1. flip around local Y, then 2. hide the front mesh and the data parent.
+        burnSeq = Sequence.Create(Tween.LocalRotation(transform, flipTarget, burnFlipDuration, burnFlipEase))
+            .ChainCallback(() =>
+            {
+                if (dataParent) dataParent.gameObject.SetActive(false);
+                if (frontFace) frontFace.SetActive(false);
+            });
+
+        // optional gap between the flip and the dissolve.
+        if (burnDissolveDelay > 0f) burnSeq.ChainDelay(burnDissolveDelay);
+
+        // 3. dissolve amount 0 -> 1 on the MasterMat3d.
+        burnSeq.Chain(Tween.Custom(0f, 1f, burnDissolveDuration,
+            v => { if (masterMat) masterMat.SetDissolveAmount(v); }, burnDissolveEase));
+
+        if (burnDestroyDelay > 0f) burnSeq.ChainDelay(burnDestroyDelay);
+
+        // 4. destroy.
+        burnSeq.ChainCallback(() =>
+        {
+            onComplete?.Invoke();
+            Destroy(gameObject);
+        });
     }
 }
