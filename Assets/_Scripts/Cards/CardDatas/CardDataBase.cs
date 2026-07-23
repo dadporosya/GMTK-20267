@@ -90,6 +90,15 @@ public class CardDataBase : ScriptableObject
         return vp;
     }
 
+    public int CalculateVpForSuitCount(List<Card> cards)
+    {
+        int vp = 0;
+
+        
+        
+        return vp;
+    }
+
     public virtual string GenerateTitle()
     {
         string result = "";

@@ -272,7 +272,8 @@ public class Card : MonoBehaviour
         // Queue this card's own effect first. A "react to another card being placed" card
         // (activation == OtherCardPlaced) must NOT resolve on its OWN placement — it only fires
         // from CardManager.OnCardPlaced when a LATER card lands — so it is skipped here.
-        if (!cardData || cardData.activation != CP.ActivateCond.OtherCardPlaced)
+        if (!cardData
+            || cardData.activation == CP.ActivateCond.Burn)
             PrepareForActivation();
 
         // Hand off to CardManager: it records this as the freshly placed card, queues every
@@ -286,7 +287,8 @@ public class Card : MonoBehaviour
     /// </summary>
     public void PrepareForActivation()
     {
-        if (EffectResolverManager.Instance) EffectResolverManager.Instance.PrepareCard(this);
+        if (EffectResolverManager.Instance)
+            EffectResolverManager.Instance.PrepareCard(this);
     }
 
     public virtual void ActivateCard()
