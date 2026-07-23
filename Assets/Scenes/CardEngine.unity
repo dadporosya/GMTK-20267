@@ -240,6 +240,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   dragDistance: -0.75
   dragLift: 0.4
+  liftingOverTable: 19.79
   dragFollowSmoothing: 0.08
   placeFaceUpOnTable: 1
   maxRayDistance: 1000
@@ -1231,6 +1232,7 @@ MonoBehaviour:
   suitTextPrefab: {fileID: 1463994399330094725, guid: 5196cc2cfb264e44db061045a95bc4b6, type: 3}
   suitTextParent: {fileID: 185827017}
   suitLineSpacing: 80
+  loopSuitAnimation: 0
   suitChangeAnimDuration: 0.5
   onScoreReached:
     m_PersistentCalls:

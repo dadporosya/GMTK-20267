@@ -92,6 +92,9 @@ public class Card : MonoBehaviour
     [Tooltip("How long the flip takes.")]
     [SerializeField] private float burnFlipDuration = 0.35f;
     [SerializeField] private Ease burnFlipEase = Ease.InOutCubic;
+    [Tooltip("How high (world up) the card hops during the flip: it rises to this height as the " +
+             "flip reaches 90°, then comes back down by the time it finishes at 180°. 0 = no hop.")]
+    [SerializeField] private float burnFlipHopHeight = 0.5f;
     [Tooltip("Pause after the flip (and after front/data are hidden) before the dissolve starts.")]
     [SerializeField] private float burnDissolveDelay = 0.05f;
     [Tooltip("How long the dissolve (amount 0 -> 1) takes.")]
@@ -321,8 +324,18 @@ public class Card : MonoBehaviour
 
         Quaternion flipTarget = transform.localRotation * Quaternion.Euler(0f, burnFlipYAngle, 0f);
 
-        // 1. flip around local Y, then 2. hide the front mesh and the data parent.
+        // 1. flip around local Y while hopping up in WORLD space (the card lies flat, so its
+        //    local up is not world up — the hop must use world Y). sin(pi*t) rises to
+        //    burnFlipHopHeight at the flip's 90° midpoint and returns to 0 by 180°. Then
+        //    2. hide the front mesh and the data parent.
+        float flipBaseWorldY = transform.position.y;
         burnSeq = Sequence.Create(Tween.LocalRotation(transform, flipTarget, burnFlipDuration, burnFlipEase))
+            .Group(Tween.Custom(0f, 1f, burnFlipDuration, t =>
+            {
+                Vector3 p = transform.position;
+                p.y = flipBaseWorldY + burnFlipHopHeight * Mathf.Sin(Mathf.PI * t);
+                transform.position = p;
+            }))
             .ChainCallback(() =>
             {
                 if (dataParent) dataParent.gameObject.SetActive(false);

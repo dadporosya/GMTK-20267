@@ -40,6 +40,9 @@ public class CardDragController : MonoBehaviour
     [SerializeField] private float dragDistance = 0f;
     [Tooltip("How high above a drop surface the card floats once it magnetizes onto it.")]
     [SerializeField] private float dragLift = 0.15f;
+    [Tooltip("How far above the table the card sits once it's actually placed. A small lift " +
+             "keeps the card from being coplanar with the surface, avoiding z-fighting.")]
+    [SerializeField] private float liftingOverTable = 0.001f;
     [Tooltip("Follow smoothing while dragging (seconds-ish). Smaller = snappier, larger = floatier. " +
              "Produces an ease-out (OutQuad-like) glide toward the target. 0 = instant.")]
     [SerializeField] private float dragFollowSmoothing = 0.08f;
@@ -51,8 +54,9 @@ public class CardDragController : MonoBehaviour
     private Card.CardState dragOriginState;
     private Card hovered;
 
-    private bool hasTablePoint;     // pointer is over an actual drop collider this frame
-    private Vector3 lastTablePoint; // last valid drop-collider point
+    private bool hasTablePoint;      // pointer is over an actual drop collider this frame
+    private Vector3 lastTablePoint;  // last valid drop-collider point
+    private Vector3 lastTableNormal = Vector3.up; // surface normal at that point
     private PlacingArea lastPlacingArea; // PlacingArea under the pointer this frame (if any)
 
     private float activeDragDistance; // fixed camera distance the card floats at this drag
@@ -152,6 +156,7 @@ public class CardDragController : MonoBehaviour
         if (hasTablePoint)
         {
             lastTablePoint = hit.point;
+            lastTableNormal = hit.normal;
             lastPlacingArea = hit.collider.GetComponentInParent<PlacingArea>();
 
             // Magnetize: lie the card flat (face up, parallel to the surface) and float it
@@ -215,13 +220,13 @@ public class CardDragController : MonoBehaviour
 
             card.SetState(Card.CardState.OnTable);
             card.SetFaceUp(placeFaceUpOnTable);
-            card.AnimateTo(lastTablePoint, FlatTableRotation(card));
+            card.AnimateTo(lastTablePoint + lastTableNormal * liftingOverTable, FlatTableRotation(card));
         }
         else if (dragOriginState == Card.CardState.OnTable)
         {
             // Dropped off the table but it was already a table card: keep it on the table.
             card.SetState(Card.CardState.OnTable);
-            card.AnimateTo(lastTablePoint, FlatTableRotation(card));
+            card.AnimateTo(lastTablePoint + lastTableNormal * liftingOverTable, FlatTableRotation(card));
         }
         else
         {

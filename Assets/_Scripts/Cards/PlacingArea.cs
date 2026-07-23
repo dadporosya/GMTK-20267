@@ -21,6 +21,12 @@ public class PlacingArea : MonoBehaviour
     [Tooltip("Cards currently placed on this area. Filled by Place().")]
     public List<Card> cards = new List<Card>();
 
+    [Header("Placement")]
+    [Tooltip("How far above the area surface a placed card rests (world units, along +Y). " +
+             "Keeps the card from being coplanar with the surface (avoids z-fighting) and " +
+             "gives it a visible lift over the table. 0 = flat on the surface.")]
+    [SerializeField] private float liftingOverTable = 0.05f;
+
     [Header("References")]
     [Tooltip("Surface collider a card is dropped onto. Falls back to the collider on this object.")]
     [SerializeField] private Collider areaCollider;
@@ -48,8 +54,8 @@ public class PlacingArea : MonoBehaviour
         // Leave the player's hand (HandManager re-arranges the remaining cards).
         if (PlayerManager.Instance) PlayerManager.Instance.RemoveCardFromHand(card);
 
-        // Land flat on the surface, face up, then pin it.
-        Vector3 pos = SurfacePointUnder(card.transform.position);
+        // Land flat on the surface, lifted slightly above it, face up, then pin it.
+        Vector3 pos = SurfacePointUnder(card.transform.position) + Vector3.up * liftingOverTable;
         card.SetState(Card.CardState.OnTable);
         card.SetFaceUp(true);
         card.AnimateTo(pos, FlatRotation(card));
