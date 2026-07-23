@@ -281,6 +281,12 @@ public class Card : MonoBehaviour
         yield return null;
         if (!cardData) yield break;
         
+        SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
+        {
+            R.PROJECT.Audio.Cards.Activate.activate1,
+            R.PROJECT.Audio.Cards.Activate.activate2,
+            R.PROJECT.Audio.Cards.Activate.activate3,
+        });
         StartCoroutine(activateAnimController.PlayAnimations());
         
         TableManager.Instance.AddSuits(cardData.suits);
@@ -429,6 +435,16 @@ public class Card : MonoBehaviour
         if (burnMats == null) return;
         foreach (var m in burnMats)
             if (m) m.SetFloat(burnAmountId, value);
+    }
+
+    /// <summary>
+    /// Called by <see cref="CardManager.OnTurnEnd"/> for every card on the tracked tables,
+    /// staggered by CardManager's delay between turn effects. Empty by design — override /
+    /// extend to trigger the card's end-of-turn behaviour.
+    /// </summary>
+    public virtual void OnTurnEnd()
+    {
+
     }
 
     public void OnTurnStart()

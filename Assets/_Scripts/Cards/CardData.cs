@@ -72,6 +72,9 @@ public class CardData : ScriptableObject
                 }
                 vp = sets * vpPerSet;
             }
+        } else if (condition == CP.Condition.FixedVp)
+        {
+            vp = vpPerSet;
         }
         
         h.Out("VP:", vp);

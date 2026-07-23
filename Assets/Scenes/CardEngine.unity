@@ -560,6 +560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlacingArea
   cards: []
+  liftingOverTable: 0.05
   areaCollider: {fileID: 0}
   cam: {fileID: 0}
 --- !u!1 &375210912
@@ -595,7 +596,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -148, y: -125}
+  m_AnchoredPosition: {x: -213, y: -125}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &410087039
@@ -941,7 +942,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1334573428572996888, guid: 74a559731b0f30d4fbd5f2e4fc8a9c57, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 331.4287
       objectReference: {fileID: 0}
     - target: {fileID: 1334573428572996888, guid: 74a559731b0f30d4fbd5f2e4fc8a9c57, type: 3}
       propertyPath: m_SizeDelta.y
@@ -998,6 +999,14 @@ PrefabInstance:
     - target: {fileID: 1463994399330094725, guid: 74a559731b0f30d4fbd5f2e4fc8a9c57, type: 3}
       propertyPath: m_Name
       value: ShakingText
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949035978863008760, guid: 74a559731b0f30d4fbd5f2e4fc8a9c57, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949035978863008760, guid: 74a559731b0f30d4fbd5f2e4fc8a9c57, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1583,6 +1592,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   Cards: []
+  targetTables: []
+  delayBetweenTurnEffects: 0.25
   pfbTest: {fileID: 6556123085242673732, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
 --- !u!1 &1681616742
 GameObject:

@@ -36,6 +36,7 @@ public static class CP
     {
         SuitSet,
         PerCardWithSuitCount,
+        FixedVp,
         Custom
     }
 
