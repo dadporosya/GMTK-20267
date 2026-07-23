@@ -24,6 +24,13 @@ public class CardManager : MonoBehaviour
     
     public void SpawnCard(Card card)
     {
+        SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
+        {
+            // R.PROJECT.Audio.Cards.TakeCard.takeCard1,
+            R.PROJECT.Audio.Cards.TakeCard.takeCard2,
+            R.PROJECT.Audio.Cards.TakeCard.takeCard3,
+            // R.PROJECT.Audio.Cards.TakeCard.takeCard4,
+        });
         Cards.Add(card);
         Instantiate(card);
     }

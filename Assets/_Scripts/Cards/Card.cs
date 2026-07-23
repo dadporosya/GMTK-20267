@@ -105,7 +105,6 @@ public class Card : MonoBehaviour
     [SerializeField] private float burnDestroyDelay = 0f;
 
     private bool burning;
-    private Sequence burnSeq;
     // Cached material instances + property id, resolved when the burn starts so the tween
     // writes straight to the materials instead of re-fetching them every frame.
     private Material[] burnMats;
@@ -258,13 +257,15 @@ public class Card : MonoBehaviour
     /// </summary>
     public virtual void OnPlace()
     {
-        h.Out("Place card", gameObject.name);
 
         if (!cardData) return;
         
-        h.Out(cardData.suits, TableManager.Instance);
+        SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
+        {
+            R.PROJECT.Audio.Cards.TakeCard.takeCard1
+        });
+        
         TableManager.Instance.AddSuits(cardData.suits);
-        h.Out(TableManager.Instance.suits);
 
         int vp = cardData.GenerateVP();
         TableManager.Instance.AddScore(vp);
@@ -278,32 +279,26 @@ public class Card : MonoBehaviour
     {
         yield return 0;
         yield return new WaitForSeconds(1f);
-        Burn();
+        yield return Burn();
     }
 
     /// <summary>
-    /// Plays the burn animation and destroys the card at the end:
-    ///   1. flip the card 180° around its local Y,
-    ///   2. hide the data parent and the front mesh,
-    ///   3. drive the MasterMat3d dissolve from 0 up to 1 (writing the material properties directly),
-    ///   4. destroy the GameObject.
+    /// Plays the burn animation and destroys the card, as a coroutine you can drive yourself
+    /// (yield on it, interleave your own steps, or call the phase helpers below in your own order):
+    ///   1. <see cref="BurnFlip"/> — flip 180° around local Y while hopping up in world space,
+    ///      then hide the data parent and the front mesh,
+    ///   2. <see cref="BurnDissolve"/> — drive the MasterMat3d dissolve 0 -> 1,
+    ///   3. destroy the GameObject.
     /// All timings/eases are the "Burn animation" inspector fields. Idempotent: a second call
-    /// while already burning is ignored. <paramref name="onComplete"/> (optional) runs just
-    /// before the card is destroyed.
+    /// while already burning is ignored. <see cref="OnBurnStarted"/> fires the instant burning
+    /// begins — that's where the burn SFX is played. <paramref name="onComplete"/> (optional)
+    /// runs just before the card is destroyed.
     /// </summary>
-    public void Burn(System.Action onComplete = null)
+    public IEnumerator Burn(System.Action onComplete = null)
     {
-        if (burning) return;
+        if (burning) yield break;
         burning = true;
 
-        string pathToBurnSound="";
-        SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
-        {
-            R.PROJECT.Audio.Fire.burn1,
-            R.PROJECT.Audio.Fire.burn2,
-        });
-        
-        
         // The card is leaving play: stop it self-driving toward the hand pose, kill any
         // in-flight tweens and make sure it can no longer be picked up or dragged.
         state = CardState.OnTable;
@@ -312,10 +307,43 @@ public class Card : MonoBehaviour
         if (placeTween.isAlive) placeTween.Stop();
         if (handManager) handManager.RemoveCard(this);
 
-        // Grab the material instances directly off the renderers. Reading `.material` (not
-        // `.sharedMaterial`) forces Unity to clone a per-renderer instance, so we never touch
-        // the MasterMat3d asset on disk. Enable the dissolve feature and pin the amount at 0
-        // so the flip shows the intact card before it starts burning away.
+        PrepareBurnMaterials();
+
+        // The card has just started to burn — play sounds / spawn VFX here.
+        OnBurnStarted();
+
+        // 1. flip + hop, then hide the front + data.
+        yield return BurnFlip();
+
+        // optional gap between the flip and the dissolve.
+        if (burnDissolveDelay > 0f) yield return new WaitForSeconds(burnDissolveDelay);
+
+        // 2. dissolve away.
+        yield return BurnDissolve();
+
+        if (burnDestroyDelay > 0f) yield return new WaitForSeconds(burnDestroyDelay);
+
+        // 3. destroy.
+        onComplete?.Invoke();
+        Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Called the moment <see cref="Burn"/> begins (materials ready, before any animation).
+    /// Plays the burn SFX; override to change / extend what happens when the card starts burning.
+    /// </summary>
+    protected virtual void OnBurnStarted()
+    {
+        
+    }
+
+    /// <summary>
+    /// Grabs per-renderer material instances (via <c>.material</c>, never touching the asset on
+    /// disk), enables the dissolve feature and pins the amount at 0 so the flip shows the intact
+    /// card before it burns away. Call once before <see cref="BurnDissolve"/>.
+    /// </summary>
+    public void PrepareBurnMaterials()
+    {
         int enableId = Shader.PropertyToID(dissolveEnableProperty);
         burnAmountId = Shader.PropertyToID(dissolveAmountProperty);
         var mats = new System.Collections.Generic.List<Material>();
@@ -330,41 +358,50 @@ public class Card : MonoBehaviour
                 mats.Add(m);
             }
         burnMats = mats.ToArray();
+    }
 
+    /// <summary>
+    /// Phase 1: flips the card 180° around its local Y while hopping up in WORLD space (the card
+    /// lies flat, so its local up is not world up — the hop must use world Y). sin(pi*t) rises to
+    /// <see cref="burnFlipHopHeight"/> at the flip's 90° midpoint and returns to 0 by 180°. When
+    /// the flip finishes it hides the data parent and the front mesh.
+    /// </summary>
+    public IEnumerator BurnFlip()
+    {
         Quaternion flipTarget = transform.localRotation * Quaternion.Euler(0f, burnFlipYAngle, 0f);
-
-        // 1. flip around local Y while hopping up in WORLD space (the card lies flat, so its
-        //    local up is not world up — the hop must use world Y). sin(pi*t) rises to
-        //    burnFlipHopHeight at the flip's 90° midpoint and returns to 0 by 180°. Then
-        //    2. hide the front mesh and the data parent.
         float flipBaseWorldY = transform.position.y;
-        burnSeq = Sequence.Create(Tween.LocalRotation(transform, flipTarget, burnFlipDuration, burnFlipEase))
+        
+        SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
+        {
+            R.PROJECT.Audio.Cards.TakeCard.takeCard4
+        });
+        
+        yield return Sequence.Create(Tween.LocalRotation(transform, flipTarget, burnFlipDuration, burnFlipEase))
             .Group(Tween.Custom(0f, 1f, burnFlipDuration, t =>
             {
                 Vector3 p = transform.position;
                 p.y = flipBaseWorldY + burnFlipHopHeight * Mathf.Sin(Mathf.PI * t);
                 transform.position = p;
             }))
-            .ChainCallback(() =>
-            {
-                if (dataParent) dataParent.gameObject.SetActive(false);
-                if (frontFace) frontFace.SetActive(false);
-            });
+            .ToYieldInstruction();
 
-        // optional gap between the flip and the dissolve.
-        if (burnDissolveDelay > 0f) burnSeq.ChainDelay(burnDissolveDelay);
+        if (dataParent) dataParent.gameObject.SetActive(false);
+        if (frontFace) frontFace.SetActive(false);
+    }
 
-        // 3. dissolve amount 0 -> 1, written straight to each cached material.
-        burnSeq.Chain(Tween.Custom(0f, 1f, burnDissolveDuration, SetBurnAmount, burnDissolveEase));
-
-        if (burnDestroyDelay > 0f) burnSeq.ChainDelay(burnDestroyDelay);
-
-        // 4. destroy.
-        burnSeq.ChainCallback(() =>
+    /// <summary>
+    /// Phase 2: drives the MasterMat3d dissolve amount 0 -> 1, written straight to each cached
+    /// material. Call <see cref="PrepareBurnMaterials"/> first.
+    /// </summary>
+    public IEnumerator BurnDissolve()
+    {
+        SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {
-            onComplete?.Invoke();
-            Destroy(gameObject);
+            R.PROJECT.Audio.Fire.burn1,
+            R.PROJECT.Audio.Fire.burn2,
         });
+        yield return Tween.Custom(0f, 1f, burnDissolveDuration, SetBurnAmount, burnDissolveEase)
+            .ToYieldInstruction();
     }
 
     private void SetBurnAmount(float value)
