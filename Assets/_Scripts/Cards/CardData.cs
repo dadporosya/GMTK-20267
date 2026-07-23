@@ -6,7 +6,7 @@ public class CardData : ScriptableObject
 {
     public string title;
     public List<CP.Suit> suits = new List<CP.Suit>();
-    private int countdown = 0; // if 0 -> player at once
+    public int countdown = 0; // if 0 -> player at once
     
     [Header("Effect")]
     /// Target suits -> amount of vp

@@ -31,6 +31,7 @@ public class Card : MonoBehaviour
     [Header("Info texts")]
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text descriptionText;
+    [SerializeField] private TMP_Text countDownText;
     
     
     [Header("Faces (two quads)")]
@@ -38,6 +39,11 @@ public class Card : MonoBehaviour
     [SerializeField] private GameObject frontFace;
     [Tooltip("Quad shown as the back. Its visible side must point along the card root's -Z.")]
     [SerializeField] private GameObject backFace;
+
+    [SerializeField] private Transform dataParent;
+
+    [Header("Animations")]
+    public AnimationControllerBase activateAnimController;
 
     [Header("Picking")]
     [Tooltip("Collider used for mouse picking. Leave empty to auto-find one in the children " +
@@ -72,6 +78,25 @@ public class Card : MonoBehaviour
     [SerializeField] private float placeDuration = 0.2f;
     [SerializeField] private Ease placeEase = Ease.OutCubic;
 
+    [Header("Burn animation")]
+    [Tooltip("MasterMat3d controller driven by the dissolve step. Auto-found in children when left empty.")]
+    [SerializeField] private MasterMaterialController masterMat;
+    [Tooltip("Angle (around the card's local Y) of the burn flip. 180 = show the back.")]
+    [SerializeField] private float burnFlipYAngle = 180f;
+    [Tooltip("How long the flip takes.")]
+    [SerializeField] private float burnFlipDuration = 0.35f;
+    [SerializeField] private Ease burnFlipEase = Ease.InOutCubic;
+    [Tooltip("Pause after the flip (and after front/data are hidden) before the dissolve starts.")]
+    [SerializeField] private float burnDissolveDelay = 0.05f;
+    [Tooltip("How long the dissolve (amount 0 -> 1) takes.")]
+    [SerializeField] private float burnDissolveDuration = 0.8f;
+    [SerializeField] private Ease burnDissolveEase = Ease.InQuad;
+    [Tooltip("Extra delay after the dissolve completes before the card is destroyed.")]
+    [SerializeField] private float burnDestroyDelay = 0f;
+
+    private bool burning;
+    private Sequence burnSeq;
+
     // Home pose assigned by HandManager, eased toward while InHand.
     private Vector3 homePosition;
     private Quaternion homeRotation;
@@ -100,6 +125,7 @@ public class Card : MonoBehaviour
         if (!Col) h.Out($"Card '{name}' has no collider assigned or in its children; it cannot be picked.");
 
         baseScale = transform.localScale;
+        if (!masterMat) masterMat = GetComponentInChildren<MasterMaterialController>(true);
         ApplyFace();
     }
 
@@ -115,6 +141,10 @@ public class Card : MonoBehaviour
 
         titleText.text = cardData.GenerateTitle();
         descriptionText.text = cardData.GenerateDescription();
+        countDownText.text = cardData.countdown.ToString();
+        
+        activateAnimController // TASK all animation bases for this controller, matching controller type
+        
     }
     
     

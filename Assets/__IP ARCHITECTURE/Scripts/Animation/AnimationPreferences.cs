@@ -13,6 +13,7 @@
         Talking,
         OnClick,
         Open,
-        Close
+        Close,
+        Activate
     }
 }
