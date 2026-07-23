@@ -7,6 +7,15 @@ public class CardManager : MonoBehaviour
     public static CardManager Instance;
     public List<Card> Cards;
 
+    [Header("Piles")]
+    [Tooltip("The draw pile for the current round. Filled from fullPile at RoundStart and " +
+             "drained as cards are drawn. This is a runtime instance — the asset is never touched.")]
+    public ScriptableObjectContainer pile;
+    [Tooltip("The complete pool a round starts with. pile is (re)built as a copy of this at RoundStart.")]
+    public ScriptableObjectContainer fullPile;
+    [Tooltip("Extra cards that can be folded into the pile during a round.")]
+    public ScriptableObjectContainer additionalCards;
+
     [Header("Turn effects")]
     [Tooltip("Tables whose placed cards receive OnTurnStart / OnTurnEnd each turn.")]
     public List<PlacingArea> targetTables = new List<PlacingArea>();
@@ -18,17 +27,53 @@ public class CardManager : MonoBehaviour
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
+
+        // Work on runtime copies so drawing / editing never mutates the original SO assets on disk.
+        if (fullPile) fullPile = Instantiate(fullPile);
+        if (additionalCards) additionalCards = Instantiate(additionalCards);
+    }
+
+    private void Start()
+    {
+        RoundStart();
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            SpawnCard(pfbTest);
+            DrawCard();
         }
     }
 
-    public void SpawnCard(Card card)
+    /// <summary>
+    /// Resets the round: rebuilds <see cref="pile"/> as a fresh copy of <see cref="fullPile"/> so
+    /// the round starts with the full pool and draining the pile never affects the source asset.
+    /// </summary>
+    public void RoundStart()
+    {
+        pile = fullPile ? Instantiate(fullPile) : null;
+    }
+
+    /// <summary>
+    /// Draws a random card from <see cref="pile"/>, removes it from the pile and spawns it.
+    /// Returns the spawned card, or null when the pile is empty.
+    /// </summary>
+    public Card DrawCard()
+    {
+        if (!pile || pile.scriptableObjects.Count == 0)
+        {
+            h.Out("CardManager: pile is empty, nothing to draw.");
+            return null;
+        }
+
+        CardData data = h.RandChoice(pile.scriptableObjects) as CardData;
+        pile.scriptableObjects.Remove(data);
+
+        return SpawnCard(pfbTest, data);
+    }
+
+    public Card SpawnCard(Card cardPrefab, CardData data = null)
     {
         SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {
@@ -37,8 +82,11 @@ public class CardManager : MonoBehaviour
             R.PROJECT.Audio.Cards.TakeCard.takeCard3,
             // R.PROJECT.Audio.Cards.TakeCard.takeCard4,
         });
+
+        Card card = Instantiate(cardPrefab);
+        if (data) card.cardData = data;
         Cards.Add(card);
-        Instantiate(card);
+        return card;
     }
 
     /// <summary>
