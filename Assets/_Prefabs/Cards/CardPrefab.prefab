@@ -948,10 +948,13 @@ MonoBehaviour:
   hoverTweenDuration: 0.12
   placeDuration: 0.2
   placeEase: 9
-  masterMat: {fileID: 0}
+  burnRenderers: []
+  dissolveEnableProperty: _Disslove
+  dissolveAmountProperty: _Dissolve_amount
   burnFlipYAngle: 180
   burnFlipDuration: 0.35
   burnFlipEase: 10
+  burnFlipHopHeight: 1.367
   burnDissolveDelay: 0.05
   burnDissolveDuration: 0.8
   burnDissolveEase: 5

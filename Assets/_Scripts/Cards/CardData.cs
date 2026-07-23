@@ -105,6 +105,9 @@ public class CardData : ScriptableObject
                 conditionLabel += CP.SuitTag(suit);
             }
             result += conditionLabel + " = " + vpPerSet.ToString();
+        } else if (condition == CP.Condition.FixedVp)
+        {
+            result = vpPerSet.ToString();
         }
         
         return result;

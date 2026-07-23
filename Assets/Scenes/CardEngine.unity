@@ -241,7 +241,7 @@ MonoBehaviour:
   dragDistance: -0.75
   dragLift: 0.4
   liftingOverTable: 19.79
-  dragFollowSmoothing: 0.08
+  dragFollowSmoothing: 0.0867
   placeFaceUpOnTable: 1
   maxRayDistance: 1000
 --- !u!1 &281960573
@@ -1647,7 +1647,7 @@ MonoBehaviour:
   heightOffset: -3
   horizontalOffset: 0
   cardGap: 3.93
-  maxHandWidth: 13.99
+  maxHandWidth: 15
   arcHeight: 0.25
   fanAngle: 12
   cardPitch: 15

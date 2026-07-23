@@ -57,14 +57,22 @@ public class CardManager : MonoBehaviour
 
     /// <summary>
     /// Draws a random card from <see cref="pile"/>, removes it from the pile and spawns it.
-    /// Returns the spawned card, or null when the pile is empty.
+    /// When the pile is empty it is rebuilt from <see cref="fullPile"/> (a fresh copy, so the
+    /// source asset is never touched) and the draw proceeds. Returns null only when there is
+    /// nothing to draw even after refilling (i.e. <see cref="fullPile"/> is empty/unset too).
     /// </summary>
     public Card DrawCard()
     {
         if (!pile || pile.scriptableObjects.Count == 0)
         {
-            h.Out("CardManager: pile is empty, nothing to draw.");
-            return null;
+            // Pile ran out — reshuffle: create a new pile from the full pile.
+            RoundStart();
+
+            if (!pile || pile.scriptableObjects.Count == 0)
+            {
+                h.Out("CardManager: pile and full pile are both empty, nothing to draw.");
+                return null;
+            }
         }
 
         CardData data = h.RandChoice(pile.scriptableObjects) as CardData;

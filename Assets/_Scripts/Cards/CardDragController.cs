@@ -54,6 +54,7 @@ public class CardDragController : MonoBehaviour
     private Card.CardState dragOriginState;
     private Card hovered;
 
+    private Card hoverHandCard;      // another hand card under the pointer this frame (swap target)
     private bool hasTablePoint;      // pointer is over an actual drop collider this frame
     private Vector3 lastTablePoint;  // last valid drop-collider point
     private Vector3 lastTableNormal = Vector3.up; // surface normal at that point
@@ -136,6 +137,7 @@ public class CardDragController : MonoBehaviour
         foreach (Collider c in dragColliders) if (c) c.enabled = false;
         hasTablePoint = false;
         lastPlacingArea = null;
+        hoverHandCard = null;
 
         // Lock in the depth the card floats at for this whole drag. Using a fixed distance
         // (rather than projecting the cursor onto a ground plane) keeps the card the same
@@ -157,14 +159,20 @@ public class CardDragController : MonoBehaviour
 
     private void UpdateDragging(Ray ray)
     {
+        // Another hand card under the pointer? If so we free-float over it (and, on release,
+        // swap the two cards' places in the hand) instead of magnetizing to any table that
+        // happens to sit behind the cards.
+        hoverHandCard = FindHandCardUnder(ray);
+
         // Is the cursor over a drop surface (table / PlacingArea)? Only then does the card
         // magnetize down onto it; this is also what makes a release a valid placement.
         // Other cards are NOT drop surfaces: releasing over another card must return the
-        // dragged card to the hand, not fling it onto the card. We therefore skip any hit
-        // that belongs to a Card and use the nearest real surface behind it (if any). This
-        // also guards against tableMask being left as "Everything" in the scene, which would
-        // otherwise make every card collider count as a table.
-        hasTablePoint = TryGetDropSurface(ray, out RaycastHit hit);
+        // dragged card to the hand (or swap, above), not fling it onto the card. We therefore
+        // skip any hit that belongs to a Card and use the nearest real surface behind it (if
+        // any). This also guards against tableMask being left as "Everything" in the scene,
+        // which would otherwise make every card collider count as a table.
+        RaycastHit hit = default;
+        hasTablePoint = hoverHandCard == null && TryGetDropSurface(ray, out hit);
 
         if (hasTablePoint)
         {
@@ -217,6 +225,17 @@ public class CardDragController : MonoBehaviour
         // (while the card was still non-blocking), not on a fresh cast.
         foreach (Collider c in dragColliders) if (c) c.enabled = true;
         dragColliders.Clear();
+
+        // Released over another hand card: swap the two cards' places in the hand instead of
+        // placing. Checked before the table branches so a table behind the cards can't hijack it.
+        if (dragOriginState == Card.CardState.InHand && hoverHandCard &&
+            hoverHandCard.state == Card.CardState.InHand)
+        {
+            card.SetState(Card.CardState.InHand);
+            if (HandManager.Instance) HandManager.Instance.SwapCards(card, hoverHandCard);
+            else card.AnimateTo(card.transform.position, card.transform.rotation);
+            return;
+        }
 
         // Released over a drop area: hand the card off to it (places, locks, leaves hand).
         if (hasTablePoint && lastPlacingArea)
@@ -278,6 +297,33 @@ public class CardDragController : MonoBehaviour
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Casts <paramref name="ray"/> against <see cref="cardMask"/> and returns the nearest
+    /// hand card under the pointer that can be swapped with — i.e. an unlocked <see cref="Card"/>
+    /// in the <see cref="Card.CardState.InHand"/> state that is not the card being dragged.
+    /// Returns null when no such card is under the pointer. (The dragged card's own colliders
+    /// are disabled during the drag, so it is never returned.)
+    /// </summary>
+    private Card FindHandCardUnder(Ray ray)
+    {
+        RaycastHit[] hits = Physics.RaycastAll(ray, maxRayDistance, cardMask, QueryTriggerInteraction.Ignore);
+        if (hits.Length == 0) return null;
+
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            Card c = hits[i].collider.GetComponentInParent<Card>();
+            if (!c) continue;                                  // non-card collider: look past it
+            if (c == dragging) continue;                       // ignore the dragged card itself
+            if (c.Locked) continue;                            // placed/locked cards can't swap
+            if (c.state != Card.CardState.InHand) continue;    // only hand cards swap
+            return c;
+        }
+
+        return null;
     }
 
     /// <summary>Flat on the table, front up, artwork oriented away from the camera (respects the card's offset).</summary>

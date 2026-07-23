@@ -87,6 +87,24 @@ public class HandManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Swaps the hand positions of two cards (their order in <see cref="Cards"/> is what the
+    /// layout reads), then re-arranges. Used when a dragged hand card is released over another
+    /// hand card. No-op if either card is missing or not in the hand.
+    /// </summary>
+    public void SwapCards(Card a, Card b)
+    {
+        if (!a || !b || a == b) return;
+
+        int ia = Cards.IndexOf(a);
+        int ib = Cards.IndexOf(b);
+        if (ia < 0 || ib < 0) return;
+
+        Cards[ia] = b;
+        Cards[ib] = a;
+        Arrange();
+    }
+
+    /// <summary>
     /// Recomputes and assigns the home pose for every InHand card. Runs automatically
     /// whenever a card is added or removed, and each frame if arrangeContinuously is on.
     /// </summary>
