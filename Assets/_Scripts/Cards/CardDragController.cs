@@ -159,7 +159,12 @@ public class CardDragController : MonoBehaviour
     {
         // Is the cursor over a drop surface (table / PlacingArea)? Only then does the card
         // magnetize down onto it; this is also what makes a release a valid placement.
-        hasTablePoint = Physics.Raycast(ray, out RaycastHit hit, maxRayDistance, tableMask, QueryTriggerInteraction.Ignore);
+        // Other cards are NOT drop surfaces: releasing over another card must return the
+        // dragged card to the hand, not fling it onto the card. We therefore skip any hit
+        // that belongs to a Card and use the nearest real surface behind it (if any). This
+        // also guards against tableMask being left as "Everything" in the scene, which would
+        // otherwise make every card collider count as a table.
+        hasTablePoint = TryGetDropSurface(ray, out RaycastHit hit);
 
         if (hasTablePoint)
         {
@@ -245,6 +250,35 @@ public class CardDragController : MonoBehaviour
     }
 
     // ---- helpers ------------------------------------------------------------
+
+    /// <summary>
+    /// Casts <paramref name="ray"/> against <see cref="tableMask"/> and returns the nearest hit
+    /// that is an actual drop surface — i.e. one that does NOT belong to a <see cref="Card"/>.
+    /// Cards are skipped so hovering/releasing over another card is never treated as a placement
+    /// (the dragged card returns to the hand instead). Returns false when only cards (or nothing)
+    /// are under the pointer.
+    /// </summary>
+    private bool TryGetDropSurface(Ray ray, out RaycastHit surfaceHit)
+    {
+        surfaceHit = default;
+
+        RaycastHit[] hits = Physics.RaycastAll(ray, maxRayDistance, tableMask, QueryTriggerInteraction.Ignore);
+        if (hits.Length == 0) return false;
+
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            // Skip cards: they are not drop surfaces. (The dragged card's own colliders are
+            // already disabled for the drag, so this only filters OTHER cards.)
+            if (hits[i].collider.GetComponentInParent<Card>()) continue;
+
+            surfaceHit = hits[i];
+            return true;
+        }
+
+        return false;
+    }
 
     /// <summary>Flat on the table, front up, artwork oriented away from the camera (respects the card's offset).</summary>
     private Quaternion FlatTableRotation(Card card)

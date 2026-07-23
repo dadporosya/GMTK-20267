@@ -1228,9 +1228,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a4361043ea4644d93f061712793178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TableManager
-  targetScore: 100
+  targetScore: 6767
   currentScore: 0
-  decreasingScore: 0
+  decreasingScore: 1
   scoreText: {fileID: 687559429}
   scoreChangeAnimation: {fileID: 687559428}
   minCountSpeed: 15

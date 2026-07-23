@@ -65,6 +65,8 @@ public class TableManager : MonoBehaviour
         if (scoreChangeAnimation == null && scoreText != null)
             scoreChangeAnimation = scoreText.GetComponentInChildren<TextChangeAnimation>();
 
+        if (decreasingScore) currentScore = targetScore;
+        
         _displayedScore = currentScore;
         RefreshScoreText(currentScore);
 
