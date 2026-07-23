@@ -5,7 +5,7 @@ using UnityEngine;
 public class CardData : ScriptableObject
 {
     public string title;
-    public List<CP.Suits> suits = new List<CP.Suits>();
+    public List<CP.Suit> suits = new List<CP.Suit>();
     private int countdown = 0; // if 0 -> player at once
     
     [Header("Effect")]
@@ -16,7 +16,7 @@ public class CardData : ScriptableObject
     public CP.TargetSource targetSource = CP.TargetSource.Table; // where card will take the values
     
     [Header("Suits set condition")]
-    public List<CP.Suits> suitSet = new List<CP.Suits>();
+    public List<CP.Suit> suitSet = new List<CP.Suit>();
 
     [Header("Suits count condition")]
     public bool fixedCount = true; // if not, would be min count
@@ -27,14 +27,14 @@ public class CardData : ScriptableObject
         int vp = 0;
         if (condition == CP.Condition.SuitSet)
         {
-            Dictionary<CP.Suits, int> sourceSuits = new Dictionary<CP.Suits, int>();
+            Dictionary<CP.Suit, int> sourceSuits = new Dictionary<CP.Suit, int>();
             if (targetSource == CP.TargetSource.Table)
             {
                 foreach (var kvp in TableManager.Instance.suits)
                     sourceSuits[kvp.Key] = kvp.Value;
             } else if (targetSource == CP.TargetSource.Hand)
             {
-                foreach (CP.Suits suit in System.Enum.GetValues(typeof(CP.Suits)))
+                foreach (CP.Suit suit in System.Enum.GetValues(typeof(CP.Suit)))
                 {
                     sourceSuits[suit] = 0;
                 }
@@ -42,7 +42,7 @@ public class CardData : ScriptableObject
                 foreach (Card card in HandManager.Instance.Cards)
                 {
                     if (!card.cardData) continue;
-                    foreach (CP.Suits suit in card.cardData.suits)
+                    foreach (CP.Suit suit in card.cardData.suits)
                     {
                         sourceSuits[suit]++;
                     }
@@ -50,7 +50,7 @@ public class CardData : ScriptableObject
             }
 
             // Count how many of each suit a single set requires.
-            Dictionary<CP.Suits, int> required = new Dictionary<CP.Suits, int>();
+            Dictionary<CP.Suit, int> required = new Dictionary<CP.Suit, int>();
             foreach (var suit in suitSet)
             {
                 if (!required.ContainsKey(suit))
@@ -76,5 +76,34 @@ public class CardData : ScriptableObject
         
         h.Out("VP:", vp);
         return vp;
+    }
+
+    public string GenerateTitle()
+    {
+        string result = "";
+        foreach (CP.Suit suit in suits)
+        {
+            result += CP.SuitTag(suit);
+        }
+        
+        return result;
+    }
+
+    public string GenerateDescription()
+    {
+        string result = "";
+        string conditionLabel = "";
+        
+        
+        if (condition == CP.Condition.SuitSet)
+        {
+            foreach (var suit in suitSet)
+            {
+                conditionLabel += CP.SuitTag(suit);
+            }
+            result += conditionLabel + " = " + vpPerSet.ToString();
+        }
+        
+        return result;
     }
 }

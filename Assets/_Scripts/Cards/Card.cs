@@ -1,5 +1,6 @@
 using System.Threading;
 using PrimeTween;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -27,6 +28,11 @@ public class Card : MonoBehaviour
     
     public enum CardState { InHand, Dragging, OnTable }
 
+    [Header("Info texts")]
+    [SerializeField] private TMP_Text titleText;
+    [SerializeField] private TMP_Text descriptionText;
+    
+    
     [Header("Faces (two quads)")]
     [Tooltip("Quad shown as the front. Its visible side must point along the card root's +Z.")]
     [SerializeField] private GameObject frontFace;
@@ -103,12 +109,15 @@ public class Card : MonoBehaviour
         {
             HandManager.Instance.AddCard(this);
         }
+        
+        if (!cardData) return;
+        cardData = Instantiate(cardData);
 
-        if (cardData)
-        {
-            cardData = Instantiate(cardData);
-        }
+        titleText.text = cardData.GenerateTitle();
+        descriptionText.text = cardData.GenerateDescription();
     }
+    
+    
 
     private void Update()
     {

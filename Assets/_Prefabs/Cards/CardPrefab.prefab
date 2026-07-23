@@ -649,6 +649,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Card
   cardData: {fileID: 11400000, guid: 2e24cdd8a240f96469b2b00d7579430e, type: 2}
   countdown: 0
+  titleText: {fileID: 9190375845582017650}
+  descriptionText: {fileID: 5589938961515234598}
   frontFace: {fileID: 8397760802324866212}
   backFace: {fileID: 2832768547768142534}
   pickCollider: {fileID: 0}

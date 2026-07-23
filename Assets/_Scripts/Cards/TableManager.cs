@@ -24,8 +24,8 @@ public class TableManager : MonoBehaviour
     [Tooltip("Delta size (in points) at which the fastest speed is reached.")]
     [SerializeField] private float speedRampDelta = 50f;
 
-    public Dictionary<CP.Suits, int> suits = new Dictionary<CP.Suits, int>();
-    [SerializeField] private List<CP.Suits> startSuits = new List<CP.Suits>();
+    public Dictionary<CP.Suit, int> suits = new Dictionary<CP.Suit, int>();
+    [SerializeField] private List<CP.Suit> startSuits = new List<CP.Suit>();
     [SerializeField] private List<int> startSuitCount = new List<int>();
 
     public UnityEvent onScoreReached;
@@ -46,7 +46,7 @@ public class TableManager : MonoBehaviour
         _displayedScore = currentScore;
         RefreshScoreText(currentScore);
 
-        foreach (CP.Suits suit in System.Enum.GetValues(typeof(CP.Suits)))
+        foreach (CP.Suit suit in System.Enum.GetValues(typeof(CP.Suit)))
         {
             int startValue = 0;
 
@@ -159,14 +159,14 @@ public class TableManager : MonoBehaviour
             scoreText.text = value.ToString();
     }
 
-    public void AddSuits(List<CP.Suits> suits)
+    public void AddSuits(List<CP.Suit> suits)
     {
         foreach (var suit in suits)
         {
             AddSuit(suit);
         }
     }
-    public void AddSuit(CP.Suits suit)
+    public void AddSuit(CP.Suit suit)
     {
         suits[suit]++;
     }

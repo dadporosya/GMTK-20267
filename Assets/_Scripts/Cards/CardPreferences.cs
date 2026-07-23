@@ -5,13 +5,13 @@ using UnityEngine;
 /// </summary>
 public static class CP
 {
-    public enum Suits
+    public enum Suit
     {
         Love,
         Grief,
         Fear,
         Pride,
-        Anger
+        Hate
     }
 
     public enum Condition
@@ -32,6 +32,13 @@ public static class CP
         Table,
         Hand,
         OnPlace
+    }
+
+    public static string SuitTag(CP.Suit suit)
+    {
+        string result = $"<sprite name={suit.ToString()}>";
+        
+        return result;
     }
     
 }
