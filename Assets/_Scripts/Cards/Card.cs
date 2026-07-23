@@ -21,6 +21,7 @@ using UnityEngine;
 /// </summary>
 public class Card : MonoBehaviour
 {
+    public CardData cardData;
     public enum CardState { InHand, Dragging, OnTable }
 
     [Header("Faces (two quads)")]
@@ -36,6 +37,13 @@ public class Card : MonoBehaviour
     [Tooltip("If ON, SetFaceUp enables/disables the two quads instead of relying on back-to-back geometry. " +
              "Use this only if both quads are stacked at the same position facing the same way.")]
     [SerializeField] private bool useFaceToggling = false;
+
+    [Header("Facing")]
+    [Tooltip("Rotation correction applied to the card's front so it faces the right way. " +
+             "Set Y = 180 if your front quad faces the card's -Z (Unity's default Quad " +
+             "orientation) and you see the back. Leave at 0 if the front already faces +Z. " +
+             "Used by the hand, dragging and table placement so they all stay consistent.")]
+    [SerializeField] private Vector3 faceRotationOffset = new Vector3(0f, 180f, 0f);
 
     [Header("State (runtime)")]
     public CardState state = CardState.InHand;
@@ -69,6 +77,9 @@ public class Card : MonoBehaviour
     public Collider Col { get; private set; }
     public bool FaceUp => faceUp;
 
+    /// <summary>When true the card is pinned in place and can no longer be picked up / dragged.</summary>
+    public bool Locked { get; private set; }
+
     /// <summary>Back-reference to the hand that owns this card (set by PlayerManager).</summary>
     [HideInInspector] public HandManager handManager;
 
@@ -89,6 +100,11 @@ public class Card : MonoBehaviour
         {
             HandManager.Instance.AddCard(this);
         }
+
+        if (cardData)
+        {
+            cardData = Instantiate(cardData);
+        }
     }
 
     private void Update()
@@ -104,6 +120,18 @@ public class Card : MonoBehaviour
         float t = 1f - Mathf.Exp(-Time.deltaTime / Mathf.Max(0.0001f, followSmoothing));
         transform.position = Vector3.Lerp(transform.position, targetPos, t);
         transform.rotation = Quaternion.Slerp(transform.rotation, homeRotation, t);
+    }
+
+    /// <summary>
+    /// Builds a rotation that aims the card's FRONT toward <paramref name="forward"/>, using
+    /// <paramref name="up"/> as the roll hint, then applies <c>faceRotationOffset</c>. Every
+    /// system (hand, dragging, table) faces the card through this so a single offset fixes
+    /// how the quads were authored (e.g. Y = 180 when the front quad faces the card's -Z).
+    /// </summary>
+    public Quaternion Face(Vector3 forward, Vector3 up)
+    {
+        if (forward.sqrMagnitude < 1e-6f) forward = Vector3.forward;
+        return Quaternion.LookRotation(forward.normalized, up) * Quaternion.Euler(faceRotationOffset);
     }
 
     /// <summary>Assigns the pose the card should rest at while it is in the hand.</summary>
@@ -158,4 +186,16 @@ public class Card : MonoBehaviour
         Vector3 target = hovered ? baseScale * hoverScaleMultiplier : baseScale;
         scaleTween = Tween.Scale(transform, target, hoverTweenDuration, Ease.OutQuad);
     }
+
+    /// <summary>Pins the card so it can no longer be picked up or dragged (see CardDragController).</summary>
+    public void Lock() => Locked = true;
+
+    /// <summary>Releases a previously locked card so it can be dragged again.</summary>
+    public void Unlock() => Locked = false;
+
+    /// <summary>
+    /// Called by <see cref="PlacingArea"/> right after the card is placed on its surface.
+    /// Empty by design — override / extend this to trigger the card's "on play" behaviour.
+    /// </summary>
+    public virtual void OnPlace() { }
 }

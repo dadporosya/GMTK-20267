@@ -136,12 +136,12 @@ public class HandManager : MonoBehaviour
                           + camForward * (-Mathf.Abs(normalized) * arcHeight)  // ends closer to player
                           + camUp * (-normalized * normalized * arcHeight * 0.5f);
 
-            // Base rotation: card front (+Z) faces the camera.
-            Quaternion look = Quaternion.LookRotation((cam.position - pos).normalized, camUp);
+            // Base rotation: card front faces the camera (respecting the card's faceRotationOffset).
+            Quaternion faceRot = slotted[i].Face(cam.position - pos, camUp);
             // Tilt tops back toward the player, then fan-roll around the facing axis.
             Quaternion pitch = Quaternion.AngleAxis(cardPitch, camRight);
             Quaternion roll = Quaternion.AngleAxis(-normalized * (fanAngle * 0.5f), (cam.position - pos).normalized);
-            Quaternion rot = roll * pitch * look;
+            Quaternion rot = roll * pitch * faceRot;
 
             slotted[i].SetHomePose(pos, rot, instant);
             slotted[i].transform.SetSiblingIndex(i); // keep a stable draw order

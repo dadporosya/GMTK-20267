@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Card preferences
+/// </summary>
 public static class CP
 {
     public enum Suits
@@ -10,4 +13,18 @@ public static class CP
         Pride,
         Anger
     }
+
+    public enum Condition
+    {
+        SuitSet,
+        SuitCount,
+        Custom
+    }
+
+    public enum ActivationCondition
+    {
+        Burn,
+        Place
+    }
+    
 }

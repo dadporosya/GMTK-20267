@@ -46,6 +46,7 @@ public class CardDragController : MonoBehaviour
 
     private bool hasTablePoint;     // pointer is over an actual table collider this frame
     private Vector3 lastTablePoint; // last valid table-collider point
+    private PlacingArea lastPlacingArea; // PlacingArea under the pointer this frame (if any)
 
     private void Awake()
     {
@@ -72,6 +73,9 @@ public class CardDragController : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, maxRayDistance, cardMask, QueryTriggerInteraction.Ignore))
             under = hit.collider.GetComponentInParent<Card>();
 
+        // Locked cards (placed on a PlacingArea) can never be hovered or picked up.
+        if (under && under.Locked) under = null;
+
         // Update hover highlight (only hand cards react).
         Card hoverTarget = (under && under.state == Card.CardState.InHand) ? under : null;
         if (hoverTarget != hovered)
@@ -81,7 +85,7 @@ public class CardDragController : MonoBehaviour
             if (hovered) hovered.SetHovered(true);
         }
 
-        if (Mouse.current.leftButton.wasPressedThisFrame && under &&
+        if (Mouse.current.leftButton.wasPressedThisFrame && under && !under.Locked &&
             (under.state == Card.CardState.InHand || under.state == Card.CardState.OnTable))
         {
             BeginDrag(under);
@@ -100,6 +104,7 @@ public class CardDragController : MonoBehaviour
         // itself (matters when card/table share a layer or masks overlap).
         if (card.Col) card.Col.enabled = false;
         hasTablePoint = false;
+        lastPlacingArea = null;
 
         // Let the rest of the hand close the gap left by the picked-up card.
         if (dragOriginState == Card.CardState.InHand && HandManager.Instance)
@@ -117,6 +122,8 @@ public class CardDragController : MonoBehaviour
         {
             point = hit.point;
             lastTablePoint = point;
+            // Remember whether the surface under the pointer is a drop area.
+            lastPlacingArea = hit.collider.GetComponentInParent<PlacingArea>();
         }
         else if (!RaycastPlane(ray, tablePlaneY, out point))
         {
@@ -124,11 +131,11 @@ public class CardDragController : MonoBehaviour
         }
 
         Vector3 target = point + Vector3.up * dragLift;
-        // Face the card's front (+Z) toward the camera, using the CAMERA's up as the
-        // roll hint. Using world up here can go near-parallel to the view direction on
-        // a top-down camera, which makes LookRotation snap the card 180 degrees (showing
-        // the back). Camera up stays perpendicular to the view, so the front stays up.
-        Quaternion rot = Quaternion.LookRotation((cam.transform.position - target).normalized, cam.transform.up);
+        // Face the card's front toward the camera (via Card.Face, so faceRotationOffset
+        // applies). Camera-up is the roll hint: world up can go near-parallel to the view
+        // on a top-down camera and make the rotation snap 180 degrees; camera-up stays
+        // perpendicular to the view, so the front stays put.
+        Quaternion rot = dragging.Face(cam.transform.position - target, cam.transform.up);
         dragging.SetPoseImmediate(target, rot);
 
         if (Mouse.current.leftButton.wasReleasedThisFrame)
@@ -141,6 +148,13 @@ public class CardDragController : MonoBehaviour
         dragging = null;
         if (card.Col) card.Col.enabled = true;
 
+        // Released over a drop area: hand the card off to it (places, locks, leaves hand).
+        if (hasTablePoint && lastPlacingArea)
+        {
+            lastPlacingArea.Place(card);
+            return;
+        }
+
         if (hasTablePoint)
         {
             // Valid placement on the table.
@@ -149,13 +163,13 @@ public class CardDragController : MonoBehaviour
 
             card.SetState(Card.CardState.OnTable);
             card.SetFaceUp(placeFaceUpOnTable);
-            card.AnimateTo(lastTablePoint, FlatTableRotation());
+            card.AnimateTo(lastTablePoint, FlatTableRotation(card));
         }
         else if (dragOriginState == Card.CardState.OnTable)
         {
             // Dropped off the table but it was already a table card: keep it on the table.
             card.SetState(Card.CardState.OnTable);
-            card.AnimateTo(lastTablePoint, FlatTableRotation());
+            card.AnimateTo(lastTablePoint, FlatTableRotation(card));
         }
         else
         {
@@ -167,12 +181,12 @@ public class CardDragController : MonoBehaviour
 
     // ---- helpers ------------------------------------------------------------
 
-    /// <summary>Flat on the table, front up, artwork oriented away from the camera.</summary>
-    private Quaternion FlatTableRotation()
+    /// <summary>Flat on the table, front up, artwork oriented away from the camera (respects the card's offset).</summary>
+    private Quaternion FlatTableRotation(Card card)
     {
         Vector3 camForwardFlat = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up).normalized;
         if (camForwardFlat.sqrMagnitude < 0.0001f) camForwardFlat = Vector3.forward;
-        return Quaternion.LookRotation(Vector3.up, camForwardFlat);
+        return card.Face(Vector3.up, camForwardFlat);
     }
 
     /// <summary>Intersects a ray with the horizontal plane at height y. False if parallel/behind.</summary>
