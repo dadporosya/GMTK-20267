@@ -1,3 +1,4 @@
+using System.Threading;
 using PrimeTween;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ using UnityEngine;
 public class Card : MonoBehaviour
 {
     public CardData cardData;
+    [HideInInspector] public int countdown=0;
+    
     public enum CardState { InHand, Dragging, OnTable }
 
     [Header("Faces (two quads)")]
@@ -199,6 +202,13 @@ public class Card : MonoBehaviour
     /// </summary>
     public virtual void OnPlace()
     {
-        h.Out("Place card");
+        h.Out("Place card", gameObject.name);
+
+        if (!cardData) return;
+
+        TableManager.Instance.AddSuits(cardData.suits);
+        
+        TableManager.Instance.AddScore(cardData.GenerateVP());
+
     }
 }

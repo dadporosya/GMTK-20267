@@ -17,14 +17,21 @@ public static class CP
     public enum Condition
     {
         SuitSet,
-        SuitCount,
+        PerCardWithSuitCount,
         Custom
     }
 
-    public enum ActivationCondition
+    public enum ActivateCond
     {
         Burn,
         Place
+    }
+
+    public enum TargetSource
+    {
+        Table,
+        Hand,
+        OnPlace
     }
     
 }
