@@ -100,6 +100,10 @@ public class CardDragController : MonoBehaviour
         // itself (matters when card/table share a layer or masks overlap).
         if (card.Col) card.Col.enabled = false;
         hasTablePoint = false;
+
+        // Let the rest of the hand close the gap left by the picked-up card.
+        if (dragOriginState == Card.CardState.InHand && HandManager.Instance)
+            HandManager.Instance.Arrange();
     }
 
     // ---- dragging: follow pointer + release ---------------------------------
@@ -120,7 +124,11 @@ public class CardDragController : MonoBehaviour
         }
 
         Vector3 target = point + Vector3.up * dragLift;
-        Quaternion rot = Quaternion.LookRotation((cam.transform.position - target).normalized, Vector3.up);
+        // Face the card's front (+Z) toward the camera, using the CAMERA's up as the
+        // roll hint. Using world up here can go near-parallel to the view direction on
+        // a top-down camera, which makes LookRotation snap the card 180 degrees (showing
+        // the back). Camera up stays perpendicular to the view, so the front stays up.
+        Quaternion rot = Quaternion.LookRotation((cam.transform.position - target).normalized, cam.transform.up);
         dragging.SetPoseImmediate(target, rot);
 
         if (Mouse.current.leftButton.wasReleasedThisFrame)
@@ -153,7 +161,7 @@ public class CardDragController : MonoBehaviour
         {
             // Dropped off the table from the hand: return to the hand layout.
             card.SetState(Card.CardState.InHand);
-            // HandManager re-arranges automatically (continuous) or on next Arrange().
+            if (HandManager.Instance) HandManager.Instance.Arrange();
         }
     }
 

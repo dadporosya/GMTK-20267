@@ -19,7 +19,6 @@ using UnityEngine;
 /// assigns it. While Dragging or OnTable the home pose is ignored and the card is
 /// positioned explicitly (by CardDragController / a one-shot tween).
 /// </summary>
-[RequireComponent(typeof(Collider))]
 public class Card : MonoBehaviour
 {
     public enum CardState { InHand, Dragging, OnTable }
@@ -29,6 +28,11 @@ public class Card : MonoBehaviour
     [SerializeField] private GameObject frontFace;
     [Tooltip("Quad shown as the back. Its visible side must point along the card root's -Z.")]
     [SerializeField] private GameObject backFace;
+
+    [Header("Picking")]
+    [Tooltip("Collider used for mouse picking. Leave empty to auto-find one in the children " +
+             "(so you can put the collider on the front quad instead of the root).")]
+    [SerializeField] private Collider pickCollider;
     [Tooltip("If ON, SetFaceUp enables/disables the two quads instead of relying on back-to-back geometry. " +
              "Use this only if both quads are stacked at the same position facing the same way.")]
     [SerializeField] private bool useFaceToggling = false;
@@ -61,7 +65,7 @@ public class Card : MonoBehaviour
     private Tween scaleTween;
     private Tween placeTween;
 
-    /// <summary>The collider used for mouse picking. Sits on the card root.</summary>
+    /// <summary>The collider used for mouse picking. May live on the root or on the front quad.</summary>
     public Collider Col { get; private set; }
     public bool FaceUp => faceUp;
 
@@ -70,7 +74,11 @@ public class Card : MonoBehaviour
 
     private void Awake()
     {
-        Col = GetComponent<Collider>();
+        // Prefer an explicitly assigned collider (e.g. one on the front quad),
+        // otherwise grab the first collider found on the root or in the children.
+        Col = pickCollider ? pickCollider : GetComponentInChildren<Collider>(true);
+        if (!Col) h.Out($"Card '{name}' has no collider assigned or in its children; it cannot be picked.");
+
         baseScale = transform.localScale;
         ApplyFace();
     }

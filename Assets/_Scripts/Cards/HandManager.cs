@@ -49,8 +49,11 @@ public class HandManager : MonoBehaviour
     [Tooltip("Recompute the layout every frame so the hand follows a moving camera. Turn off to only arrange on demand.")]
     [SerializeField] private bool arrangeContinuously = true;
 
-    // Reused each Arrange() call so the per-frame layout does not allocate.
-    private readonly List<Card> slotted = new List<Card>();
+    /// <summary>The cards currently in the hand. This is the layout's source of truth.</summary>
+    public List<Card> Cards { get; } = new List<Card>();
+
+    // Reused each Arrange() call so the layout does not allocate.
+    public List<Card> slotted = new List<Card>();
 
     private void Awake()
     {
@@ -60,26 +63,43 @@ public class HandManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!arrangeContinuously) return;
-        if (PlayerManager.Instance == null) return;
-        Arrange(PlayerManager.Instance.Hand);
+        // Optional: keep the hand glued to a moving camera. Add/remove already
+        // re-arrange on their own, so this can be turned off for a static camera.
+        if (arrangeContinuously) Arrange();
+    }
+
+    /// <summary>Adds a card to the hand, marks it InHand, and re-arranges immediately.</summary>
+    public void AddCard(Card card)
+    {
+        if (!card || Cards.Contains(card)) return;
+        card.handManager = this;
+        card.SetState(Card.CardState.InHand);
+        Cards.Add(card);
+        Arrange();
+    }
+
+    /// <summary>Removes a card from the hand and re-arranges immediately.</summary>
+    public void RemoveCard(Card card)
+    {
+        if (card && Cards.Remove(card))
+            Arrange();
     }
 
     /// <summary>
-    /// Recomputes and assigns the home pose for every InHand card in the list.
-    /// Call this whenever the hand contents change (PlayerManager does this for you).
+    /// Recomputes and assigns the home pose for every InHand card. Runs automatically
+    /// whenever a card is added or removed, and each frame if arrangeContinuously is on.
     /// </summary>
-    public void Arrange(List<Card> hand, bool instant = false)
+    public void Arrange(bool instant = false)
     {
-        if (hand == null) return;
         if (!targetCamera) targetCamera = Camera.main;
         if (!targetCamera) return;
 
-        // Only the cards actually sitting in the hand take up a slot.
+        // Only the cards actually sitting in the hand take up a slot (a card being
+        // dragged is skipped so the rest close the gap).
         slotted.Clear();
-        for (int i = 0; i < hand.Count; i++)
-            if (hand[i] && hand[i].state == Card.CardState.InHand)
-                slotted.Add(hand[i]);
+        for (int i = 0; i < Cards.Count; i++)
+            if (Cards[i] && Cards[i].state == Card.CardState.InHand)
+                slotted.Add(Cards[i]);
 
         int n = slotted.Count;
         if (n == 0) return;

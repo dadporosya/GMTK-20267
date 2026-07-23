@@ -63,6 +63,7 @@ Material:
     - _DissloveScale: 88
     - _DissloveTwirl: 1
     - _DissloveTwirlStrength: 11.3
+    - _DissolvePixelation: 1000
     - _Dissolve_amount: 0.489
     - _Distortion: 0
     - _DistortionScale: 10
@@ -83,6 +84,7 @@ Material:
     - _Outline_Thickness: 5
     - _Pixel_Resolution: 100.9
     - _Pixelation: 0
+    - _PixelationShape: 1
     - _PolarCoordinates: 0
     - _PolarLengthScale: 32.08
     - _PolarRadialScale: -29.48
@@ -95,6 +97,7 @@ Material:
     - _XDir: 0
     - _YDir: 0
     m_Colors:
+    - White: {r: 1, g: 1, b: 1, a: 1}
     - _Distortion_Direction: {r: 0, g: 1, b: 0, a: 0}
     - _EdgeColor: {r: 1.981132, g: 0.75394136, b: 0, a: 1}
     - _Hit_Color: {r: 1, g: 1, b: 1, a: 1}

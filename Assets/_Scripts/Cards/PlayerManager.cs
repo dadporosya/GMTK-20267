@@ -20,8 +20,15 @@ public class PlayerManager : MonoBehaviour
     [Tooltip("Where freshly drawn cards spawn before flying into the hand (e.g. a deck transform). Falls back to this object.")]
     [SerializeField] private Transform drawOrigin;
 
-    /// <summary>The cards currently in hand. Read-only from the outside.</summary>
-    public List<Card> Hand { get; private set; } = new List<Card>();
+    /// <summary>The cards currently in hand. Backed by the HandManager list (single source of truth).</summary>
+    public List<Card> Hand
+    {
+        get
+        {
+            if (!handManager) handManager = HandManager.Instance;
+            return handManager ? handManager.Cards : null;
+        }
+    }
 
     private void Awake()
     {
@@ -29,26 +36,23 @@ public class PlayerManager : MonoBehaviour
         if (!handManager) handManager = HandManager.Instance;
     }
 
-    /// <summary>Adds an existing card to the hand and re-arranges.</summary>
+    /// <summary>Adds an existing card to the hand (HandManager appends it and re-arranges).</summary>
     public void AddCardToHand(Card card)
     {
-        if (!card || Hand.Contains(card)) return;
+        if (!card) return;
+        if (!handManager) handManager = HandManager.Instance;
+        if (!handManager) { h.Out("PlayerManager.AddCardToHand: no HandManager in scene."); return; }
 
         if (cardsParent) card.transform.SetParent(cardsParent, worldPositionStays: true);
 
-        card.handManager = handManager;
-        card.SetState(Card.CardState.InHand);
-        Hand.Add(card);
-
-        RearrangeHand();
+        handManager.AddCard(card);
     }
 
     /// <summary>Removes a card from the hand (e.g. when it is played onto the table) and re-arranges.</summary>
     public void RemoveCardFromHand(Card card)
     {
-        if (!card) return;
-        if (Hand.Remove(card))
-            RearrangeHand();
+        if (!handManager) handManager = HandManager.Instance;
+        if (handManager) handManager.RemoveCard(card);
     }
 
     /// <summary>Spawns a new card from the prefab at the draw origin and sends it to the hand.</summary>
@@ -64,11 +68,5 @@ public class PlayerManager : MonoBehaviour
         Card card = Instantiate(cardPrefab, origin.position, origin.rotation);
         AddCardToHand(card);
         return card;
-    }
-
-    private void RearrangeHand()
-    {
-        if (!handManager) handManager = HandManager.Instance;
-        if (handManager) handManager.Arrange(Hand);
     }
 }
