@@ -53,6 +53,9 @@ public class CardDataBase : ScriptableObject
         } else if (condition == CP.Condition.FixedVp)
         {
             vp = vpPerSet;
+        } else if (condition == CP.Condition.SuitCount)
+        {
+            
         }
         
         h.Out("VP:", vp);

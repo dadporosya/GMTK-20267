@@ -35,7 +35,7 @@ public static class CP
     public enum Condition
     {
         SuitSet,
-        PerCardWithSuitCount,
+        SuitCount,
         FixedVp,
         Custom
     }
