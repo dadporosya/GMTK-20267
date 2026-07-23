@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -58,6 +59,10 @@ public class CardDragController : MonoBehaviour
     private Vector3 dragTargetPos;    // pose the card is currently easing toward
     private Quaternion dragTargetRot;
 
+    // Every collider on the card being dragged, disabled for the whole drag so the card
+    // can never block the drop-surface raycast (including on the release frame).
+    private readonly List<Collider> dragColliders = new List<Collider>();
+
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance, setDontDestroy: false);
@@ -110,9 +115,13 @@ public class CardDragController : MonoBehaviour
         dragOriginState = card.state;
         card.SetHovered(false);
         card.SetState(Card.CardState.Dragging);
-        // Ignore the dragged card in raycasts so the table ray can't hit the card
-        // itself (matters when card/table share a layer or masks overlap).
-        if (card.Col) card.Col.enabled = false;
+        // Ignore the dragged card in raycasts so the drop-surface ray can't hit the card
+        // itself. Disable ALL of its colliders (a card often has more than one, e.g. a quad
+        // per face); leaving any enabled lets the card sit between the camera and the
+        // placing area and steal the hit — so releases would never register a placement.
+        dragColliders.Clear();
+        card.GetComponentsInChildren(true, dragColliders);
+        foreach (Collider c in dragColliders) if (c) c.enabled = false;
         hasTablePoint = false;
         lastPlacingArea = null;
 
@@ -184,7 +193,11 @@ public class CardDragController : MonoBehaviour
     {
         Card card = dragging;
         dragging = null;
-        if (card.Col) card.Col.enabled = true;
+        // Restore the colliders we disabled at pickup. Safe to do now: the placement
+        // decision below relies on the raycast already taken this frame in UpdateDragging
+        // (while the card was still non-blocking), not on a fresh cast.
+        foreach (Collider c in dragColliders) if (c) c.enabled = true;
+        dragColliders.Clear();
 
         // Released over a drop area: hand the card off to it (places, locks, leaves hand).
         if (hasTablePoint && lastPlacingArea)
