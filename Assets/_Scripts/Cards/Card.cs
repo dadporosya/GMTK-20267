@@ -209,8 +209,10 @@ public class Card : MonoBehaviour
         h.Out(cardData.suits, TableManager.Instance);
         TableManager.Instance.AddSuits(cardData.suits);
         h.Out(TableManager.Instance.suits);
-        
-        TableManager.Instance.AddScore(cardData.GenerateVP());
+
+        int vp = cardData.GenerateVP();
+        TableManager.Instance.AddScore(vp);
+        TextAlertManager.Instance.CreateDamageAlert(vp, transform);
 
     }
 }

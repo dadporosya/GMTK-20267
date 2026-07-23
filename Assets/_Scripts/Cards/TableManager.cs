@@ -11,6 +11,9 @@ public class TableManager : MonoBehaviour
     public int targetScore=100;
     public int currentScore=0;
 
+    [Tooltip("If true, gained points DECREASE the score and the player must bring it down to 0 to trigger onScoreReached. If false, the score rises toward targetScore as before.")]
+    public bool decreasingScore = false;
+
     [SerializeField] private TMP_Text scoreText;
 
     [Header("Score count animation")]
@@ -31,6 +34,9 @@ public class TableManager : MonoBehaviour
     // The value currently shown by the animation (may lag behind currentScore mid-tween).
     private int _displayedScore;
     private Tween _scoreTween;
+
+    // Guards onScoreReached so it only fires once until the score leaves the reached state again.
+    private bool _scoreReached;
 
     private void Start()
     {
@@ -54,10 +60,12 @@ public class TableManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Adds <paramref name="amount"/> to the current score (can be negative) and
-    /// animates the displayed number up/down to the new value.
+    /// Adds <paramref name="amount"/> "gained points" to the score and animates the
+    /// displayed number to the new value.
+    /// In normal mode the score goes up; in <see cref="decreasingScore"/> mode gained
+    /// points are subtracted instead, so the score counts down toward 0.
     /// </summary>
-    public void AddScore(int amount) => SetScore(currentScore + amount);
+    public void AddScore(int amount) => SetScore(currentScore + (decreasingScore ? -amount : amount));
 
     /// <summary>
     /// Sets the current score to <paramref name="value"/> and smoothly counts the
@@ -67,7 +75,13 @@ public class TableManager : MonoBehaviour
     /// </summary>
     public void SetScore(int value, bool instant = false)
     {
+        // In decreasing mode the score can't go below 0 (the goal); otherwise leave it free.
+        if (decreasingScore)
+            value = Mathf.Max(0, value);
+
         currentScore = value;
+
+        CheckScoreReached();
 
         // Stop any running count so a new change takes over from what's on screen now.
         if (_scoreTween.isAlive)
@@ -103,6 +117,34 @@ public class TableManager : MonoBehaviour
         );
         
         //
+    }
+
+    /// <summary>
+    /// Whether the goal condition is currently met:
+    /// decreasing mode -> score counted down to 0 (or below);
+    /// normal mode      -> score reached targetScore (or above).
+    /// </summary>
+    public bool IsScoreReached()
+    {
+        return decreasingScore ? currentScore <= 0 : currentScore >= targetScore;
+    }
+
+    // Fires OnScoreReached once when the goal condition becomes true, and re-arms
+    // if the score later leaves that state.
+    private void CheckScoreReached()
+    {
+        if (IsScoreReached())
+        {
+            if (!_scoreReached)
+            {
+                _scoreReached = true;
+                OnScoreReached();
+            }
+        }
+        else
+        {
+            _scoreReached = false;
+        }
     }
 
     public void OnScoreReached()

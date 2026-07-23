@@ -869,6 +869,69 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1001 &621211191
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1961.685
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.7499686
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 257.16925
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8042637533860296657, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_Name
+      value: CardPrefab
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4595660310542942647, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6304494058496946124, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+  m_SourcePrefab: {fileID: 100100000, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
 --- !u!1 &758091522
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,12 +1259,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TableManager
   targetScore: 100
   currentScore: 0
+  decreasingScore: 0
   scoreText: {fileID: 940504565}
-  minCountSpeed: 15
-  maxCountSpeed: 200
+  minCountSpeed: 67
+  maxCountSpeed: 676.767
   speedRampDelta: 50
   startSuits: 00000000
   startSuitCount: 02000000
+  onScoreReached:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &948521953
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,6 +1492,38 @@ Transform:
   - {fileID: 2027281650}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1348317617
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1348317618}
+  m_Layer: 0
+  m_Name: ---PLAYER EXPERIENCE---
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1348317618
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348317617}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2098908249}
+  m_Father: {fileID: 1772355077}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1384954252
 GameObject:
   m_ObjectHideFlags: 0
@@ -1602,8 +1701,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1227102920}
-  - {fileID: 281960574}
   - {fileID: 1028779186}
+  - {fileID: 281960574}
+  - {fileID: 1348317618}
   m_Father: {fileID: 948521954}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1901041844
@@ -1718,6 +1818,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1279035261}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2098908248
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2098908249}
+  - component: {fileID: 2098908250}
+  m_Layer: 0
+  m_Name: TextAlertManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2098908249
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098908248}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1348317618}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2098908250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098908248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 986cebbf91064bb68363b30ddaf7bf1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TextAlertManager
+  damageTextPfb: {fileID: 8136521024119370316, guid: 0f155e7d13e0ced46970b6255bc90ff8, type: 3}
+  holdDuration: 0.6
+  fadeOutDuration: 0.4
+  speed: 1
+  spread: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1728,3 +1877,4 @@ SceneRoots:
   - {fileID: 9043470}
   - {fileID: 948521954}
   - {fileID: 1901041845}
+  - {fileID: 621211191}
