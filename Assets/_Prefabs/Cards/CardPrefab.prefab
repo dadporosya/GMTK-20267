@@ -647,10 +647,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82812ae8513f9fb448bc4dd0c346916b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Card
+  cardData: {fileID: 11400000, guid: 2e24cdd8a240f96469b2b00d7579430e, type: 2}
+  countdown: 0
   frontFace: {fileID: 8397760802324866212}
   backFace: {fileID: 2832768547768142534}
   pickCollider: {fileID: 0}
   useFaceToggling: 0
+  faceRotationOffset: {x: 0, y: 180, z: 0}
   state: 0
   faceUp: 1
   followSmoothing: 0.12

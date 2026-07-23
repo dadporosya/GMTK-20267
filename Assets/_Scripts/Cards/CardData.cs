@@ -30,24 +30,39 @@ public class CardData : ScriptableObject
             Dictionary<CP.Suits, int> sourceSuits = new Dictionary<CP.Suits, int>();
             if (targetSource == CP.TargetSource.Table)
             {
-                // TASK: add all suits from TableManager.INstance.suits to sourceSuits
+                foreach (var kvp in TableManager.Instance.suits)
+                    sourceSuits[kvp.Key] = kvp.Value;
             } else if (targetSource == CP.TargetSource.Hand)
             {
                 // skip for now
             }
-            
-            /// TASK:
-            /// you have to calculate amount of vp player will resieve
-            /// it should give vpPerSet for each set of suitSet suits
-            /// if suitSet = {A, B, B}, and player have 2A and 5B, player will recieve
-            /// 2 * vpCount, as u can create only 2 sets of A B B from 2A and 5B
-            /// literally, divide all suit count by it count in suitSet, round down,
-            /// then, take min value, and multiply it by vpPerSet
-            /// if suitSet = {A}, and player have 5A, it will be 5 * vpPErset
-            /// if suit set = {A, B}, and player has 5A, 0B, 67C, player will receive 0 vp, as there are no requiered sets
+
+            // Count how many of each suit a single set requires.
+            Dictionary<CP.Suits, int> required = new Dictionary<CP.Suits, int>();
+            foreach (var suit in suitSet)
+            {
+                if (!required.ContainsKey(suit))
+                    required[suit] = 0;
+                required[suit]++;
+            }
+
+            // How many complete sets can be formed = min over each required suit of
+            // (available count / required count), rounded down. Multiply by vpPerSet.
+            if (required.Count > 0)
+            {
+                int sets = int.MaxValue;
+                foreach (var kvp in required)
+                {
+                    int available = sourceSuits.TryGetValue(kvp.Key, out int count) ? count : 0;
+                    int possible = available / kvp.Value; // integer division floors
+                    if (possible < sets)
+                        sets = possible;
+                }
+                vp = sets * vpPerSet;
+            }
         }
         
-        h.Out(vp);
+        h.Out("VP:", vp);
         return vp;
     }
 }

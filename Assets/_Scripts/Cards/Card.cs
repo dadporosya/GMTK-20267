@@ -205,8 +205,10 @@ public class Card : MonoBehaviour
         h.Out("Place card", gameObject.name);
 
         if (!cardData) return;
-
+        
+        h.Out(cardData.suits);
         TableManager.Instance.AddSuits(cardData.suits);
+        h.Out(TableManager.Instance.suits);
         
         TableManager.Instance.AddScore(cardData.GenerateVP());
 
