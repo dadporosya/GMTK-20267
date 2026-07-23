@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: 1Suit
   m_EditorClassIdentifier: Assembly-CSharp::CardDataBase
   title: 
-  suits: 
+  suits: 0000000000000000
   countdown: 0
   condition: 1
-  vpPerSet: 0
+  vpPerSet: 50
   activation: 0
   targetSource: 0
   suitSet: 

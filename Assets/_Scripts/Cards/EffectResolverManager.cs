@@ -51,7 +51,7 @@ public class EffectResolverManager : MonoBehaviour
     public IEnumerator EffectResolveCoroutine()
     {
         var wait = new WaitForSeconds(delayBeforeActivations);
-
+        yield return wait;
         while (cardsToResolve.Count > 0)
         {
             Card card = cardsToResolve.Dequeue();

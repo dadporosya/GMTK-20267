@@ -155,6 +155,17 @@ public class CardDataBase : ScriptableObject
         } else if (condition == CP.Condition.FixedVp)
         {
             result = vpPerSet.ToString();
+        } else if (condition == CP.Condition.SuitCount)
+        {
+            if (suitSet.Count == 1)
+            {
+                result += $"CARD WITH {suitCount} SUIT";
+            }
+            else
+            {
+                result += $"CARD WITH {suitCount} SUITS";
+            }
+            result += " =  " + vpPerSet.ToString();
         }
         
         return result;
