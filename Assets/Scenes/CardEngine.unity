@@ -273,9 +273,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1413536207}
   - {fileID: 249588255}
   - {fileID: 1681616743}
-  - {fileID: 1413536207}
   - {fileID: 947604499}
   m_Father: {fileID: 1772355077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1558,7 +1558,7 @@ GameObject:
   - component: {fileID: 1413536207}
   - component: {fileID: 1413536208}
   m_Layer: 0
-  m_Name: CardManager
+  m_Name: CARD MANAGER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1592,6 +1592,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   Cards: []
+  pile: {fileID: 11400000, guid: a132faa2b978021489e07d913b134ece, type: 2}
+  fullPile: {fileID: 11400000, guid: a132faa2b978021489e07d913b134ece, type: 2}
+  additionalCards: {fileID: 11400000, guid: 4396121585fd04d4c8ffee6d8f866167, type: 2}
   targetTables: []
   delayBetweenTurnEffects: 0.25
   pfbTest: {fileID: 6556123085242673732, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
