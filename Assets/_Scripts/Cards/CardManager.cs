@@ -26,7 +26,7 @@ public class CardManager : MonoBehaviour
     {
         SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {
-            // R.PROJECT.Audio.Cards.TakeCard.takeCard1,
+            R.PROJECT.Audio.Cards.TakeCard.takeCard1,
             R.PROJECT.Audio.Cards.TakeCard.takeCard2,
             R.PROJECT.Audio.Cards.TakeCard.takeCard3,
             // R.PROJECT.Audio.Cards.TakeCard.takeCard4,

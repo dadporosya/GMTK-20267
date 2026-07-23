@@ -109,6 +109,24 @@ public static class R
         {
             public static class Cards
             {
+                public static class Slide
+                {
+                    public static AudioClip cardSlide1 => Resources.Load<AudioClip>("PROJECT/Audio/Cards/Slide/cardSlide1");
+                    public static AudioClip cardSlide2 => Resources.Load<AudioClip>("PROJECT/Audio/Cards/Slide/cardSlide2");
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                            cardSlide1,
+                            cardSlide2,
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
                 public static class TakeCard
                 {
                     public static AudioClip takeCard1 => Resources.Load<AudioClip>("PROJECT/Audio/Cards/TakeCard/takeCard1");
@@ -131,15 +149,18 @@ public static class R
 
                     public static object[] All => _all.Value;
                 }
+                public static AudioClip dropCard => Resources.Load<AudioClip>("PROJECT/Audio/Cards/dropCard");
                 public static AudioClip flipCard => Resources.Load<AudioClip>("PROJECT/Audio/Cards/flipCard");
 
                 private static readonly System.Lazy<object[]> _all = new(() =>
                 {
                     var list = new System.Collections.Generic.List<object>
                     {
+                        dropCard,
                         flipCard,
                     };
 
+                    list.AddRange(Slide.All);
                     list.AddRange(TakeCard.All);
 
                     return list.ToArray();

@@ -257,22 +257,40 @@ public class Card : MonoBehaviour
     /// </summary>
     public virtual void OnPlace()
     {
-
-        if (!cardData) return;
-        
         SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {
-            R.PROJECT.Audio.Cards.TakeCard.takeCard1
+            R.PROJECT.Audio.Cards.dropCard,
         });
+        
+        StartCoroutine(OnPlaceCoroutine());
+    }
+
+    public IEnumerator OnPlaceCoroutine()
+    {
+        yield return new WaitForSeconds(0.67f);
+        ActivateCard();
+    }
+
+    public virtual void ActivateCard()
+    {
+        StartCoroutine(ActivateCardCoroutine());
+    }
+
+    public IEnumerator ActivateCardCoroutine()
+    {
+        yield return null;
+        if (!cardData) yield break;
+        
+        StartCoroutine(activateAnimController.PlayAnimations());
         
         TableManager.Instance.AddSuits(cardData.suits);
 
         int vp = cardData.GenerateVP();
         TableManager.Instance.AddScore(vp);
         TextAlertManager.Instance.CreateDamageAlert(vp, transform);
-
+        
+        // TODO: if countdown <= 0
         StartCoroutine(DestroyCoroutine());
-
     }
 
     public IEnumerator DestroyCoroutine()
