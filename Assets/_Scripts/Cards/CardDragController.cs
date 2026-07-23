@@ -154,9 +154,10 @@ public class CardDragController : MonoBehaviour
             lastTablePoint = hit.point;
             lastPlacingArea = hit.collider.GetComponentInParent<PlacingArea>();
 
-            // Magnetize: snap the target onto the hovered surface, floating just above it.
-            dragTargetPos = hit.point + Vector3.up * dragLift;
-            dragTargetRot = dragging.Face(cam.transform.position - dragTargetPos, cam.transform.up);
+            // Magnetize: lie the card flat (face up, parallel to the surface) and float it
+            // above the plane by dragLift so it hovers over the area instead of clipping into it.
+            dragTargetPos = hit.point + hit.normal * dragLift;
+            dragTargetRot = FlatTableRotation(dragging);
         }
         else
         {
