@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using PrimeTween;
 using TMPro;
@@ -295,6 +296,14 @@ public class Card : MonoBehaviour
         if (burning) return;
         burning = true;
 
+        string pathToBurnSound="";
+        SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
+        {
+            R.PROJECT.Audio.Fire.burn1,
+            R.PROJECT.Audio.Fire.burn2,
+        });
+        
+        
         // The card is leaving play: stop it self-driving toward the hand pose, kill any
         // in-flight tweens and make sure it can no longer be picked up or dragged.
         state = CardState.OnTable;

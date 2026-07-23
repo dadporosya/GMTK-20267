@@ -103,6 +103,97 @@ public static class R
 
         public static object[] All => _all.Value;
     }
+    public static class PROJECT
+    {
+        public static class Audio
+        {
+            public static class Cards
+            {
+                public static class TakeCard
+                {
+                    public static AudioClip takeCard1 => Resources.Load<AudioClip>("PROJECT/Audio/Cards/TakeCard/takeCard1");
+                    public static AudioClip takeCard2 => Resources.Load<AudioClip>("PROJECT/Audio/Cards/TakeCard/takeCard2");
+                    public static AudioClip takeCard3 => Resources.Load<AudioClip>("PROJECT/Audio/Cards/TakeCard/takeCard3");
+                    public static AudioClip takeCard4 => Resources.Load<AudioClip>("PROJECT/Audio/Cards/TakeCard/takeCard4");
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                            takeCard1,
+                            takeCard2,
+                            takeCard3,
+                            takeCard4,
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
+                public static AudioClip flipCard => Resources.Load<AudioClip>("PROJECT/Audio/Cards/flipCard");
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                        flipCard,
+                    };
+
+                    list.AddRange(TakeCard.All);
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
+            public static class Fire
+            {
+                public static AudioClip burn1 => Resources.Load<AudioClip>("PROJECT/Audio/Fire/burn1");
+                public static AudioClip burn2 => Resources.Load<AudioClip>("PROJECT/Audio/Fire/burn2");
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                        burn1,
+                        burn2,
+                    };
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
+
+            private static readonly System.Lazy<object[]> _all = new(() =>
+            {
+                var list = new System.Collections.Generic.List<object>
+                {
+                };
+
+                list.AddRange(Cards.All);
+                list.AddRange(Fire.All);
+
+                return list.ToArray();
+            });
+
+            public static object[] All => _all.Value;
+        }
+
+        private static readonly System.Lazy<object[]> _all = new(() =>
+        {
+            var list = new System.Collections.Generic.List<object>
+            {
+            };
+
+            list.AddRange(Audio.All);
+
+            return list.ToArray();
+        });
+
+        public static object[] All => _all.Value;
+    }
 
     private static readonly System.Lazy<object[]> _all = new(() =>
     {
@@ -111,6 +202,7 @@ public static class R
         };
 
         list.AddRange(ARCHITECTURE.All);
+        list.AddRange(PROJECT.All);
 
         return list.ToArray();
     });

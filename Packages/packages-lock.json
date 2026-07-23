@@ -243,6 +243,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.xk.rsg": {
+      "version": "https://github.com/koster/rsg.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "2aa6fa6618a06d83734ac86fbe94ce6457315b1b"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,
