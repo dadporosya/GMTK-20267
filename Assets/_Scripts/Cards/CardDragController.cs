@@ -36,6 +36,9 @@ public class CardDragController : MonoBehaviour
     [SerializeField] private float dragLift = 0.4f;
     [Tooltip("Fallback horizontal plane height used when no table collider is under the pointer.")]
     [SerializeField] private float tablePlaneY = 0f;
+    [Tooltip("Follow smoothing while dragging (seconds-ish). Smaller = snappier, larger = floatier. " +
+             "Produces an ease-out (OutQuad-like) glide toward the cursor. 0 = instant.")]
+    [SerializeField] private float dragFollowSmoothing = 0.08f;
     [Tooltip("Cards land face up on the table when true.")]
     [SerializeField] private bool placeFaceUpOnTable = true;
     [SerializeField] private float maxRayDistance = 1000f;
@@ -47,6 +50,10 @@ public class CardDragController : MonoBehaviour
     private bool hasTablePoint;     // pointer is over an actual table collider this frame
     private Vector3 lastTablePoint; // last valid table-collider point
     private PlacingArea lastPlacingArea; // PlacingArea under the pointer this frame (if any)
+
+    private float dragPlaneY;       // horizontal plane height the cursor is projected onto while dragging
+    private Vector3 dragTargetPos;  // pose the card is currently easing toward
+    private Quaternion dragTargetRot;
 
     private void Awake()
     {
@@ -106,6 +113,26 @@ public class CardDragController : MonoBehaviour
         hasTablePoint = false;
         lastPlacingArea = null;
 
+        // Pick the horizontal plane the cursor will be projected onto for the whole drag.
+        // Prefer the table surface directly under the card; otherwise use the configured
+        // fallback height. Keeping this fixed for the drag means the card keeps following
+        // the cursor smoothly even when the pointer wanders off the table mesh.
+        Ray downFromCard = new Ray(card.transform.position + Vector3.up * maxRayDistance, Vector3.down);
+        if (Physics.Raycast(downFromCard, out RaycastHit surf, maxRayDistance * 2f, tableMask, QueryTriggerInteraction.Ignore))
+        {
+            dragPlaneY = surf.point.y;
+            lastTablePoint = surf.point;
+        }
+        else
+        {
+            dragPlaneY = tablePlaneY;
+            lastTablePoint = new Vector3(card.transform.position.x, tablePlaneY, card.transform.position.z);
+        }
+
+        // Seed the follow target at the card's current pose so it eases out, not from origin.
+        dragTargetPos = card.transform.position;
+        dragTargetRot = card.transform.rotation;
+
         // Let the rest of the hand close the gap left by the picked-up card.
         if (dragOriginState == Card.CardState.InHand && HandManager.Instance)
             HandManager.Instance.Arrange();
@@ -115,28 +142,41 @@ public class CardDragController : MonoBehaviour
 
     private void UpdateDragging(Ray ray)
     {
-        // Where is the pointer on the table? Prefer a real collider, fall back to a plane.
+        // Is a real table / drop collider under the pointer? This only decides whether a
+        // release counts as a valid placement (and remembers the drop area / snap point).
         hasTablePoint = Physics.Raycast(ray, out RaycastHit hit, maxRayDistance, tableMask, QueryTriggerInteraction.Ignore);
-        Vector3 point;
         if (hasTablePoint)
         {
-            point = hit.point;
-            lastTablePoint = point;
-            // Remember whether the surface under the pointer is a drop area.
+            lastTablePoint = hit.point;
             lastPlacingArea = hit.collider.GetComponentInParent<PlacingArea>();
         }
-        else if (!RaycastPlane(ray, tablePlaneY, out point))
+
+        // Follow target: project the cursor onto the fixed drag plane so the card keeps
+        // tracking the mouse even when the pointer is nowhere near the table mesh. Only a
+        // ray parallel to the plane fails, in which case we keep the previous target.
+        if (RaycastPlane(ray, dragPlaneY, out Vector3 point))
         {
-            point = lastTablePoint; // pointer aimed away from the plane; keep last
+            dragTargetPos = point + Vector3.up * dragLift;
+            // Face the card's front toward the camera (via Card.Face, so faceRotationOffset
+            // applies). Camera-up is the roll hint: world up can go near-parallel to the view
+            // on a top-down camera and make the rotation snap 180 degrees; camera-up stays
+            // perpendicular to the view, so the front stays put.
+            dragTargetRot = dragging.Face(cam.transform.position - dragTargetPos, cam.transform.up);
         }
 
-        Vector3 target = point + Vector3.up * dragLift;
-        // Face the card's front toward the camera (via Card.Face, so faceRotationOffset
-        // applies). Camera-up is the roll hint: world up can go near-parallel to the view
-        // on a top-down camera and make the rotation snap 180 degrees; camera-up stays
-        // perpendicular to the view, so the front stays put.
-        Quaternion rot = dragging.Face(cam.transform.position - target, cam.transform.up);
-        dragging.SetPoseImmediate(target, rot);
+        // Ease toward the target every frame (frame-rate independent, OutQuad-like glide).
+        // The manager owns the motion now, so the card follows continuously until release.
+        if (dragFollowSmoothing <= 0f)
+        {
+            dragging.SetPoseImmediate(dragTargetPos, dragTargetRot);
+        }
+        else
+        {
+            float t = 1f - Mathf.Exp(-Time.deltaTime / dragFollowSmoothing);
+            Vector3 pos = Vector3.Lerp(dragging.transform.position, dragTargetPos, t);
+            Quaternion rot = Quaternion.Slerp(dragging.transform.rotation, dragTargetRot, t);
+            dragging.SetPoseImmediate(pos, rot);
+        }
 
         if (Mouse.current.leftButton.wasReleasedThisFrame)
             EndDrag();

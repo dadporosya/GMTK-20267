@@ -197,5 +197,8 @@ public class Card : MonoBehaviour
     /// Called by <see cref="PlacingArea"/> right after the card is placed on its surface.
     /// Empty by design — override / extend this to trigger the card's "on play" behaviour.
     /// </summary>
-    public virtual void OnPlace() { }
+    public virtual void OnPlace()
+    {
+        h.Out("Place card");
+    }
 }
