@@ -80,8 +80,13 @@ public class Card : MonoBehaviour
     [SerializeField] private Ease placeEase = Ease.OutCubic;
 
     [Header("Burn animation")]
-    [Tooltip("MasterMat3d controller driven by the dissolve step. Auto-found in children when left empty.")]
-    [SerializeField] private MasterMaterialController masterMat;
+    [Tooltip("Renderers whose MasterMat3d material is dissolved during the burn. Auto-filled " +
+             "with every renderer in the children when left empty.")]
+    [SerializeField] private Renderer[] burnRenderers;
+    [Tooltip("Shader property that toggles the dissolve feature on (MasterMat3d: '_Disslove').")]
+    [SerializeField] private string dissolveEnableProperty = "_Disslove";
+    [Tooltip("Shader property carrying the 0->1 dissolve amount (MasterMat3d: '_Dissolve_amount').")]
+    [SerializeField] private string dissolveAmountProperty = "_Dissolve_amount";
     [Tooltip("Angle (around the card's local Y) of the burn flip. 180 = show the back.")]
     [SerializeField] private float burnFlipYAngle = 180f;
     [Tooltip("How long the flip takes.")]
@@ -97,6 +102,10 @@ public class Card : MonoBehaviour
 
     private bool burning;
     private Sequence burnSeq;
+    // Cached material instances + property id, resolved when the burn starts so the tween
+    // writes straight to the materials instead of re-fetching them every frame.
+    private Material[] burnMats;
+    private int burnAmountId;
 
     // Home pose assigned by HandManager, eased toward while InHand.
     private Vector3 homePosition;
@@ -126,7 +135,8 @@ public class Card : MonoBehaviour
         if (!Col) h.Out($"Card '{name}' has no collider assigned or in its children; it cannot be picked.");
 
         baseScale = transform.localScale;
-        if (!masterMat) masterMat = GetComponentInChildren<MasterMaterialController>(true);
+        if (burnRenderers == null || burnRenderers.Length == 0)
+            burnRenderers = GetComponentsInChildren<Renderer>(true);
         ApplyFace();
     }
 
@@ -271,7 +281,7 @@ public class Card : MonoBehaviour
     /// Plays the burn animation and destroys the card at the end:
     ///   1. flip the card 180° around its local Y,
     ///   2. hide the data parent and the front mesh,
-    ///   3. drive the MasterMat3d dissolve from 0 up to 1,
+    ///   3. drive the MasterMat3d dissolve from 0 up to 1 (writing the material properties directly),
     ///   4. destroy the GameObject.
     /// All timings/eases are the "Burn animation" inspector fields. Idempotent: a second call
     /// while already burning is ignored. <paramref name="onComplete"/> (optional) runs just
@@ -290,13 +300,24 @@ public class Card : MonoBehaviour
         if (placeTween.isAlive) placeTween.Stop();
         if (handManager) handManager.RemoveCard(this);
 
-        // Enable the dissolve feature and pin it at 0 so the flip shows the intact card
-        // before it starts burning away.
-        if (masterMat)
-        {
-            masterMat.SetDissolve(true);
-            masterMat.SetDissolveAmount(0f);
-        }
+        // Grab the material instances directly off the renderers. Reading `.material` (not
+        // `.sharedMaterial`) forces Unity to clone a per-renderer instance, so we never touch
+        // the MasterMat3d asset on disk. Enable the dissolve feature and pin the amount at 0
+        // so the flip shows the intact card before it starts burning away.
+        int enableId = Shader.PropertyToID(dissolveEnableProperty);
+        burnAmountId = Shader.PropertyToID(dissolveAmountProperty);
+        var mats = new System.Collections.Generic.List<Material>();
+        if (burnRenderers != null)
+            foreach (var r in burnRenderers)
+            {
+                if (!r) continue;
+                var m = r.material;
+                if (!m) continue;
+                m.SetFloat(enableId, 1f);
+                m.SetFloat(burnAmountId, 0f);
+                mats.Add(m);
+            }
+        burnMats = mats.ToArray();
 
         Quaternion flipTarget = transform.localRotation * Quaternion.Euler(0f, burnFlipYAngle, 0f);
 
@@ -311,9 +332,8 @@ public class Card : MonoBehaviour
         // optional gap between the flip and the dissolve.
         if (burnDissolveDelay > 0f) burnSeq.ChainDelay(burnDissolveDelay);
 
-        // 3. dissolve amount 0 -> 1 on the MasterMat3d.
-        burnSeq.Chain(Tween.Custom(0f, 1f, burnDissolveDuration,
-            v => { if (masterMat) masterMat.SetDissolveAmount(v); }, burnDissolveEase));
+        // 3. dissolve amount 0 -> 1, written straight to each cached material.
+        burnSeq.Chain(Tween.Custom(0f, 1f, burnDissolveDuration, SetBurnAmount, burnDissolveEase));
 
         if (burnDestroyDelay > 0f) burnSeq.ChainDelay(burnDestroyDelay);
 
@@ -323,5 +343,12 @@ public class Card : MonoBehaviour
             onComplete?.Invoke();
             Destroy(gameObject);
         });
+    }
+
+    private void SetBurnAmount(float value)
+    {
+        if (burnMats == null) return;
+        foreach (var m in burnMats)
+            if (m) m.SetFloat(burnAmountId, value);
     }
 }
