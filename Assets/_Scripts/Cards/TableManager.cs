@@ -28,6 +28,9 @@ public class TableManager : MonoBehaviour
     [SerializeField] private List<CP.Suit> startSuits = new List<CP.Suit>();
     [SerializeField] private List<int> startSuitCount = new List<int>();
 
+    [Tooltip("Text that lists each suit and its current count.")]
+    [SerializeField] private TMP_Text suitInfoText;
+
     public UnityEvent onScoreReached;
     
     
@@ -56,7 +59,8 @@ public class TableManager : MonoBehaviour
 
             suits[suit] = startValue;
         }
-        
+
+        RefreshSuitInfoText();
     }
 
     /// <summary>
@@ -163,11 +167,34 @@ public class TableManager : MonoBehaviour
     {
         foreach (var suit in suits)
         {
-            AddSuit(suit);
+            this.suits[suit]++;
         }
+        RefreshSuitInfoText();
     }
     public void AddSuit(CP.Suit suit)
     {
         suits[suit]++;
+        RefreshSuitInfoText();
+    }
+
+    /// <summary>
+    /// Rebuilds <see cref="suitInfoText"/> as one line per suit:
+    /// "{SuitTag} {count}", each colored with that suit's color.
+    /// </summary>
+    public void RefreshSuitInfoText()
+    {
+        if (suitInfoText == null)
+            return;
+
+        var sb = new System.Text.StringBuilder();
+
+        foreach (CP.Suit suit in System.Enum.GetValues(typeof(CP.Suit)))
+        {
+            int count = suits.TryGetValue(suit, out int value) ? value : 0;
+            string hex = ColorUtility.ToHtmlStringRGB(CP.SuitColor(suit));
+            sb.AppendLine($"<color=#{hex}>{CP.SuitTag(suit)} {count}</color>");
+        }
+
+        suitInfoText.text = sb.ToString().TrimEnd();
     }
 }
