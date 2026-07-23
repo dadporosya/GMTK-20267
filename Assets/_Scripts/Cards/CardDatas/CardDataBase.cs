@@ -73,7 +73,7 @@ public class CardDataBase : ScriptableObject
             vp = CalculateVpForSuitCount(sourceCards); 
         }
         
-        TableManager.Instance.RemoveSuits(suitsToDestroy);
+        TableManager.Instance.RemoveSuits(suitsToDestroy); // TODO more polish, so this part would be noticable
 
         h.Out("VP:", vp);
         return vp;

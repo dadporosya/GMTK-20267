@@ -17,9 +17,9 @@ MonoBehaviour:
   countdown: 0
   condition: 2
   vpPerSet: 670
-  activation: 3
+  activation: 0
   targetSource: 1
   suitSet: 
   fixedCount: 1
   suitCount: 0
-  suitDestroying: 0000000000000000
+  suitsToDestroy: 0000000000000000
