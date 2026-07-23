@@ -288,9 +288,11 @@ public class Card : MonoBehaviour
         int vp = cardData.GenerateVP();
         TableManager.Instance.AddScore(vp);
         TextAlertManager.Instance.CreateDamageAlert(vp, transform);
-        
-        // TODO: if countdown <= 0
-        StartCoroutine(DestroyCoroutine());
+
+        if (countdown <= 0)
+        {
+            StartCoroutine(DestroyCoroutine());
+        }
     }
 
     public IEnumerator DestroyCoroutine()
@@ -427,5 +429,27 @@ public class Card : MonoBehaviour
         if (burnMats == null) return;
         foreach (var m in burnMats)
             if (m) m.SetFloat(burnAmountId, value);
+    }
+
+    public void OnTurnStart()
+    {
+        countdown--;
+        SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
+        {
+            R.PROJECT.Audio.Clock.Tick.clockTick1,
+            R.PROJECT.Audio.Clock.Tick.clockTick2,
+            R.PROJECT.Audio.Clock.Tick.clockTick3,
+            R.PROJECT.Audio.Clock.Tick.clockTick4
+        });
+        countDownText.text = countdown.ToString();
+        // TODO squish anim
+        if (countdown <= 0f)
+        {
+            StartCoroutine(DestroyCoroutine());
+        }
+        
+        
+
+        
     }
 }

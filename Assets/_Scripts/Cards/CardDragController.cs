@@ -107,6 +107,14 @@ public class CardDragController : MonoBehaviour
         if (Mouse.current.leftButton.wasPressedThisFrame && under && !under.Locked &&
             (under.state == Card.CardState.InHand || under.state == Card.CardState.OnTable))
         {
+            // Picking up a card that was hovered in hand: play the card-slide sound.
+            if (under.state == Card.CardState.InHand)
+                SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
+                {
+                    R.PROJECT.Audio.Cards.Slide.cardSlide1,
+                    R.PROJECT.Audio.Cards.Slide.cardSlide2,
+                });
+
             BeginDrag(under);
         }
     }

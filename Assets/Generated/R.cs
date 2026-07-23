@@ -168,6 +168,44 @@ public static class R
 
                 public static object[] All => _all.Value;
             }
+            public static class Clock
+            {
+                public static class Tick
+                {
+                    public static AudioClip clockTick1 => Resources.Load<AudioClip>("PROJECT/Audio/Clock/Tick/clockTick1");
+                    public static AudioClip clockTick2 => Resources.Load<AudioClip>("PROJECT/Audio/Clock/Tick/clockTick2");
+                    public static AudioClip clockTick3 => Resources.Load<AudioClip>("PROJECT/Audio/Clock/Tick/clockTick3");
+                    public static AudioClip clockTick4 => Resources.Load<AudioClip>("PROJECT/Audio/Clock/Tick/clockTick4");
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                            clockTick1,
+                            clockTick2,
+                            clockTick3,
+                            clockTick4,
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                    };
+
+                    list.AddRange(Tick.All);
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
             public static class Fire
             {
                 public static AudioClip burn1 => Resources.Load<AudioClip>("PROJECT/Audio/Fire/burn1");
@@ -194,6 +232,7 @@ public static class R
                 };
 
                 list.AddRange(Cards.All);
+                list.AddRange(Clock.All);
                 list.AddRange(Fire.All);
 
                 return list.ToArray();
