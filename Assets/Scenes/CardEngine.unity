@@ -203,7 +203,7 @@ MonoBehaviour:
   pickCollider: {fileID: 0}
   useFaceToggling: 0
   state: 0
-  faceUp: 0
+  faceUp: 1
   followSmoothing: 0.12
   hoverLift: 0.35
   hoverScaleMultiplier: 1.1
@@ -1640,8 +1640,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandManager
   targetCamera: {fileID: 330585545}
-  distanceInFront: 2.2
-  heightOffset: -1
+  distanceInFront: 10
+  heightOffset: -3
   horizontalOffset: 0
   cardGap: 0.6
   maxHandWidth: 6

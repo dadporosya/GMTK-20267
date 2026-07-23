@@ -83,6 +83,14 @@ public class Card : MonoBehaviour
         ApplyFace();
     }
 
+    public void Start()
+    {
+        if (state == CardState.InHand)
+        {
+            HandManager.Instance.AddCard(this);
+        }
+    }
+
     private void Update()
     {
         // The hand is the only state that self-drives its transform.
