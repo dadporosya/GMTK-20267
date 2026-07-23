@@ -25,7 +25,7 @@ using UnityEngine;
 /// </summary>
 public class Card : MonoBehaviour
 {
-    public CardData cardData;
+    public CardDataBase cardDataBase;
     [HideInInspector] public int countdown=0;
     
     public enum CardState { InHand, Dragging, OnTable }
@@ -150,12 +150,12 @@ public class Card : MonoBehaviour
             HandManager.Instance.AddCard(this);
         }
         
-        if (!cardData) return;
-        cardData = Instantiate(cardData);
+        if (!cardDataBase) return;
+        cardDataBase = Instantiate(cardDataBase);
 
-        titleText.text = cardData.GenerateTitle();
-        descriptionText.text = cardData.GenerateDescription();
-        countDownText.text = cardData.countdown.ToString();
+        titleText.text = cardDataBase.GenerateTitle();
+        descriptionText.text = cardDataBase.GenerateDescription();
+        countDownText.text = cardDataBase.countdown.ToString();
 
         // Play the activate animation. AnimationControllerBase already gathered, in its Awake,
         // every AnimationBase under it whose type matches this controller's type (targetTypes),
@@ -279,7 +279,7 @@ public class Card : MonoBehaviour
     public IEnumerator ActivateCardCoroutine()
     {
         yield return null;
-        if (!cardData) yield break;
+        if (!cardDataBase) yield break;
         
         SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {
@@ -289,9 +289,9 @@ public class Card : MonoBehaviour
         });
         StartCoroutine(activateAnimController.PlayAnimations());
         
-        TableManager.Instance.AddSuits(cardData.suits);
+        TableManager.Instance.AddSuits(cardDataBase.suits);
 
-        int vp = cardData.GenerateVP();
+        int vp = cardDataBase.GenerateVP();
         TableManager.Instance.AddScore(vp);
         TextAlertManager.Instance.CreateDamageAlert(vp, transform);
 

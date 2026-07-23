@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CardData", menuName = "Cards/CardData")]
-public class CardData : ScriptableObject
+public class CardDataBase : ScriptableObject
 {
     public string title;
     public List<CP.Suit> suits = new List<CP.Suit>();
@@ -22,7 +22,7 @@ public class CardData : ScriptableObject
     public bool fixedCount = true; // if not, would be min count
     public int suitCount = 0;
 
-    public int GenerateVP()
+    public virtual int GenerateVP()
     {
         int vp = 0;
         if (condition == CP.Condition.SuitSet)
@@ -41,37 +41,15 @@ public class CardData : ScriptableObject
 
                 foreach (Card card in HandManager.Instance.Cards)
                 {
-                    if (!card.cardData) continue;
-                    foreach (CP.Suit suit in card.cardData.suits)
+                    if (!card.cardDataBase) continue;
+                    foreach (CP.Suit suit in card.cardDataBase.suits)
                     {
                         sourceSuits[suit]++;
                     }
                 }
             }
 
-            // Count how many of each suit a single set requires.
-            Dictionary<CP.Suit, int> required = new Dictionary<CP.Suit, int>();
-            foreach (var suit in suitSet)
-            {
-                if (!required.ContainsKey(suit))
-                    required[suit] = 0;
-                required[suit]++;
-            }
-
-            // How many complete sets can be formed = min over each required suit of
-            // (available count / required count), rounded down. Multiply by vpPerSet.
-            if (required.Count > 0)
-            {
-                int sets = int.MaxValue;
-                foreach (var kvp in required)
-                {
-                    int available = sourceSuits.TryGetValue(kvp.Key, out int count) ? count : 0;
-                    int possible = available / kvp.Value; // integer division floors
-                    if (possible < sets)
-                        sets = possible;
-                }
-                vp = sets * vpPerSet;
-            }
+           vp = CalculateVPForSuitSets(sourceSuits);
         } else if (condition == CP.Condition.FixedVp)
         {
             vp = vpPerSet;
@@ -80,8 +58,39 @@ public class CardData : ScriptableObject
         h.Out("VP:", vp);
         return vp;
     }
+    
+    public int CalculateVPForSuitSets(Dictionary<CP.Suit, int> sourceSuits)
+    {
+        int vp = 0;
+        
+        // Count how many of each suit a single set requires.
+        Dictionary<CP.Suit, int> required = new Dictionary<CP.Suit, int>();
+        foreach (var suit in suitSet)
+        {
+            if (!required.ContainsKey(suit))
+                required[suit] = 0;
+            required[suit]++;
+        }
 
-    public string GenerateTitle()
+        // How many complete sets can be formed = min over each required suit of
+        // (available count / required count), rounded down. Multiply by vpPerSet.
+        if (required.Count > 0)
+        {
+            int sets = int.MaxValue;
+            foreach (var kvp in required)
+            {
+                int available = sourceSuits.TryGetValue(kvp.Key, out int count) ? count : 0;
+                int possible = available / kvp.Value; // integer division floors
+                if (possible < sets)
+                    sets = possible;
+            }
+            vp = sets * vpPerSet;
+        }
+        
+        return vp;
+    }
+
+    public virtual string GenerateTitle()
     {
         string result = "";
         foreach (CP.Suit suit in suits)
@@ -92,7 +101,7 @@ public class CardData : ScriptableObject
         return result;
     }
 
-    public string GenerateDescription()
+    public virtual string GenerateDescription()
     {
         string result = "";
         string conditionLabel = "";

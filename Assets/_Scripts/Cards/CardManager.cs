@@ -14,7 +14,9 @@ public class CardManager : MonoBehaviour
     [Tooltip("The complete pool a round starts with. pile is (re)built as a copy of this at RoundStart.")]
     public ScriptableObjectContainer fullPile;
     [Tooltip("Extra cards that can be folded into the pile during a round.")]
-    public ScriptableObjectContainer additionalCards;
+    [SerializeField] private List<ScriptableObjectContainer> rawAdditionalPiles;
+    [SerializeField] private List<CP.Suit> pileSuits =  new List<CP.Suit>();
+    public Dictionary<CP.Suit, ScriptableObjectContainer> additionalPiles = new Dictionary<CP.Suit, ScriptableObjectContainer>();
 
     [Header("Turn effects")]
     [Tooltip("Tables whose placed cards receive OnTurnStart / OnTurnEnd each turn.")]
@@ -30,7 +32,10 @@ public class CardManager : MonoBehaviour
 
         // Work on runtime copies so drawing / editing never mutates the original SO assets on disk.
         if (fullPile) fullPile = Instantiate(fullPile);
-        if (additionalCards) additionalCards = Instantiate(additionalCards);
+        for (int i = 0; i < additionalPiles.Count; i++)
+        {
+            additionalPiles.Add(pileSuits[i], Instantiate(rawAdditionalPiles[i]));
+        }
     }
 
     private void Start()
@@ -75,13 +80,13 @@ public class CardManager : MonoBehaviour
             }
         }
 
-        CardData data = h.RandChoice(pile.scriptableObjects) as CardData;
-        pile.scriptableObjects.Remove(data);
+        CardDataBase dataBase = h.RandChoice(pile.scriptableObjects) as CardDataBase;
+        pile.scriptableObjects.Remove(dataBase);
 
-        return SpawnCard(pfbTest, data);
+        return SpawnCard(pfbTest, dataBase);
     }
 
-    public Card SpawnCard(Card cardPrefab, CardData data = null)
+    public Card SpawnCard(Card cardPrefab, CardDataBase dataBase = null)
     {
         SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {
@@ -92,7 +97,7 @@ public class CardManager : MonoBehaviour
         });
 
         Card card = Instantiate(cardPrefab);
-        if (data) card.cardData = data;
+        if (dataBase) card.cardDataBase = dataBase;
         Cards.Add(card);
         return card;
     }
