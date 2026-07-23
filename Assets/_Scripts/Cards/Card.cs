@@ -206,7 +206,7 @@ public class Card : MonoBehaviour
 
         if (!cardData) return;
         
-        h.Out(cardData.suits);
+        h.Out(cardData.suits, TableManager.Instance);
         TableManager.Instance.AddSuits(cardData.suits);
         h.Out(TableManager.Instance.suits);
         

@@ -32,6 +32,7 @@ public class TableManager : MonoBehaviour
     private void Start()
     {
         h.CreateStaticInstance(this, ref Instance);
+        h.Out(Instance);
 
         _displayedScore = currentScore;
         RefreshScoreText(currentScore);
