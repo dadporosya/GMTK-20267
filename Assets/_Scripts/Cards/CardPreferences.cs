@@ -50,7 +50,7 @@ public static class CP
     {
         Table,
         Hand,
-        OnPlace
+        PlacedCard
     }
 
     public static string SuitTag(CP.Suit suit)
