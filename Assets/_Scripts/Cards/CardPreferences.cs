@@ -43,7 +43,8 @@ public static class CP
     public enum ActivateCond
     {
         Burn,
-        Place
+        OtherCardPlaced,
+        OnTurnEnd
     }
 
     public enum TargetSource

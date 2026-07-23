@@ -41,8 +41,8 @@ public class CardDataBase : ScriptableObject
 
                 foreach (Card card in HandManager.Instance.Cards)
                 {
-                    if (!card.cardDataBase) continue;
-                    foreach (CP.Suit suit in card.cardDataBase.suits)
+                    if (!card.cardData) continue;
+                    foreach (CP.Suit suit in card.cardData.suits)
                     {
                         sourceSuits[suit]++;
                     }

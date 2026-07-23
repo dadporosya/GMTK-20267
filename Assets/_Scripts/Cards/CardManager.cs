@@ -26,6 +26,10 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private Card pfbTest;
 
+    [HideInInspector] public Card currentPlacedCard;
+
+    [SerializeField] private List<CardDataBase> startCards = new List<CardDataBase>();
+
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
@@ -40,6 +44,11 @@ public class CardManager : MonoBehaviour
 
     private void Start()
     {
+        foreach (var card in startCards)
+        {
+            SpawnCard(pfbTest, card);
+        }
+        
         RoundStart();
     }
 
@@ -97,9 +106,30 @@ public class CardManager : MonoBehaviour
         });
 
         Card card = Instantiate(cardPrefab);
-        if (dataBase) card.cardDataBase = dataBase;
+        if (dataBase) card.cardData = dataBase;
         Cards.Add(card);
         return card;
+    }
+
+    /// <summary>
+    /// Called by <see cref="Card.OnPlace"/> every time a card lands on the table.
+    /// Records <paramref name="placedCard"/> as <see cref="currentPlacedCard"/> (so
+    /// OnPlace-effect cards can read what was just played), then activates every OTHER
+    /// card on the tracked tables whose data is a <see cref="CardDataOnPlaceEffect"/> and
+    /// whose <see cref="Card.countdown"/> is still &gt; 0. The freshly placed card is
+    /// skipped so it never triggers itself.
+    /// </summary>
+    public void OnCardPlaced(Card placedCard)
+    {
+        currentPlacedCard = placedCard;
+
+        foreach (Card card in CardsOnTargetTables())
+        {
+            if (!card || card == placedCard) continue;   // don't self-trigger the placed card
+            if (card.countdown <= 0) continue;            // only cards still counting down react
+            if (card.cardData is CardDataOnPlaceEffect)
+                card.ActivateCard();
+        }
     }
 
     /// <summary>

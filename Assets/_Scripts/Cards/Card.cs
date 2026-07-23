@@ -25,7 +25,7 @@ using UnityEngine;
 /// </summary>
 public class Card : MonoBehaviour
 {
-    public CardDataBase cardDataBase;
+    public CardDataBase cardData;
     [HideInInspector] public int countdown=0;
     
     public enum CardState { InHand, Dragging, OnTable }
@@ -150,12 +150,17 @@ public class Card : MonoBehaviour
             HandManager.Instance.AddCard(this);
         }
         
-        if (!cardDataBase) return;
-        cardDataBase = Instantiate(cardDataBase);
+        if (!cardData) return;
+        cardData = Instantiate(cardData);
 
-        titleText.text = cardDataBase.GenerateTitle();
-        descriptionText.text = cardDataBase.GenerateDescription();
-        countDownText.text = cardDataBase.countdown.ToString();
+        // Seed the live countdown from the data so the card persists on the table for
+        // as many turns as it declares (cards with countdown > 0 stay in play and keep
+        // reacting; countdown <= 0 means "resolve once, then burn").
+        countdown = cardData.countdown;
+
+        titleText.text = cardData.GenerateTitle();
+        descriptionText.text = cardData.GenerateDescription();
+        countDownText.text = cardData.countdown.ToString();
 
         // Play the activate animation. AnimationControllerBase already gathered, in its Awake,
         // every AnimationBase under it whose type matches this controller's type (targetTypes),
@@ -261,13 +266,24 @@ public class Card : MonoBehaviour
         {
             R.PROJECT.Audio.Cards.dropCard,
         });
-        
+
+        // Record this as the freshly placed card and fire every OnPlace-effect card already
+        // on the table (see CardManager.OnCardPlaced). Must run before those cards activate
+        // so their effect can read CardManager.currentPlacedCard (this card).
+        if (CardManager.Instance) CardManager.Instance.OnCardPlaced(this);
+
         StartCoroutine(OnPlaceCoroutine());
     }
 
     public IEnumerator OnPlaceCoroutine()
     {
-        yield return new WaitForSeconds(0.67f);
+        yield return new WaitForSeconds(0.267f);
+
+        // "React to another card being placed" cards (activation == OtherCardPlaced) must not
+        // resolve on their OWN placement — they only fire from CardManager.OnCardPlaced when a
+        // LATER card lands. So skip the normal self-activation for them here.
+        if (cardData && cardData.activation == CP.ActivateCond.OtherCardPlaced) yield break;
+
         ActivateCard();
     }
 
@@ -279,7 +295,7 @@ public class Card : MonoBehaviour
     public IEnumerator ActivateCardCoroutine()
     {
         yield return null;
-        if (!cardDataBase) yield break;
+        if (!cardData) yield break;
         
         SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {
@@ -289,9 +305,9 @@ public class Card : MonoBehaviour
         });
         StartCoroutine(activateAnimController.PlayAnimations());
         
-        TableManager.Instance.AddSuits(cardDataBase.suits);
+        TableManager.Instance.AddSuits(cardData.suits);
 
-        int vp = cardDataBase.GenerateVP();
+        int vp = cardData.GenerateVP();
         TableManager.Instance.AddScore(vp);
         TextAlertManager.Instance.CreateDamageAlert(vp, transform);
 
