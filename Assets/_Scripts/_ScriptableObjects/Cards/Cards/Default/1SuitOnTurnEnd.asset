@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4655358ac95fbc4482b628279ca500d, type: 3}
-  m_Name: 1Suit
+  m_Name: 1SuitOnTurnEnd
   m_EditorClassIdentifier: Assembly-CSharp::CardDataBase
   title: 
   suits: 0000000000000000
-  countdown: 0
+  countdown: 4
   condition: 1
   vpPerSet: 50
-  activation: 0
+  activation: 3
   targetSource: 1
   suitSet: 
   fixedCount: 1

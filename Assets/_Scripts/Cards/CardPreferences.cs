@@ -31,14 +31,21 @@ public static class CP
         return SuitColors.TryGetValue(suit, out Color c) ? c : Color.white;
     }
 
-
+    /// <summary>
+    /// Multiple Condition:
+    /// Only for OnPlace events
+    /// If placed card has necessary amount of suits, return vp for suit sets
+    /// </summary>
     public enum Condition
     {
         SuitSet,
         SuitCount,
         FixedVp,
+        Multiple,
         Custom
     }
+    
+    
 
     public enum ActivateCond
     {

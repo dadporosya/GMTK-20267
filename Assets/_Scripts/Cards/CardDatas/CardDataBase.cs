@@ -114,7 +114,7 @@ public class CardDataBase : ScriptableObject
         int suitCountDelta;
         foreach (var card in sourceCards)
         {
-            suitCountDelta = card.cardData.suits.Count;
+            suitCountDelta = suitCount - card.cardData.suits.Count;
             if (fixedCount == true && suitCountDelta == 0)
             {
                 setCount++;

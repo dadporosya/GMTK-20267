@@ -16,6 +16,32 @@ public class CardDataOnPlaceEffect : CardDataBase
 
         if (CardManager.Instance.currentPlacedCard == null) return vp;
 
+        if (condition == CP.Condition.SuitSet)
+        {
+            vp = CalculateForSuitSets();
+        } else if (condition == CP.Condition.SuitCount)
+        {
+            vp = CalculateForSuitCount();
+        } else if (condition == CP.Condition.Multiple)
+        {
+            
+            int tempVp = CalculateForSuitCount();
+
+            if (tempVp > 0)
+            {
+                vp = CalculateForSuitSets();
+            }
+        }
+        
+        
+        h.Out("activate place card", vp);
+        
+        h.Out("VP:", vp);
+        return vp;
+    }
+
+    private int CalculateForSuitSets()
+    {
         Dictionary<CP.Suit, int> sourceSuits = new Dictionary<CP.Suit, int>();
         foreach (var suit in CardManager.Instance.currentPlacedCard.cardData.suits)
         {
@@ -24,12 +50,15 @@ public class CardDataOnPlaceEffect : CardDataBase
             else
                 sourceSuits[suit] = 1;
         }
-        vp = CalculateVpForSuitSets(sourceSuits);
-        
-        h.Out("activate place card", vp);
-        
-        h.Out("VP:", vp);
-        return vp;
+        return CalculateVpForSuitSets(sourceSuits);
+    }
+
+    private int CalculateForSuitCount()
+    {
+        return CalculateVpForSuitCount(new List<Card>()
+        {
+            CardManager.Instance.currentPlacedCard
+        });
     }
     
     public override string GenerateDescription()
