@@ -49,7 +49,7 @@ public class CardDataBase : ScriptableObject
                 }
             }
 
-           vp = CalculateVPForSuitSets(sourceSuits);
+           vp = CalculateVpForSuitSets(sourceSuits);
         } else if (condition == CP.Condition.FixedVp)
         {
             vp = vpPerSet;
@@ -59,7 +59,7 @@ public class CardDataBase : ScriptableObject
         return vp;
     }
     
-    public int CalculateVPForSuitSets(Dictionary<CP.Suit, int> sourceSuits)
+    public int CalculateVpForSuitSets(Dictionary<CP.Suit, int> sourceSuits)
     {
         int vp = 0;
         
