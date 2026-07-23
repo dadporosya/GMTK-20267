@@ -1649,6 +1649,8 @@ MonoBehaviour:
   startCards:
   - {fileID: 11400000, guid: 75fdbcb9de6d9a74e9eb94264a705eed, type: 2}
   - {fileID: 11400000, guid: a74d6fc252f26134b9585c738f1c8bcc, type: 2}
+  - {fileID: 11400000, guid: 8bb26dd0b7b09264db68980332152898, type: 2}
+  - {fileID: 11400000, guid: 36e40dd5fa312f0449f50a965e860440, type: 2}
 --- !u!1 &1681616742
 GameObject:
   m_ObjectHideFlags: 0

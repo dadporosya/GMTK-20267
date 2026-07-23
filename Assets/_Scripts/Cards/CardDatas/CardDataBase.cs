@@ -21,6 +21,9 @@ public class CardDataBase : ScriptableObject
     [Header("Suits count condition")]//
     public bool fixedCount = true; // if not, would be min count
     public int suitCount = 0;
+    
+    [Header("SuitDestroying")]
+    public List<CP.Suit> suitsToDestroy = new List<CP.Suit>();
 
     public virtual int GenerateVP()
     {
@@ -70,6 +73,8 @@ public class CardDataBase : ScriptableObject
             vp = CalculateVpForSuitCount(sourceCards); 
         }
         
+        TableManager.Instance.RemoveSuits(suitsToDestroy);
+
         h.Out("VP:", vp);
         return vp;
     }

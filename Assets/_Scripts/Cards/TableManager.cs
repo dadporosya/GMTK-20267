@@ -231,6 +231,22 @@ public class TableManager : MonoBehaviour
         RefreshSuitText(suit);
         PlaySuitChangeAnimation(suit);
     }
+    
+    public void RemoveSuits(List<CP.Suit> suitsToRemove)
+    {
+        foreach (var suit in suitsToRemove)
+            RemoveSuit(suit);
+    }
+
+    public void RemoveSuit(CP.Suit suit)
+    {
+        if (!suits.ContainsKey(suit)) suits[suit] = 0;
+        suits[suit] = h.Max(suits[suit]-1, 0);
+        
+
+        RefreshSuitText(suit);
+        PlaySuitChangeAnimation(suit);
+    }
 
     // Rebuilds a single suit line: "{SuitTag} {count}", colored with that suit's color.
     private void RefreshSuitText(CP.Suit suit)
