@@ -55,7 +55,19 @@ public class CardDataBase : ScriptableObject
             vp = vpPerSet;
         } else if (condition == CP.Condition.SuitCount)
         {
+            List<Card>  sourceCards = new List<Card>();
+            if (targetSource == CP.TargetSource.Table)
+            {
+                foreach (var table in CardManager.Instance.targetTables)
+                {
+                    sourceCards.AddRange(table.cards);
+                }
+            } else if (targetSource == CP.TargetSource.Hand)
+            {
+                sourceCards.AddRange(HandManager.Instance.Cards);
+            }
             
+            vp = CalculateVpForSuitCount(sourceCards); 
         }
         
         h.Out("VP:", vp);
@@ -95,6 +107,8 @@ public class CardDataBase : ScriptableObject
 
     public int CalculateVpForSuitCount(List<Card> sourceCards)
     {
+        if (sourceCards.Count == 0) return 0;
+        
         int vp = 0;
         int setCount = 0;
         int suitCountDelta;
