@@ -18,7 +18,7 @@ public class CardData : ScriptableObject
     [Header("Suits set condition")]
     public List<CP.Suit> suitSet = new List<CP.Suit>();
 
-    [Header("Suits count condition")]
+    [Header("Suits count condition")]//
     public bool fixedCount = true; // if not, would be min count
     public int suitCount = 0;
 
