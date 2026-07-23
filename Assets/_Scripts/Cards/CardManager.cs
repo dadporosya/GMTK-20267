@@ -186,6 +186,20 @@ public class CardManager : MonoBehaviour
             card.OnTurnStart();
             yield return wait;
         }
+
+        // Queue every card on the tracked tables whose activation is OnTurnStart so its effect
+        // resolves at the start of the turn (mirrors how OnCardPlaced queues reacting cards).
+        foreach (Card card in CardsOnTargetTables())
+        {
+            if (!card) continue;
+            if (card.countdown <= 0) continue;            // expired cards are being destroyed already
+            if (card.cardData && card.cardData.activation == CP.ActivateCond.OnTurnStart)
+                card.PrepareForActivation();
+        }
+
+        // Resolve the whole queue one effect at a time, after all cards have been looked through.
+        if (EffectResolverManager.Instance)
+            yield return EffectResolverManager.Instance.EffectResolveCoroutine();
     }
 
     private IEnumerator OnTurnEndCoroutine()

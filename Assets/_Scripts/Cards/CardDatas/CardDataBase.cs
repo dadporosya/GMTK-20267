@@ -90,12 +90,24 @@ public class CardDataBase : ScriptableObject
         return vp;
     }
 
-    public int CalculateVpForSuitCount(List<Card> cards)
+    public int CalculateVpForSuitCount(List<Card> sourceCards)
     {
         int vp = 0;
+        int setCount = 0;
+        int suitCountDelta;
+        foreach (var card in sourceCards)
+        {
+            suitCountDelta = card.cardData.suits.Count;
+            if (fixedCount == true && suitCountDelta == 0)
+            {
+                setCount++;
+            } else if (fixedCount == false && suitCountDelta >= 0)
+            {
+                setCount++;
+            }
+        }
 
-        
-        
+        vp = vpPerSet * setCount;
         return vp;
     }
 

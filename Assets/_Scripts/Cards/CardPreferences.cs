@@ -44,7 +44,8 @@ public static class CP
     {
         Burn,
         OtherCardPlaced,
-        OnTurnEnd
+        OnTurnEnd,
+        OnTurnStart
     }
 
     public enum TargetSource
