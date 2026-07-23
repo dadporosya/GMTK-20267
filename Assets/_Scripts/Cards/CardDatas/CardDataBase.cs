@@ -30,29 +30,7 @@ public class CardDataBase : ScriptableObject
         int vp = 0;
         if (condition == CP.Condition.SuitSet)
         {
-            Dictionary<CP.Suit, int> sourceSuits = new Dictionary<CP.Suit, int>();
-            if (targetSource == CP.TargetSource.Table)
-            {
-                foreach (var kvp in TableManager.Instance.suits)
-                    sourceSuits[kvp.Key] = kvp.Value;
-            } else if (targetSource == CP.TargetSource.Hand)
-            {
-                foreach (CP.Suit suit in System.Enum.GetValues(typeof(CP.Suit)))
-                {
-                    sourceSuits[suit] = 0;
-                }
-
-                foreach (Card card in HandManager.Instance.Cards)
-                {
-                    if (!card.cardData) continue;
-                    foreach (CP.Suit suit in card.cardData.suits)
-                    {
-                        sourceSuits[suit]++;
-                    }
-                }
-            }
-
-           vp = CalculateVpForSuitSets(sourceSuits);
+           vp = CalculateVpForSuitSets(GatherSourceSuits());
         } else if (condition == CP.Condition.FixedVp)
         {
             vp = vpPerSet;
@@ -110,6 +88,33 @@ public class CardDataBase : ScriptableObject
         return vp;
     }
 
+    public Dictionary<CP.Suit, int> GatherSourceSuits()
+    {
+        Dictionary<CP.Suit, int> sourceSuits = new Dictionary<CP.Suit, int>();
+        if (targetSource == CP.TargetSource.Table)
+        {
+            foreach (var kvp in TableManager.Instance.suits)
+                sourceSuits[kvp.Key] = kvp.Value;
+        } else if (targetSource == CP.TargetSource.Hand)
+        {
+            foreach (CP.Suit suit in System.Enum.GetValues(typeof(CP.Suit)))
+            {
+                sourceSuits[suit] = 0;
+            }
+
+            foreach (Card card in HandManager.Instance.Cards)
+            {
+                if (!card.cardData) continue;
+                foreach (CP.Suit suit in card.cardData.suits)
+                {
+                    sourceSuits[suit]++;
+                }
+            }
+        }
+
+        return sourceSuits;
+    }
+    
     public int CalculateVpForSuitCount(List<Card> sourceCards)
     {
         if (sourceCards.Count == 0) return 0;

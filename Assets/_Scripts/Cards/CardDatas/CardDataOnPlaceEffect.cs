@@ -8,14 +8,14 @@ public class CardDataOnPlaceEffect : CardDataBase
     private void OnEnable()
     {
         activation = CP.ActivateCond.OtherCardPlaced;
-        targetSource = CP.TargetSource.PlacedCard;
+        // targetSource = CP.TargetSource.PlacedCard;
     }
     public override int GenerateVP()
     {
         int vp = 0;
 
         if (CardManager.Instance.currentPlacedCard == null) return vp;
-
+        h.Out("DENERATE FOR ON PLACRED");
         if (condition == CP.Condition.SuitSet)
         {
             vp = CalculateForSuitSets();
@@ -26,10 +26,12 @@ public class CardDataOnPlaceEffect : CardDataBase
         {
             
             int tempVp = CalculateForSuitCount();
-
+            h.Out("tempvp,", tempVp);
             if (tempVp > 0)
             {
+                h.Out(targetSource);
                 vp = CalculateForSuitSets();
+                h.Out("not temp,", vp);
             }
         }
         
@@ -43,13 +45,21 @@ public class CardDataOnPlaceEffect : CardDataBase
     private int CalculateForSuitSets()
     {
         Dictionary<CP.Suit, int> sourceSuits = new Dictionary<CP.Suit, int>();
-        foreach (var suit in CardManager.Instance.currentPlacedCard.cardData.suits)
+        if (targetSource == CP.TargetSource.PlacedCard)
         {
-            if (sourceSuits.ContainsKey(suit))
-                sourceSuits[suit]++;
-            else
-                sourceSuits[suit] = 1;
+            foreach (var suit in CardManager.Instance.currentPlacedCard.cardData.suits)
+            {
+                if (sourceSuits.ContainsKey(suit))
+                    sourceSuits[suit]++;
+                else
+                    sourceSuits[suit] = 1;
+            }
         }
+        else
+        {
+            sourceSuits = GatherSourceSuits();
+        }
+        
         return CalculateVpForSuitSets(sourceSuits);
     }
 
