@@ -890,6 +890,7 @@ GameObject:
   - component: {fileID: 6556123085242673732}
   - component: {fileID: 3753440124336302830}
   - component: {fileID: 1860111264258832675}
+  - component: {fileID: 3595019471363852253}
   m_Layer: 0
   m_Name: CardPrefab
   m_TagString: Untagged
@@ -931,11 +932,11 @@ MonoBehaviour:
   countdown: 0
   titleText: {fileID: 9190375845582017650}
   descriptionText: {fileID: 5589938961515234598}
-  countDownText: {fileID: 0}
+  countDownText: {fileID: 5145997676384685177}
   frontFace: {fileID: 8397760802324866212}
   backFace: {fileID: 2832768547768142534}
-  dataParent: {fileID: 0}
-  activateAnimController: {fileID: 0}
+  dataParent: {fileID: 4644588000603010055}
+  activateAnimController: {fileID: 3595019471363852253}
   pickCollider: {fileID: 0}
   useFaceToggling: 0
   faceRotationOffset: {x: 0, y: 180, z: 0}
@@ -1019,6 +1020,26 @@ MonoBehaviour:
   ease: 5
   randomPhase: 0
   initialState: {x: 0, y: 0, z: 0}
+--- !u!114 &3595019471363852253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8042637533860296657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b0c9cf46137438cb8ed511c1238e438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationControllerBase
+  type: 12
+  filterByTypes: 1
+  targetTypes: 
+  animations: []
+  searchForAnimationInChildren: 1
+  searchForAnimationInAllChildren: 1
+  loop: 0
+  playOnStart: 0
 --- !u!1 &8397760802324866212
 GameObject:
   m_ObjectHideFlags: 0

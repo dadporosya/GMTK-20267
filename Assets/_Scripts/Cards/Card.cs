@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Threading;
 using PrimeTween;
 using TMPro;
@@ -255,6 +256,15 @@ public class Card : MonoBehaviour
         TableManager.Instance.AddScore(vp);
         TextAlertManager.Instance.CreateDamageAlert(vp, transform);
 
+        StartCoroutine(DestroyCoroutine());
+
+    }
+
+    public IEnumerator DestroyCoroutine()
+    {
+        yield return 0;
+        yield return new WaitForSeconds(1f);
+        Burn();
     }
 
     /// <summary>
