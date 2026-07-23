@@ -34,7 +34,19 @@ public class CardData : ScriptableObject
                     sourceSuits[kvp.Key] = kvp.Value;
             } else if (targetSource == CP.TargetSource.Hand)
             {
-                // skip for now
+                foreach (CP.Suits suit in System.Enum.GetValues(typeof(CP.Suits)))
+                {
+                    sourceSuits[suit] = 0;
+                }
+
+                foreach (Card card in HandManager.Instance.Cards)
+                {
+                    if (!card.cardData) continue;
+                    foreach (CP.Suits suit in card.cardData.suits)
+                    {
+                        sourceSuits[suit]++;
+                    }
+                }
             }
 
             // Count how many of each suit a single set requires.

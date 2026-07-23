@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TableManager : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class TableManager : MonoBehaviour
     public Dictionary<CP.Suits, int> suits = new Dictionary<CP.Suits, int>();
     [SerializeField] private List<CP.Suits> startSuits = new List<CP.Suits>();
     [SerializeField] private List<int> startSuitCount = new List<int>();
+
+    public UnityEvent onScoreReached;
     
     
     // The value currently shown by the animation (may lag behind currentScore mid-tween).
@@ -98,8 +101,16 @@ public class TableManager : MonoBehaviour
             },
             ease: Ease.Linear
         );
+        
+        //
     }
 
+    public void OnScoreReached()
+    {
+        h.Out("ScoreReached");
+        onScoreReached?.Invoke();
+    }
+    
     private void RefreshScoreText(int value)
     {
         if (scoreText != null)
