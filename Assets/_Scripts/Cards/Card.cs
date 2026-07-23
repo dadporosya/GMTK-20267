@@ -258,7 +258,9 @@ public class Card : MonoBehaviour
 
     /// <summary>
     /// Called by <see cref="PlacingArea"/> right after the card is placed on its surface.
-    /// Empty by design — override / extend this to trigger the card's "on play" behaviour.
+    /// Queues this card's own effect (unless it is a "react to another card" card) and hands
+    /// off to <see cref="CardManager.OnCardPlaced"/>, which queues every reacting card, resolves
+    /// the whole queue one effect at a time and then runs turn-end -> turn-start.
     /// </summary>
     public virtual void OnPlace()
     {
@@ -267,24 +269,24 @@ public class Card : MonoBehaviour
             R.PROJECT.Audio.Cards.dropCard,
         });
 
-        // Record this as the freshly placed card and fire every OnPlace-effect card already
-        // on the table (see CardManager.OnCardPlaced). Must run before those cards activate
-        // so their effect can read CardManager.currentPlacedCard (this card).
-        if (CardManager.Instance) CardManager.Instance.OnCardPlaced(this);
+        // Queue this card's own effect first. A "react to another card being placed" card
+        // (activation == OtherCardPlaced) must NOT resolve on its OWN placement — it only fires
+        // from CardManager.OnCardPlaced when a LATER card lands — so it is skipped here.
+        if (!cardData || cardData.activation != CP.ActivateCond.OtherCardPlaced)
+            PrepareForActivation();
 
-        StartCoroutine(OnPlaceCoroutine());
+        // Hand off to CardManager: it records this as the freshly placed card, queues every
+        // reacting card, resolves the queue consecutively, then advances the turn.
+        if (CardManager.Instance) CardManager.Instance.OnCardPlaced(this);
     }
 
-    public IEnumerator OnPlaceCoroutine()
+    /// <summary>
+    /// Registers this card with <see cref="EffectResolverManager"/> so its effect is resolved
+    /// in turn — one card at a time — rather than firing immediately alongside every other card.
+    /// </summary>
+    public void PrepareForActivation()
     {
-        yield return new WaitForSeconds(0.267f);
-
-        // "React to another card being placed" cards (activation == OtherCardPlaced) must not
-        // resolve on their OWN placement — they only fire from CardManager.OnCardPlaced when a
-        // LATER card lands. So skip the normal self-activation for them here.
-        if (cardData && cardData.activation == CP.ActivateCond.OtherCardPlaced) yield break;
-
-        ActivateCard();
+        if (EffectResolverManager.Instance) EffectResolverManager.Instance.PrepareCard(this);
     }
 
     public virtual void ActivateCard()

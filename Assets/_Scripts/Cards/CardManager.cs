@@ -118,26 +118,46 @@ public class CardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Called by <see cref="Card.OnPlace"/> every time a card lands on the table.
-    /// Records <paramref name="placedCard"/> as <see cref="currentPlacedCard"/> (so
-    /// OnPlace-effect cards can read what was just played), then activates every OTHER
-    /// card on the tracked tables whose data is a <see cref="CardDataOnPlaceEffect"/> and
-    /// whose <see cref="Card.countdown"/> is still &gt; 0. The freshly placed card is
-    /// skipped so it never triggers itself.
+    /// Called by <see cref="Card.OnPlace"/> every time a card lands on the table. Records the
+    /// placed card, queues every reacting card and resolves the whole effect queue one card at
+    /// a time, then advances the turn (see <see cref="OnCardPlacedCoroutine"/>).
     /// </summary>
     public void OnCardPlaced(Card placedCard)
     {
+        StartCoroutine(OnCardPlacedCoroutine(placedCard));
+    }
+
+    /// <summary>
+    /// Records <paramref name="placedCard"/> as <see cref="currentPlacedCard"/> (so reacting
+    /// cards can read what was just played), then queues every OTHER card on the tracked tables
+    /// whose activation is <see cref="CP.ActivateCond.OtherCardPlaced"/> and whose
+    /// <see cref="Card.countdown"/> is still &gt; 0. The placed card is skipped so it never
+    /// triggers itself (it already queued its own effect first, in <see cref="Card.OnPlace"/>).
+    /// Once every effect has resolved consecutively, the turn ends and the next one starts.
+    /// </summary>
+    private IEnumerator OnCardPlacedCoroutine(Card placedCard)
+    {
         currentPlacedCard = placedCard;
-        
-        h.Out("curernt placed card", placedCard);
-        
+
+        h.Out("current placed card", placedCard);
+
+        // Queue every OTHER reacting card so it responds to the freshly placed card. The placed
+        // card sits first in the queue (queued in Card.OnPlace), so it resolves before these.
         foreach (Card card in CardsOnTargetTables())
         {
             if (!card || card == placedCard) continue;   // don't self-trigger the placed card
             if (card.countdown <= 0) continue;            // only cards still counting down react
-            if (card.cardData is CardDataOnPlaceEffect)
-                card.ActivateCard();
+            if (card.cardData && card.cardData.activation == CP.ActivateCond.OtherCardPlaced)
+                card.PrepareForActivation();
         }
+
+        // Resolve the whole queue one effect at a time.
+        if (EffectResolverManager.Instance)
+            yield return EffectResolverManager.Instance.EffectResolveCoroutine();
+
+        // End the current turn, then start the next.
+        yield return OnTurnEndCoroutine();
+        yield return OnTurnStartCoroutine();
     }
 
     /// <summary>
