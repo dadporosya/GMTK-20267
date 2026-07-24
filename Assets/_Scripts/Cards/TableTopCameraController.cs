@@ -217,10 +217,10 @@ public class TableTopCameraController : MonoBehaviour
         // Straight above the surface by the zoom height, looking straight down.
         Vector3 pos = new Vector3(center.x, b.max.y + tableViewZoom, center.z);
 
-        // Look straight down (pitch 90) but KEEP the camera's current Y rotation (yaw) instead of
-        // snapping the screen-up to a fixed direction — the view stays oriented the way the player
-        // was already facing.
-        Quaternion rot = Quaternion.Euler(90f, camTransform.eulerAngles.y, 0f);
+        // Only change the X rotation (pitch) to look straight down; leave Y and Z untouched, so the
+        // view keeps whatever heading/roll the camera already had.
+        Vector3 e = camTransform.eulerAngles;
+        Quaternion rot = Quaternion.Euler(90f, e.y, e.z);
 
         MoveToWorld(pos, rot, instant);
     }

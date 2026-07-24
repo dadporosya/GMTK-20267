@@ -1113,6 +1113,7 @@ GameObject:
   m_Component:
   - component: {fileID: 758091523}
   - component: {fileID: 758091524}
+  - component: {fileID: 758091525}
   m_Layer: 0
   m_Name: CameraParent
   m_TagString: Untagged
@@ -1160,6 +1161,36 @@ MonoBehaviour:
   handViewIsInitView: 1
   handViewLocalPosition: {x: 0, y: 0, z: 0}
   handViewLocalEuler: {x: 0, y: 0, z: 0}
+--- !u!114 &758091525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758091522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602ed2d16e08fee4f80f2b95288aa419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouseLook
+  sensitivity: 10
+  smoothing: 10
+  rotationTime: 0.67
+  cameraMoveTime: 0.67
+  minY: 0
+  maxY: 0
+  yOffset: 0
+  minX: 0
+  maxX: 0
+  limitX: 0
+  canLook: 0
+  cameraBob: 0
+  bobFrequency: 0
+  bobAmount: 0
+  bobSmoothing: 0
+  magnitudeThreshold: 0
+  walkBobMultiplier: 0
+  walkReturnSpeed: 0
 --- !u!1 &816907031
 GameObject:
   m_ObjectHideFlags: 0
