@@ -1,0 +1,77 @@
+card creation rules:
+
+each letter (from a to g) represent a suit
+a	pride
+b	wrath
+c	greed
+d	gluttony
+e	sloth
+f	lust
+g	envy
+
+
+the suits column shows what suits the card have (if suits = a b, card.suits = {pride wrath})
+
+condition represents the condition
+---
+if the condition consists only of suits (like: ABC), its default suit sert condition. set for the card: suit set = {suits in the row}. activation = burn. target source = table. condition = suit set.
+-----
+if card has ON PLACE or ON THE CARD added to the suit in its condition, it would be on place effect. do following:
+condition = suitset. activation = other card palced. target source = placed card. suit set = P{suits before ON PLACE text}. also, for such a card, create not CardDataDefault object but CardDataOnPlaceEffect object
+------
+if IN HAND is added -> change the target source to Hand
+example: A A in hand -> suit set {A, A}, target source = "Hand"
+----
+instead of suits (letters) other condition can be mentioned.
+if the condition is: N SUIT (where N is int) -> change condtion to suit count, and set suitCount param to N. Set fixed count = true for all cards
+example:
+2 SUIT IN HAND		
+condition = suit count. suitCount = 2. fixedCount = true. targetSource = hand
+----
+if condition looks like: DESTROY [Suits]:
+set condition to fixed VP. Add all suits that goes after DESTROY to SuitsToDestroy list
+example:
+DESTROY A A
+condtion = fixed VP. Suit To Desctory = {A, A}
+------
+if END TURN is added to the condtion, change the activation to "OnTurnEnd"
+example:
+B B IN HAND END TURN		
+suit set = {B, B}. target source = Hand. Activation = OnTurnEnd
+-----
+MIXED CONDITIONS
+if condition goes like: N SUIT: [suits], its a mixed condition (Multiple)
+Do follwoing:
+Create CardDataOnPlaceEffect
+condition = Multiple
+activation = orhercardPlaced
+source = Table by default. HAnd if IN HAND is mentioned
+N SUIT shows the value of SuitCount.
+[suits] shows the SuitSet elements
+
+example:
+2 SUIT: GG IN HAND		
+create CardDataOnPlaceEffect
+condition = multiple
+target source = table
+activation = other card placed
+SuitCount = 2
+SuitSet = {G, G}
+----
+other examples:
+exmp1:
+1 SUIT CARD ON PLACE
+create CardDataOnPlaceEffect
+condition = suitcount
+suitCount = 1
+targetSource = placed card
+---------------
+
+VP shows the value of VpPerSet
+
+countdown shows the value of CountDown. if its empty, sountdown = 0
+
+
+
+
+root folder: _Scripts._ScripttableObjects.Cards.Cards
