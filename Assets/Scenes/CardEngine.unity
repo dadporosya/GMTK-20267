@@ -1154,7 +1154,7 @@ MonoBehaviour:
   transitionDuration: 0.5
   transitionEase: 9
   instantOnStart: 1
-  tableViewZoom: 20
+  tableViewZoom: 12
   minTableViewZoom: 1.5
   maxTableViewZoom: 25
   handViewIsInitView: 1
