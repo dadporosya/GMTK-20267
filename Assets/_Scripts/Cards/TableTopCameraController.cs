@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using PrimeTween;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Drives the card-game camera between three framing modes and keeps the hand's
@@ -77,6 +78,8 @@ public class TableTopCameraController : MonoBehaviour
              "Overwritten from the scene pose on Start when handViewIsInitView is on.")]
     [SerializeField] private Vector3 handViewLocalEuler;
 
+    private MouseLook mouseLook;
+    
     // Active move/rotate tweens, stopped before a new transition starts.
     private Tween posTween;
     private Tween rotTween;
@@ -85,6 +88,7 @@ public class TableTopCameraController : MonoBehaviour
     {
         h.CreateStaticInstance(this, ref Instance, setDontDestroy: false);
         if (!camTransform) camTransform = transform;
+        mouseLook = GetComponent<MouseLook>();
     }
 
     private void Start()
@@ -200,6 +204,8 @@ public class TableTopCameraController : MonoBehaviour
     /// <summary>Top-down over the table; hand stops following the camera.</summary>
     private void ApplyTableView(bool instant)
     {
+        if (mouseLook) mouseLook.canLook = false;
+
         SetCardsFollow(false);
 
         if (!currentTable) currentTable = FindTable();
@@ -214,20 +220,28 @@ public class TableTopCameraController : MonoBehaviour
         Bounds b = TableBounds();
         Vector3 center = b.center;
 
-        // Straight above the surface by the zoom height, looking straight down.
-        Vector3 pos = new Vector3(center.x, b.max.y + tableViewZoom, center.z);
+        // Straight above the surface by the zoom height.
+        Vector3 worldPos = new Vector3(center.x, b.max.y + tableViewZoom, center.z);
 
-        // Only change the X rotation (pitch) to look straight down; leave Y and Z untouched, so the
-        // view keeps whatever heading/roll the camera already had.
-        Vector3 e = camTransform.eulerAngles;
-        Quaternion rot = Quaternion.Euler(90f, e.y, e.z);
+        // Only change the camera's LOCAL X rotation (pitch); keep its local Y and Z EXACTLY as they
+        // were in the previous state. Working in local space (not world) avoids the world-euler
+        // gimbal aliasing that made Y/Z jump — e.g. (90,90,0) being reported as (90,0,-90) — because
+        // in the scene the yaw lives on CameraParent and the camera's own local Y/Z are 0.
+        Vector3 le = camTransform.localEulerAngles;
+        Quaternion localRot = Quaternion.Euler(tableViewPitchX, le.y, le.z);
 
-        MoveToWorld(pos, rot, instant);
+        // Bring the world target position into the parent's space so position + rotation move
+        // together in local space.
+        Transform parent = camTransform.parent;
+        Vector3 localPos = parent ? parent.InverseTransformPoint(worldPos) : worldPos;
+
+        MoveToLocal(localPos, localRot, instant);
     }
 
     /// <summary>Return to the saved hand pose; hand follows the camera.</summary>
     private void ApplyHandView(bool instant)
     {
+        if (mouseLook) mouseLook.canLook = false;
         SetCardsFollow(true);
         MoveToLocal(handViewLocalPosition, Quaternion.Euler(handViewLocalEuler), instant);
     }
@@ -235,6 +249,7 @@ public class TableTopCameraController : MonoBehaviour
     /// <summary>Minimal for now: level out to look forward at the horizon; hand does not follow.</summary>
     private void ApplyFreeView(bool instant)
     {
+        if (mouseLook) mouseLook.canLook = true;
         SetCardsFollow(false);
 
         if (!camTransform) camTransform = transform;
