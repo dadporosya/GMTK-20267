@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e082cd29848535a42922a1884cc70287, type: 3}
+  m_Name: D_Gluttony
+  m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjectContainer
+  scriptableObjects:
+  - {fileID: 11400000, guid: d76094e7b7a2413fb8c4ae0c120e1df1, type: 2}
+  - {fileID: 11400000, guid: 8671f1edc94143caa421dd412a1791df, type: 2}
+  - {fileID: 11400000, guid: b21f268c63e94326862ba77016200378, type: 2}
+  - {fileID: 11400000, guid: 02ba2ffecd1c434e8c8f9f6b79f229d2, type: 2}
+  - {fileID: 11400000, guid: 728e91ba8de0456f83f39c790636975a, type: 2}
+  - {fileID: 11400000, guid: 3fb34fd031694d4db009c7491b8c255f, type: 2}
+  - {fileID: 11400000, guid: 73874ff6cb5f48d4a6ef623eb01bcbdb, type: 2}
+  - {fileID: 11400000, guid: 5383ed33f81545cb9f212703ce210ea5, type: 2}
+  - {fileID: 11400000, guid: 8c01ac61ef34424b8cbc66f155750d58, type: 2}
+  - {fileID: 11400000, guid: 0ca9b9e017274095a0a4f95a8bd707e1, type: 2}
+  - {fileID: 11400000, guid: 1244bdb6c5ee4f02bdbe7cc69db80c76, type: 2}
+  - {fileID: 11400000, guid: 0173c865cc074772b42cd4a19192ff18, type: 2}
+  - {fileID: 11400000, guid: e1f8d6f68b234377a7c33a7154448419, type: 2}
+  - {fileID: 11400000, guid: b70fa22c662b4e6094b1f32c1f3e9dcc, type: 2}

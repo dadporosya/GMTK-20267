@@ -12,4 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e082cd29848535a42922a1884cc70287, type: 3}
   m_Name: B_WrathPile
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjectContainer
-  scriptableObjects: []
+  scriptableObjects:
+  - {fileID: 11400000, guid: fa266f6b6c6740ee841652cee50f75e4, type: 2}
+  - {fileID: 11400000, guid: cfc3e9ef09564d2a8652f412804e93eb, type: 2}
+  - {fileID: 11400000, guid: 5305584c42c94f52b1cdd2dbe54959ed, type: 2}
+  - {fileID: 11400000, guid: 7c2e927bfeb34d758973dfc2552c2a38, type: 2}
+  - {fileID: 11400000, guid: 38ffc3cc5d22470ba9c34c9194fc6ef9, type: 2}
+  - {fileID: 11400000, guid: 0312e63748fb44619a4aa19ba7ce09cc, type: 2}
+  - {fileID: 11400000, guid: 5628b150ef6346b4ae5960d4ff53c357, type: 2}
+  - {fileID: 11400000, guid: 13543292b6db48deb8cd693351fc3ed1, type: 2}
+  - {fileID: 11400000, guid: c9d3feac8d6a4ed293bf6429c63664c1, type: 2}
+  - {fileID: 11400000, guid: 30fd3321fb2e477fb2b0207fba68f6b0, type: 2}
+  - {fileID: 11400000, guid: 25ed468a599a4400a8e03b9e3213d510, type: 2}
+  - {fileID: 11400000, guid: ee5dea1e430845bd9ac55a42cb7fb9a3, type: 2}
+  - {fileID: 11400000, guid: ef7fdc5c92864a48b0905c943aed3ffd, type: 2}
+  - {fileID: 11400000, guid: a04b1d0d1af941a7be09981688c928e5, type: 2}
+  - {fileID: 11400000, guid: 1f2602bb6a184ef997ec43d8a7658409, type: 2}

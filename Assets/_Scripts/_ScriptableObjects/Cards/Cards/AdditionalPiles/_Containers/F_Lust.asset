@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e082cd29848535a42922a1884cc70287, type: 3}
+  m_Name: F_Lust
+  m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjectContainer
+  scriptableObjects:
+  - {fileID: 11400000, guid: ed8567dd716844bbb113d9b5d5891045, type: 2}
+  - {fileID: 11400000, guid: 611bf7267f4d4bed82b51c8382cefaeb, type: 2}
+  - {fileID: 11400000, guid: 6bc8267e85284449bedd7d9df93e8718, type: 2}
+  - {fileID: 11400000, guid: 9752955627e04d9bb15bcf7a8832ae5c, type: 2}
+  - {fileID: 11400000, guid: d697f8b45b7a4111905c3eef8bf98343, type: 2}
+  - {fileID: 11400000, guid: d3026eec879b417f98fddd90c2bd10c3, type: 2}
+  - {fileID: 11400000, guid: 0b1cf513f4de48ef863dd2f44f9df472, type: 2}
+  - {fileID: 11400000, guid: e23dabf509714a2e9a75eb6bd74a8e29, type: 2}
+  - {fileID: 11400000, guid: c031d7b841d34a318cb58ee13162e03f, type: 2}
+  - {fileID: 11400000, guid: 5e996037a37442ef86cbe11f6b2e4282, type: 2}
+  - {fileID: 11400000, guid: 5546643a41ea4ecf9077327776740cda, type: 2}
+  - {fileID: 11400000, guid: aee48eb949d34fd28195cd7c6d79839b, type: 2}
