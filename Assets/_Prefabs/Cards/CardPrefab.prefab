@@ -1110,7 +1110,7 @@ MonoBehaviour:
   burnDissolveDelay: 0.05
   burnDissolveDuration: 0.8
   burnDissolveEase: 5
-  burnDestroyDelay: 0
+  burnDestroyDelay: 1.67
   delayBeforeBurn: 0.25
   countdownSquishStrength: 1.25
   countdownSquishDuration: 0.14

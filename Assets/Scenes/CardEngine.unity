@@ -1158,9 +1158,11 @@ MonoBehaviour:
   tableViewZoom: 12
   minTableViewZoom: 1.5
   maxTableViewZoom: 25
+  tableViewPitchX: 90
   handViewIsInitView: 1
   handViewLocalPosition: {x: 0, y: 0, z: 0}
   handViewLocalEuler: {x: 0, y: 0, z: 0}
+  mouseLook: {fileID: 0}
 --- !u!114 &758091525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1173,8 +1175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 602ed2d16e08fee4f80f2b95288aa419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseLook
-  sensitivity: 10
-  smoothing: 10
+  sensitivity: 26.7
+  smoothing: 6.7
   rotationTime: 0.67
   cameraMoveTime: 0.67
   minY: 0
