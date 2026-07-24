@@ -183,11 +183,11 @@ public class CardDataBase : ScriptableObject
 
         if (condition == CP.Condition.SuitSet)
         {
-            result = BuildSuitTags(id) + " = " + vpPerSet.ToString();
+            result = BuildSuitTags(id);
         }
         else if (condition == CP.Condition.SuitCount)
         {
-            result = CP.CardIconTag(id) + " " + suitCount.ToString() + " " + SuitWord(suitCount) + " = " + vpPerSet.ToString();
+            result = CP.CardIconTag(id) + " " + suitCount.ToString() + " " + SuitWord(suitCount);
         }
         else if (condition == CP.Condition.FixedVp)
         {
@@ -195,14 +195,13 @@ public class CardDataBase : ScriptableObject
         }
         else if (condition == CP.Condition.Multiple)
         {
-            result = BuildSuitTags(id) + " = " + vpPerSet.ToString()
-                     + "\nIF " + suitCount.ToString() + " " + SuitWord(suitCount) + " ON PLACED CARD";
+            result = "IF " + suitCount.ToString() + " " + SuitWord(suitCount) + " ON PLACED CARD" + "\n" + BuildSuitTags(id);
         }
 
         // Target-source suffix.
         if (targetSource == CP.TargetSource.Hand)
         {
-            result += "\nIN HAND";
+            result += " IN HAND";
         }
         else if (targetSource == CP.TargetSource.PlacedCard)
         {
@@ -213,7 +212,7 @@ public class CardDataBase : ScriptableObject
         // Activation suffix (only OnTurnEnd is described).
         if (activation == CP.ActivateCond.OnTurnEnd)
         {
-            result += "\nON TURN END";
+            result += " ON TURN END";
         }
         
         // Destroy suffix: if this card removes suits, show which ones (as suit sprite tags for
@@ -223,6 +222,8 @@ public class CardDataBase : ScriptableObject
             result += "\nDESTROYS " + BuildSuitTags(suitsToDestroy, id);
         }
 
+        if (condition != CP.Condition.FixedVp) result += " = " + vpPerSet.ToString();
+        
         return result;
     }
 
