@@ -187,7 +187,7 @@ public class CardDataBase : ScriptableObject
         }
         else if (condition == CP.Condition.SuitCount)
         {
-            result = suitCount.ToString() + " " + SuitWord(suitCount) + " = " + vpPerSet.ToString();
+            result = "CARD " + suitCount.ToString() + " " + SuitWord(suitCount) + " = " + vpPerSet.ToString();
         }
         else if (condition == CP.Condition.FixedVp)
         {

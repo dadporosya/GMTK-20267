@@ -65,6 +65,13 @@ public class CardDragController : MonoBehaviour
              "selected, tilting their tops back so they read as 'laid down'. Only used when " +
              "lowerTheOtherCards is on.")]
     [SerializeField] private float lowerOthersRotationX = 8f;
+    [Tooltip("ADDITIONAL dip added to the other cards while the selected card is actually held/" +
+             "dragged (added on top of lowerOthersAmount). Only used when lowerTheOtherCards is on.")]
+    [SerializeField] private float selectedExtraLowerOthers = 0.15f;
+    [Tooltip("ADDITIONAL X-axis rotation (degrees) added to the other cards while the selected " +
+             "card is held/dragged (added on top of lowerOthersRotationX). Only used when " +
+             "lowerTheOtherCards is on.")]
+    [SerializeField] private float selectedExtraRotationX = 5f;
 
     private Card dragging;
     private Card.CardState dragOriginState;
@@ -146,12 +153,18 @@ public class CardDragController : MonoBehaviour
     /// <see cref="HandManager"/>, which applies the actual pose offsets in its layout. Kept in one
     /// place so hover-change and drag-start both report focus consistently.
     /// </summary>
-    private void PushHoverFocus(Card focused)
+    private void PushHoverFocus(Card focused, bool selected = false)
     {
-        if (HandManager.Instance)
-            HandManager.Instance.SetHoverFocus(
-                focused, RaiseSelectedOnTop, lowerTheOtherCards,
-                raiseTowardCameraAmount, lowerOthersAmount, lowerOthersRotationX);
+        if (!HandManager.Instance) return;
+
+        // While the card is actually selected (clicked/held), the others dip and tilt a bit more
+        // than on plain hover — the extra amounts are added on top of the hover values.
+        float lower = lowerOthersAmount + (selected ? selectedExtraLowerOthers : 0f);
+        float rotX = lowerOthersRotationX + (selected ? selectedExtraRotationX : 0f);
+
+        HandManager.Instance.SetHoverFocus(
+            focused, RaiseSelectedOnTop, lowerTheOtherCards,
+            raiseTowardCameraAmount, lower, rotX);
     }
 
     private void BeginDrag(Card card)
@@ -161,10 +174,13 @@ public class CardDragController : MonoBehaviour
         dragging = card;
         dragOriginState = card.state;
 
-        // Keep the other hand cards lowered for the WHOLE drag. The picked-up card leaves the
-        // hand (it becomes the focus but takes no layout slot), so every remaining hand card
-        // stays dipped until release. Dragging a table card has no hand focus, so clear it.
-        PushHoverFocus(dragOriginState == Card.CardState.InHand ? card : null);
+        // Keep the other hand cards lowered for the WHOLE drag, with the extra "selected" dip/tilt.
+        // The picked-up card leaves the hand (it becomes the focus but takes no layout slot), so
+        // every remaining hand card stays dipped until release. A table card has no hand focus.
+        if (dragOriginState == Card.CardState.InHand)
+            PushHoverFocus(card, selected: true);
+        else
+            PushHoverFocus(null);
         card.SetHovered(false);
         card.SetState(Card.CardState.Dragging);
         // Ignore the dragged card in raycasts so the drop-surface ray can't hit the card
