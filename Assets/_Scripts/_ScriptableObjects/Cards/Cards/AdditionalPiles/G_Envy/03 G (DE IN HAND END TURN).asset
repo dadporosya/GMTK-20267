@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8668d63a175058d409513ed9345c62f2, type: 3}
-  m_Name: 07 C (GG IN HAND END TURN)
+  m_Name: 03 G (DE IN HAND END TURN)
   m_EditorClassIdentifier: Assembly-CSharp::CardDataBase
   title: 
-  suits: 01000000
+  suits: 03000000
   countdown: 2
   condition: 0
   vpPerSet: 175
   activation: 2
   targetSource: 1
-  suitSet: 0300000003000000
+  suitSet: 0400000006000000
   fixedCount: 1
   suitCount: 0
   suitsToDestroy: 

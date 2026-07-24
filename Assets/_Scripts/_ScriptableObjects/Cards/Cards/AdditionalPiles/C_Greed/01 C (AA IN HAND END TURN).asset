@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardDataBase
   title: 
   suits: 01000000
-  countdown: 0
+  countdown: 2
   condition: 0
   vpPerSet: 175
   activation: 2

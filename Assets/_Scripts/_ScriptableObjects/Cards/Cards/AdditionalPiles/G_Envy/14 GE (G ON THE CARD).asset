@@ -9,17 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8668d63a175058d409513ed9345c62f2, type: 3}
-  m_Name: 07 C (GG IN HAND END TURN)
-  m_EditorClassIdentifier: Assembly-CSharp::CardDataBase
+  m_Script: {fileID: 11500000, guid: cc09c4ac3eed411498d84c17174622ba, type: 3}
+  m_Name: 14 GE (G ON THE CARD)
+  m_EditorClassIdentifier: Assembly-CSharp::CardDataOnPlaceEffect
   title: 
-  suits: 01000000
-  countdown: 2
+  suits: 0300000006000000
+  countdown: 3
   condition: 0
   vpPerSet: 175
-  activation: 2
-  targetSource: 1
-  suitSet: 0300000003000000
+  activation: 1
+  targetSource: 2
+  suitSet: 03000000
   fixedCount: 1
   suitCount: 0
   suitsToDestroy: 
