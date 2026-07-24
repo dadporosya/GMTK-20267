@@ -1,0 +1,20 @@
+[
+  {
+    "MountId": "56e62dd7-241f-41e9-8c6b-dd4ca4513e62",
+    "AncestorCsetIds": [
+      54
+    ],
+    "SourceCsetId": 55,
+    "DestinationCsetId": 54,
+    "FileConflicts": [
+      {
+        "Path": "/Assets/TextMesh Pro/Fonts/DK Crayon Crumble SDF.asset",
+        "ItemId": 9391,
+        "ParentItemId": 6005,
+        "BaseRevId": 9893,
+        "SourceRevId": 9963,
+        "DestinationRevId": 9893
+      }
+    ]
+  }
+]
