@@ -68,12 +68,12 @@ Material:
     - _Contrast: 0
     - _Contrast_Amount: 15.3
     - _Disslove: 1
-    - _DissloveOutlinesthickness: 0.2
-    - _DissloveScale: 500
+    - _DissloveOutlinesthickness: 0.067
+    - _DissloveScale: 162
     - _DissloveTwirl: 0
     - _DissloveTwirlStrength: 1
     - _DissolvePixelation: 128
-    - _Dissolve_amount: 0.304
+    - _Dissolve_amount: 0.363
     - _Distortion: 0
     - _DistortionScale: 26.9
     - _DistortionStrength: 1
@@ -107,7 +107,7 @@ Material:
     - _YDir: 32.73
     m_Colors:
     - _Distortion_Direction: {r: 0, g: 1, b: 0, a: 0}
-    - _EdgeColor: {r: 16, g: 14.684007, b: 8.075472, a: 1}
+    - _EdgeColor: {r: 17.269756, g: 15.44402, b: 8.06465, a: 1}
     - _Hit_Color: {r: 0, g: 0, b: 0, a: 1}
     - _OUtlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
