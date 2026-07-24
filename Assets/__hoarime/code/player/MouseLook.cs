@@ -19,6 +19,8 @@ public class MouseLook : MonoBehaviour
     [SerializeField] float minX;
     [SerializeField] float maxX;
     [SerializeField] bool limitX;
+    [Tooltip("Clamp vertical look (pitch / xRot) to [minY, maxY]. Off = free pitch.")]
+    [SerializeField] bool limitY;
 
     public bool canLook = true;
     private bool frozen;
@@ -156,7 +158,10 @@ public class MouseLook : MonoBehaviour
 
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
         xRot -= mouseY;
-        xRot = Mathf.Clamp(xRot, minY, maxY);
+        if (limitY)
+        {
+            xRot = Mathf.Clamp(xRot, minY, maxY);
+        }
         cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, Quaternion.Euler(xRot, cam.transform.eulerAngles.y, 0), smoothing * Time.deltaTime);
     }
 
