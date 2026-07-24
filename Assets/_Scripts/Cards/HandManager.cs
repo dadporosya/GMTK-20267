@@ -49,8 +49,21 @@ public class HandManager : MonoBehaviour
     [Tooltip("Recompute the layout every frame so the hand follows a moving camera. Turn off to only arrange on demand.")]
     [SerializeField] private bool arrangeContinuously = true;
 
+    [Header("Hover focus (tops the selected card / lays the others down)")]
+    [Tooltip("Extra pitch (degrees) applied to the NON-selected cards while one card is focused, " +
+             "tilting their tops back so they read as 'laid down' behind the selected card.")]
+    [SerializeField] private float lowerOthersPitch = 8f;
+
     /// <summary>The cards currently in the hand. This is the layout's source of truth.</summary>
     public List<Card> Cards { get; } = new List<Card>();
+
+    // Hover-focus state, pushed in from CardDragController. Read by Arrange to raise the focused
+    // card toward the camera (so it renders on top) and/or dip the others so it stands clear.
+    private Card focusedCard;
+    private bool focusRaiseSelected;
+    private bool focusLowerOthers;
+    private float focusRaiseAmount;
+    private float focusLowerAmount;
 
     // Reused each Arrange() call so the layout does not allocate.
     public List<Card> slotted = new List<Card>();
@@ -102,6 +115,23 @@ public class HandManager : MonoBehaviour
         Cards[ia] = b;
         Cards[ib] = a;
         Arrange();
+    }
+
+    /// <summary>
+    /// Sets which hand card is currently focused (hovered), and how the layout should react.
+    /// Called by <see cref="CardDragController"/>; pass <paramref name="card"/> = null to clear.
+    /// <paramref name="raiseSelected"/> pulls the focused card toward the camera so it renders on
+    /// top; <paramref name="lowerOthers"/> dips every other hand card so the focused one stands out.
+    /// Each is gated by its matching flag in the drag controller.
+    /// </summary>
+    public void SetHoverFocus(Card card, bool raiseSelected, bool lowerOthers,
+                              float raiseAmount, float lowerAmount)
+    {
+        focusedCard = card;
+        focusRaiseSelected = raiseSelected;
+        focusLowerOthers = lowerOthers;
+        focusRaiseAmount = raiseAmount;
+        focusLowerAmount = lowerAmount;
     }
 
     /// <summary>
@@ -160,6 +190,28 @@ public class HandManager : MonoBehaviour
             Quaternion pitch = Quaternion.AngleAxis(cardPitch, camRight);
             Quaternion roll = Quaternion.AngleAxis(-normalized * (fanAngle * 0.5f), (cam.position - pos).normalized);
             Quaternion rot = roll * pitch * faceRot;
+
+            // Hover focus: raise the selected card toward the camera so it reads on top, and/or
+            // dip the other cards so the selected one stands clear. Both effects are opt-in and
+            // driven by CardDragController via SetHoverFocus; when nothing is focused this is a no-op.
+            if (focusedCard)
+            {
+                if (slotted[i] == focusedCard)
+                {
+                    if (focusRaiseSelected)
+                    {
+                        Vector3 toCam = (cam.position - pos).normalized;
+                        pos += toCam * focusRaiseAmount;   // closer to camera => rendered on top
+                    }
+                }
+                else if (focusLowerOthers)
+                {
+                    // Drop the card and push it slightly back, then tilt its top further away so
+                    // it reads as being "laid down" behind the selected card.
+                    pos += camUp * -focusLowerAmount + camForward * (focusLowerAmount * 0.4f);
+                    rot = Quaternion.AngleAxis(lowerOthersPitch, camRight) * rot;
+                }
+            }
 
             slotted[i].SetHomePose(pos, rot, instant);
             slotted[i].transform.SetSiblingIndex(i); // keep a stable draw order

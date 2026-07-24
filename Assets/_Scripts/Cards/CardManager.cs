@@ -17,6 +17,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] private List<ScriptableObjectContainer> rawAdditionalPiles;
     [SerializeField] private List<CP.Suit> pileSuits =  new List<CP.Suit>();
     public Dictionary<CP.Suit, ScriptableObjectContainer> additionalPiles = new Dictionary<CP.Suit, ScriptableObjectContainer>();
+    [SerializeField] private bool shuffleAllPiles = false;
 
     [Header("Turn effects")]
     [Tooltip("Tables whose placed cards receive turn effects and count down each time a card is played.")]
@@ -57,6 +58,15 @@ public class CardManager : MonoBehaviour
         {
             if (!table.TryGetComponent(out PlacingArea placingArea)) return;
             if (!targetTables.Contains(placingArea)) targetTables.Add(placingArea);
+        }
+
+        if (shuffleAllPiles)
+        {
+            foreach (var additionalPile in additionalPiles.Values)
+            {
+                if (!additionalPile || additionalPile.scriptableObjects == null) continue;
+                fullPile.scriptableObjects.AddRange(additionalPile.scriptableObjects);
+            }
         }
         
         RoundStart();

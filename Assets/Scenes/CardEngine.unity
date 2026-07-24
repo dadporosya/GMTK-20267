@@ -1645,8 +1645,15 @@ MonoBehaviour:
   Cards: []
   pile: {fileID: 11400000, guid: a132faa2b978021489e07d913b134ece, type: 2}
   fullPile: {fileID: 11400000, guid: a132faa2b978021489e07d913b134ece, type: 2}
-  rawAdditionalPiles: []
-  pileSuits: 
+  rawAdditionalPiles:
+  - {fileID: 11400000, guid: a8f10babf529ba94485d8b2859b1c816, type: 2}
+  - {fileID: 11400000, guid: 60c2825629efb80409404803341b0b1a, type: 2}
+  - {fileID: 11400000, guid: c16d069ad415c084891ea80cef95147b, type: 2}
+  - {fileID: 11400000, guid: 006a6add03e029449bb458cf8b5f6c18, type: 2}
+  - {fileID: 11400000, guid: 6c3dc35e8094640498a57ea697f4d7b5, type: 2}
+  - {fileID: 11400000, guid: 951c976b88d25784982d5dd8cfcc3086, type: 2}
+  - {fileID: 11400000, guid: 4a2039ac57a8e6445b396c9b91c0dcea, type: 2}
+  pileSuits: 00000000050000000100000004000000060000000200000003000000
   targetTables: []
   countdownTickDelay: 0.1
   pfbTest: {fileID: 6556123085242673732, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}

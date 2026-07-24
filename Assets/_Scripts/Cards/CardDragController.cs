@@ -50,6 +50,18 @@ public class CardDragController : MonoBehaviour
     [SerializeField] private bool placeFaceUpOnTable = true;
     [SerializeField] private float maxRayDistance = 1000f;
 
+    [Header("Hover focus (make the selected hand card readable)")]
+    [Tooltip("When ON, the hovered/selected hand card is pulled toward the camera so it renders " +
+             "ON TOP of its neighbours (in addition to the card's own hover lift).")]
+    [SerializeField] private bool RaiseSelectedOnTop = true;
+    [Tooltip("When ON, every OTHER hand card dips down/back while one card is hovered, so the " +
+             "selected card is clearly visible above the rest (the player 'lays down' the others).")]
+    [SerializeField] private bool lowerTheOtherCards = false;
+    [Tooltip("How far the selected card moves toward the camera when RaiseSelectedOnTop is on.")]
+    [SerializeField] private float raiseTowardCameraAmount = 0.35f;
+    [Tooltip("How far the other cards dip when lowerTheOtherCards is on.")]
+    [SerializeField] private float lowerOthersAmount = 0.3f;
+
     private Card dragging;
     private Card.CardState dragOriginState;
     private Card hovered;
@@ -104,6 +116,10 @@ public class CardDragController : MonoBehaviour
             if (hovered) hovered.SetHovered(false);
             hovered = hoverTarget;
             if (hovered) hovered.SetHovered(true);
+
+            // Tell the hand which card is focused so it can raise it on top and/or lower the
+            // others. Both effects are gated by their matching flag above.
+            PushHoverFocus(hovered);
         }
 
         if (Mouse.current.leftButton.wasPressedThisFrame && under && !under.Locked &&
@@ -121,9 +137,24 @@ public class CardDragController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Forwards the currently focused hand card (or null) and the two focus flags to the
+    /// <see cref="HandManager"/>, which applies the actual pose offsets in its layout. Kept in one
+    /// place so hover-change and drag-start both report focus consistently.
+    /// </summary>
+    private void PushHoverFocus(Card focused)
+    {
+        if (HandManager.Instance)
+            HandManager.Instance.SetHoverFocus(
+                focused, RaiseSelectedOnTop, lowerTheOtherCards,
+                raiseTowardCameraAmount, lowerOthersAmount);
+    }
+
     private void BeginDrag(Card card)
     {
         if (hovered) { hovered.SetHovered(false); hovered = null; }
+        // No card is hovered while dragging: release the focus so the hand returns to normal.
+        PushHoverFocus(null);
 
         dragging = card;
         dragOriginState = card.state;
