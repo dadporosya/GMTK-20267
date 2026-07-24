@@ -249,6 +249,8 @@ MonoBehaviour:
   raiseTowardCameraAmount: 0.367
   lowerOthersAmount: 0.67
   lowerOthersRotationX: 16.7
+  selectedExtraLowerOthers: 0.2
+  selectedExtraRotationX: 6.7
 --- !u!1 &270699532
 GameObject:
   m_ObjectHideFlags: 0

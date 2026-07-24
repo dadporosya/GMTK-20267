@@ -187,7 +187,7 @@ public class CardDataBase : ScriptableObject
         }
         else if (condition == CP.Condition.SuitCount)
         {
-            result = "CARD " + suitCount.ToString() + " " + SuitWord(suitCount) + " = " + vpPerSet.ToString();
+            result = CP.CardIconTag(id) + " " + suitCount.ToString() + " " + SuitWord(suitCount) + " = " + vpPerSet.ToString();
         }
         else if (condition == CP.Condition.FixedVp)
         {
@@ -215,16 +215,27 @@ public class CardDataBase : ScriptableObject
         {
             result += "\nON TURN END";
         }
+        
+        // Destroy suffix: if this card removes suits, show which ones (as suit sprite tags for
+        // this frame so they flip-book with the rest of the line).
+        if (suitsToDestroy != null && suitsToDestroy.Count > 0)
+        {
+            result += "\nDESTROYS " + BuildSuitTags(suitsToDestroy, id);
+        }
 
         return result;
     }
 
     /// <summary>Concatenates the suit-set sprite tags for a single animation frame.</summary>
-    private string BuildSuitTags(int id)
+    private string BuildSuitTags(int id) => BuildSuitTags(suitSet, id);
+
+    /// <summary>Concatenates the sprite tags for the given suits at a single animation frame.</summary>
+    private string BuildSuitTags(List<CP.Suit> suitList, int id)
     {
         string tags = "";
-        foreach (var suit in suitSet)
-            tags += CP.SuitTag(suit, id);
+        if (suitList != null)
+            foreach (var suit in suitList)
+                tags += CP.SuitTag(suit, id);
         return tags;
     }
 

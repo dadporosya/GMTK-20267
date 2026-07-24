@@ -59,7 +59,7 @@ public class CardManager : MonoBehaviour
             if (!table.TryGetComponent(out PlacingArea placingArea)) return;
             if (!targetTables.Contains(placingArea)) targetTables.Add(placingArea);
         }
-
+        
         if (shuffleAllPiles)
         {
             h.Out(additionalPiles);
@@ -88,6 +88,7 @@ public class CardManager : MonoBehaviour
     public void RoundStart()
     {
         pile = fullPile ? Instantiate(fullPile) : null;
+        DealFullHand();
     }
 
     /// <summary>
@@ -145,6 +146,7 @@ public class CardManager : MonoBehaviour
     /// </summary>
     public void OnCardPlaced(Card placedCard)
     {
+        DealFullHand();
         StartCoroutine(OnCardPlacedCoroutine(placedCard));
     }
 
@@ -205,6 +207,14 @@ public class CardManager : MonoBehaviour
         yield return ReduceCountdownsCoroutine(placedCard);
     }
 
+    public void DealFullHand()
+    {
+        while (PlayerManager.Instance.handSize - PlayerManager.Instance.Hand.Count > 0)
+        {
+            DrawCard();
+        }
+    }
+    
     /// <summary>
     /// Ticks the table's countdowns after the placed card's effects have resolved.
     ///

@@ -20,6 +20,9 @@ public class PlayerManager : MonoBehaviour
     [Tooltip("Where freshly drawn cards spawn before flying into the hand (e.g. a deck transform). Falls back to this object.")]
     [SerializeField] private Transform drawOrigin;
 
+    [Header("Hand And GamePlayStuff")]
+    public int handSize = 6;
+
     /// <summary>The cards currently in hand. Backed by the HandManager list (single source of truth).</summary>
     public List<Card> Hand
     {
