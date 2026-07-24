@@ -180,31 +180,57 @@ public class CardDataBase : ScriptableObject
     protected virtual string BuildDescription(int id)
     {
         string result = "";
-        string conditionLabel = "";
 
         if (condition == CP.Condition.SuitSet)
         {
-            foreach (var suit in suitSet)
-            {
-                conditionLabel += CP.SuitTag(suit, id);
-            }
-            result += conditionLabel + " = " + vpPerSet.ToString();
-        } else if (condition == CP.Condition.FixedVp)
+            result = BuildSuitTags(id) + " = " + vpPerSet.ToString();
+        }
+        else if (condition == CP.Condition.SuitCount)
+        {
+            result = suitCount.ToString() + " " + SuitWord(suitCount) + " = " + vpPerSet.ToString();
+        }
+        else if (condition == CP.Condition.FixedVp)
         {
             result = vpPerSet.ToString();
-        } else if (condition == CP.Condition.SuitCount)
+        }
+        else if (condition == CP.Condition.Multiple)
         {
-            if (suitSet.Count == 1)
-            {
-                result += $"CARD WITH {suitCount} SUIT";
-            }
-            else
-            {
-                result += $"CARD WITH {suitCount} SUITS";
-            }
-            result += " =  " + vpPerSet.ToString();
+            result = BuildSuitTags(id) + " = " + vpPerSet.ToString()
+                     + "\nIF " + suitCount.ToString() + " " + SuitWord(suitCount) + " ON PLACED CARD";
+        }
+
+        // Target-source suffix.
+        if (targetSource == CP.TargetSource.Hand)
+        {
+            result += "\nIN HAND";
+        }
+        else if (targetSource == CP.TargetSource.PlacedCard)
+        {
+            result += " ON PLACED CARD";
+        }
+        // TargetSource.Table adds nothing.
+
+        // Activation suffix (only OnTurnEnd is described).
+        if (activation == CP.ActivateCond.OnTurnEnd)
+        {
+            result += "\nON TURN END";
         }
 
         return result;
+    }
+
+    /// <summary>Concatenates the suit-set sprite tags for a single animation frame.</summary>
+    private string BuildSuitTags(int id)
+    {
+        string tags = "";
+        foreach (var suit in suitSet)
+            tags += CP.SuitTag(suit, id);
+        return tags;
+    }
+
+    /// <summary>"SUIT" for a single suit, "SUITS" otherwise.</summary>
+    private static string SuitWord(int count)
+    {
+        return count == 1 ? "SUIT" : "SUITS";
     }
 }
