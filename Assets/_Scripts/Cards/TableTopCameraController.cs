@@ -81,8 +81,11 @@ public class TableTopCameraController : MonoBehaviour
              "Overwritten from the scene pose on Start when handViewIsInitView is on.")]
     [SerializeField] private Vector3 handViewLocalEuler;
 
-    private MouseLook mouseLook;
-    
+    [Header("Free view / mouse look")]
+    [Tooltip("Mouse-look on the camera rig (usually on CameraParent). Auto-found up the parent chain " +
+             "if left empty. Enabled only in Free view; disabled in Hand/Table view.")]
+    [SerializeField] private MouseLook mouseLook;
+
     // Active move/rotate tweens, stopped before a new transition starts.
     private Tween posTween;
     private Tween rotTween;
@@ -91,7 +94,7 @@ public class TableTopCameraController : MonoBehaviour
     {
         h.CreateStaticInstance(this, ref Instance, setDontDestroy: false);
         if (!camTransform) camTransform = transform;
-        mouseLook = GetComponent<MouseLook>();
+        if (!mouseLook) mouseLook = GetComponentInParent<MouseLook>();
     }
 
     private void Start()
@@ -117,7 +120,7 @@ public class TableTopCameraController : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
-            SwitchToHandView();
+            ChangeStateDown();
         }
     }
 
@@ -208,6 +211,7 @@ public class TableTopCameraController : MonoBehaviour
     private void ApplyTableView(bool instant)
     {
         if (mouseLook) mouseLook.canLook = false;
+        SetCursorVisible(true);
 
         SetCardsFollow(false);
 
@@ -245,26 +249,43 @@ public class TableTopCameraController : MonoBehaviour
     private void ApplyHandView(bool instant)
     {
         if (mouseLook) mouseLook.canLook = false;
+        SetCursorVisible(true);
         SetCardsFollow(true);
         MoveToLocal(handViewLocalPosition, Quaternion.Euler(handViewLocalEuler), instant);
     }
 
-    /// <summary>Minimal for now: level out to look forward at the horizon; hand does not follow.</summary>
+    /// <summary>
+    /// Free look: rotate the camera pitch (local X) to 0 so it looks level at the horizon, hide the
+    /// cursor and hand control over to MouseLook. The hand does not follow the camera here.
+    /// </summary>
     private void ApplyFreeView(bool instant)
     {
-        if (mouseLook) mouseLook.canLook = true;
         SetCardsFollow(false);
-        //
-        // if (!camTransform) camTransform = transform;
-        //
-        // // Keep the current heading (yaw) but drop pitch/roll so the camera looks straight ahead.
-        // Vector3 fwd = Vector3.ProjectOnPlane(camTransform.forward, Vector3.up);
-        // if (fwd.sqrMagnitude < 0.0001f && camTransform.parent)
-        //     fwd = Vector3.ProjectOnPlane(camTransform.parent.forward, Vector3.up);
-        // if (fwd.sqrMagnitude < 0.0001f) fwd = Vector3.forward;
-        //
-        // Quaternion rot = Quaternion.LookRotation(fwd.normalized, Vector3.up);
-        // MoveToWorld(camTransform.position, rot, instant);
+        SetCursorVisible(false);
+
+        if (!camTransform) camTransform = transform;
+
+        // Mouse look stays OFF while we rotate so it doesn't fight the tween; it's switched on (and
+        // resynced) once the camera has settled at pitch 0 (see EnableMouseLook).
+        if (mouseLook) mouseLook.canLook = false;
+
+        // Level out: only the camera's local X (pitch) goes to 0; keep its local Y and Z.
+        Vector3 le = camTransform.localEulerAngles;
+        Quaternion target = Quaternion.Euler(0f, le.y, le.z);
+
+        StopTweens();
+        if (instant || transitionDuration <= 0f)
+        {
+            camTransform.localRotation = target;
+            EnableMouseLook();
+        }
+        else
+        {
+            rotTween = Tween.LocalRotation(camTransform, target, transitionDuration, transitionEase)
+                            .OnComplete(EnableMouseLook);
+        }
+        h.Out("free");
+
     }
 
     // ---- helpers ------------------------------------------------------------
@@ -272,6 +293,21 @@ public class TableTopCameraController : MonoBehaviour
     private void SetCardsFollow(bool follow)
     {
         if (HandManager.Instance) HandManager.Instance.SetFollowCamera(follow);
+    }
+
+    /// <summary>Shows + frees the cursor (Hand/Table view) or hides + locks it for mouse look (Free view).</summary>
+    private void SetCursorVisible(bool visible)
+    {
+        Cursor.visible = visible;
+        Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Locked;
+    }
+
+    /// <summary>Turns MouseLook back on, first resyncing its internal angles so the view doesn't snap.</summary>
+    private void EnableMouseLook()
+    {
+        if (!mouseLook) return;
+        mouseLook.SyncRotation();
+        mouseLook.canLook = true;
     }
 
     /// <summary>World-space move + rotate (used by the table/free views).</summary>
