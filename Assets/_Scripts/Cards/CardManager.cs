@@ -131,6 +131,11 @@ public class CardManager : MonoBehaviour
         if (dataBase) card.cardData = dataBase;
         Cards.Add(card);
 
+        // Put the freshly spawned card into the player's hand. Without this the card only ever
+        // lands in CardManager.Cards, so PlayerManager.Hand.Count never grows and DealFullHand's
+        // while-loop spins forever (the "endless loop" freeze on RoundStart).
+        if (PlayerManager.Instance) PlayerManager.Instance.AddCardToHand(card);
+
         // Give the card a random look: pick one texture from cardTextures and assign it to the
         // "_CardTexture" slot of both the front and back face materials.
         if (cardTextures != null && cardTextures.Count > 0)
@@ -209,9 +214,19 @@ public class CardManager : MonoBehaviour
 
     public void DealFullHand()
     {
-        while (PlayerManager.Instance.handSize - PlayerManager.Instance.Hand.Count > 0)
+        if (!PlayerManager.Instance) return;
+
+        // Safety guard: if the hand can't be read/grown (e.g. no HandManager in scene), bail out
+        // instead of spinning forever. Also cap iterations to handSize as a hard stop.
+        for (int i = 0; i < PlayerManager.Instance.handSize; i++)
         {
+            if (PlayerManager.Instance.Hand == null) return;
+            if (PlayerManager.Instance.handSize - PlayerManager.Instance.Hand.Count <= 0) break;
+
+            int before = PlayerManager.Instance.Hand.Count;
             DrawCard();
+            // If a draw failed to add a card to the hand, stop rather than loop endlessly.
+            if (PlayerManager.Instance.Hand.Count == before) break;
         }
     }
     
