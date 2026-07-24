@@ -37,7 +37,15 @@ public class Card : MonoBehaviour
     [SerializeField] private TMP_Text suitsText;
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private TMP_Text countDownText;
-    
+
+    [Header("Info text animations (looped 2-frame suit flip-books)")]
+    [Tooltip("Frame animator on the title text. Auto-found on the title TMP if left empty.")]
+    [SerializeField] private TextChangeAnimation titleAnim;
+    [Tooltip("Frame animator on the suits text. Auto-found on the suits TMP if left empty.")]
+    [SerializeField] private TextChangeAnimation suitsAnim;
+    [Tooltip("Frame animator on the description text. Auto-found on the description TMP if left empty.")]
+    [SerializeField] private TextChangeAnimation descriptionAnim;
+
     
     [Header("Faces (two quads)")]
     [Tooltip("Quad shown as the front. Its visible side must point along the card root's +Z.")]
@@ -175,8 +183,26 @@ public class Card : MonoBehaviour
         // reacting; countdown <= 0 means "resolve once, then burn").
         countdown = cardData.countdown;
 
-        suitsText.text = cardData.GenerateSuits();
-        descriptionText.text = cardData.GenerateDescription();
+        // Resolve the frame animators from their TMP objects if they weren't wired in the inspector.
+        if (!titleAnim && titleText) titleAnim = titleText.GetComponentInChildren<TextChangeAnimation>();
+        if (!suitsAnim && suitsText) suitsAnim = suitsText.GetComponentInChildren<TextChangeAnimation>();
+        if (!descriptionAnim && descriptionText) descriptionAnim = descriptionText.GetComponentInChildren<TextChangeAnimation>();
+
+        // Title has no suit tags, so it's a single static frame (fed through the animator when
+        // present so the animator doesn't overwrite it with an empty string).
+        if (titleAnim) titleAnim.SetFrames(new List<string> { cardData.title });
+        else if (titleText) titleText.text = cardData.title;
+
+        // Suits + description are multi-frame flip-books: one text frame per suit-sprite frame.
+        // Assigning the frames auto-starts the looped animation (loop is set on the component).
+        List<string> suitFrames = cardData.GenerateSuits();
+        if (suitsAnim) suitsAnim.SetFrames(suitFrames);
+        else if (suitsText) suitsText.text = suitFrames.Count > 0 ? suitFrames[0] : "";
+
+        List<string> descriptionFrames = cardData.GenerateDescription();
+        if (descriptionAnim) descriptionAnim.SetFrames(descriptionFrames);
+        else if (descriptionText) descriptionText.text = descriptionFrames.Count > 0 ? descriptionFrames[0] : "";
+
         countDownText.text = cardData.countdown.ToString();
 
         // Play the activate animation. AnimationControllerBase already gathered, in its Awake,

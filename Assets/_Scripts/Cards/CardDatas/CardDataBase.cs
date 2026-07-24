@@ -138,28 +138,55 @@ public class CardDataBase : ScriptableObject
         return vp;
     }
 
-    public virtual string GenerateSuits()
+    /// <summary>
+    /// Builds one text frame per suit-sprite animation frame (id 1..CP.SuitFrameCount). Each frame
+    /// is the full suit line with every suit tag pinned to that frame's id, so cycling the frames
+    /// flip-books the suit sprites. Example (3 Wrath suits, 2 frames):
+    ///   [ "&lt;sprite name=Wrath1&gt;&lt;sprite name=Wrath1&gt;&lt;sprite name=Wrath1&gt;",
+    ///     "&lt;sprite name=Wrath2&gt;&lt;sprite name=Wrath2&gt;&lt;sprite name=Wrath2&gt;" ]
+    /// </summary>
+    public virtual List<string> GenerateSuits()
     {
-        string result = "";
-        foreach (CP.Suit suit in suits)
+        List<string> famousFrames = new List<string>();
+        for (int id = 1; id <= CP.SuitFrameCount; id++)
         {
-            result += CP.SuitTag(suit);
+            string frame = "";
+            foreach (CP.Suit suit in suits)
+                frame += CP.SuitTag(suit, id);
+            famousFrames.Add(frame);
         }
-        
-        return result;
+
+        return famousFrames;
     }
 
-    public virtual string GenerateDescription()
+    /// <summary>
+    /// Builds one description text frame per suit-sprite animation frame (id 1..CP.SuitFrameCount).
+    /// The non-suit text (e.g. " = 100") is identical across frames; only the suit tags advance.
+    /// </summary>
+    public virtual List<string> GenerateDescription()
+    {
+        List<string> descriptionFrames = new List<string>();
+        for (int id = 1; id <= CP.SuitFrameCount; id++)
+            descriptionFrames.Add(BuildDescription(id));
+
+        return descriptionFrames;
+    }
+
+    /// <summary>
+    /// Builds the description string for a single suit-sprite frame <paramref name="id"/>. Override
+    /// this (rather than <see cref="GenerateDescription"/>) to change wording while keeping the
+    /// per-frame animation behaviour.
+    /// </summary>
+    protected virtual string BuildDescription(int id)
     {
         string result = "";
         string conditionLabel = "";
-        
-        
+
         if (condition == CP.Condition.SuitSet)
         {
             foreach (var suit in suitSet)
             {
-                conditionLabel += CP.SuitTag(suit);
+                conditionLabel += CP.SuitTag(suit, id);
             }
             result += conditionLabel + " = " + vpPerSet.ToString();
         } else if (condition == CP.Condition.FixedVp)
@@ -177,7 +204,7 @@ public class CardDataBase : ScriptableObject
             }
             result += " =  " + vpPerSet.ToString();
         }
-        
+
         return result;
     }
 }

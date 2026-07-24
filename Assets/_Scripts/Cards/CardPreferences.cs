@@ -17,16 +17,22 @@ public static class CP
         Sloth
     }
 
-    /// <summary>Display color for each suit.</summary>
-    /// task: generate new colors
+    /// <summary>Display color for each of the seven deadly-sin suits. Chosen to stay visually
+    /// distinct from one another.</summary>
     public static readonly Dictionary<Suit, Color> SuitColors = new Dictionary<Suit, Color>
     {
-        // { Suit.Love,  new Color(0.93f, 0.29f, 0.47f) }, // pink/rose
-        // { Suit.Grief, new Color(0.30f, 0.53f, 0.85f) }, // blue
-        // { Suit.Fear,  new Color(0.55f, 0.36f, 0.79f) }, // purple
-        // { Suit.Pride, new Color(0.95f, 0.73f, 0.20f) }, // gold
-        // { Suit.Hate,  new Color(0.80f, 0.20f, 0.18f) }, // crimson
+        { Suit.Pride,    new Color(0.55f, 0.30f, 0.80f) }, // royal purple
+        { Suit.Greed,    new Color(0.93f, 0.75f, 0.20f) }, // gold
+        { Suit.Lust,     new Color(0.90f, 0.25f, 0.55f) }, // magenta / rose
+        { Suit.Envy,     new Color(0.20f, 0.70f, 0.40f) }, // emerald green
+        { Suit.Gluttony, new Color(0.95f, 0.55f, 0.20f) }, // orange
+        { Suit.Wrath,    new Color(0.85f, 0.18f, 0.16f) }, // crimson red
+        { Suit.Sloth,    new Color(0.40f, 0.55f, 0.75f) }, // slate blue
     };
+
+    /// <summary>How many sprite frames each suit tag has in the TMP sprite asset
+    /// (e.g. "Wrath1", "Wrath2"). Drives the number of text frames the card generators emit.</summary>
+    public const int SuitFrameCount = 2;
 
     /// <summary>Returns the color for a suit (white if none assigned).</summary>
     public static Color SuitColor(Suit suit)

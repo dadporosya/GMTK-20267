@@ -71,12 +71,8 @@ public class CardDataOnPlaceEffect : CardDataBase
         });
     }
     
-    public override string GenerateDescription()
+    protected override string BuildDescription(int id)
     {
-        string result = base.GenerateDescription();
-
-        result += $"\nON PLACED CARD";
-        
-        return result;
+        return base.BuildDescription(id) + "\nON PLACED CARD";
     }
 }
