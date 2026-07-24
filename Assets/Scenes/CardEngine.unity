@@ -478,7 +478,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ab8353b5ebd32545867da143199a814, type: 3}
   m_Name: 
@@ -1156,6 +1156,8 @@ MonoBehaviour:
   handViewIsInitView: 1
   handViewLocalPosition: {x: 0, y: 0, z: 0}
   handViewLocalEuler: {x: 0, y: 0, z: 0}
+  playerTransform: {fileID: 0}
+  handViewPlayerLocalEuler: {x: 0, y: 0, z: 0}
   mouseLook: {fileID: 1644317585}
 --- !u!1 &816907031
 GameObject:

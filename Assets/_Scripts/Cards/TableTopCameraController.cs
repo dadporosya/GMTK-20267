@@ -80,6 +80,13 @@ public class TableTopCameraController : MonoBehaviour
     [Tooltip("Camera local rotation, in euler degrees, used for the hand view. " +
              "Overwritten from the scene pose on Start when handViewIsInitView is on.")]
     [SerializeField] private Vector3 handViewLocalEuler;
+    [Tooltip("The player root (the camera parent's parent) whose rotation is restored together with " +
+             "the hand view. Auto-found from MouseLook / the camera's grandparent if left empty.")]
+    [SerializeField] private Transform playerTransform;
+    [Tooltip("Player local rotation, in euler degrees, restored together with the hand view (so free " +
+             "look can turn the player and the hand view still faces the right way). " +
+             "Overwritten from the scene pose on Start when handViewIsInitView is on.")]
+    [SerializeField] private Vector3 handViewPlayerLocalEuler;
 
     [Header("Free view / mouse look")]
     [Tooltip("Mouse-look on the camera rig (usually on CameraParent). Auto-found up the parent chain " +
@@ -89,12 +96,20 @@ public class TableTopCameraController : MonoBehaviour
     // Active move/rotate tweens, stopped before a new transition starts.
     private Tween posTween;
     private Tween rotTween;
+    private Tween playerRotTween;
 
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance, setDontDestroy: false);
         if (!camTransform) camTransform = transform;
         if (!mouseLook) mouseLook = GetComponentInParent<MouseLook>();
+        // The player root = the camera parent's parent (Player -> CameraParent -> Camera). MouseLook
+        // lives on the player, so prefer that; otherwise walk up from the camera.
+        if (!playerTransform)
+        {
+            if (mouseLook) playerTransform = mouseLook.transform;
+            else if (camTransform && camTransform.parent) playerTransform = camTransform.parent.parent;
+        }
     }
 
     private void Start()
@@ -105,6 +120,7 @@ public class TableTopCameraController : MonoBehaviour
         {
             handViewLocalPosition = camTransform.localPosition;
             handViewLocalEuler = camTransform.localEulerAngles;
+            if (playerTransform) handViewPlayerLocalEuler = playerTransform.localEulerAngles;
         }
 
         if (!currentTable) currentTable = FindTable();
@@ -252,6 +268,9 @@ public class TableTopCameraController : MonoBehaviour
         SetCursorVisible(true);
         SetCardsFollow(true);
         MoveToLocal(handViewLocalPosition, Quaternion.Euler(handViewLocalEuler), instant);
+        // Free look yaws the player, so restore the player's remembered rotation too, otherwise the
+        // hand view would come back facing wherever mouse look left the player.
+        RotatePlayerLocal(Quaternion.Euler(handViewPlayerLocalEuler), instant);
     }
 
     /// <summary>
@@ -328,10 +347,26 @@ public class TableTopCameraController : MonoBehaviour
         rotTween = Tween.LocalRotation(camTransform, localRot, transitionDuration, transitionEase);
     }
 
+    /// <summary>Rotates the player root to <paramref name="localRot"/> (used by the hand view).</summary>
+    private void RotatePlayerLocal(Quaternion localRot, bool instant)
+    {
+        if (!playerTransform) return;
+        if (playerRotTween.isAlive) playerRotTween.Stop();
+
+        if (instant || transitionDuration <= 0f)
+        {
+            playerTransform.localRotation = localRot;
+            return;
+        }
+
+        playerRotTween = Tween.LocalRotation(playerTransform, localRot, transitionDuration, transitionEase);
+    }
+
     private void StopTweens()
     {
         if (posTween.isAlive) posTween.Stop();
         if (rotTween.isAlive) rotTween.Stop();
+        if (playerRotTween.isAlive) playerRotTween.Stop();
     }
 
     /// <summary>World-space bounds of the table surface (collider, then renderer, then a unit box).</summary>
