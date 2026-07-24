@@ -68,7 +68,7 @@ Material:
     - _Contrast: 0
     - _Contrast_Amount: 15.3
     - _Disslove: 1
-    - _DissloveOutlinesthickness: 0
+    - _DissloveOutlinesthickness: 0.067
     - _DissloveScale: 500
     - _DissloveTwirl: 0
     - _DissloveTwirlStrength: 1
