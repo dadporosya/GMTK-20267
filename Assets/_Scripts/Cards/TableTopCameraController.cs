@@ -64,9 +64,6 @@ public class TableTopCameraController : MonoBehaviour
     [SerializeField] private float minTableViewZoom = 1.5f;
     [Tooltip("Upper clamp for tableViewZoom.")]
     [SerializeField] private float maxTableViewZoom = 25f;
-    [Tooltip("Screen-up hint for the top-down view (which way is 'up' on screen). The table's own " +
-             "forward is used when available; this is the fallback if that is degenerate.")]
-    [SerializeField] private Vector3 tableViewUpFallback = Vector3.forward;
 
     [Header("Hand view")]
     [Tooltip("If true, the camera's local pose at startup is captured as the hand-view pose, so the " +
@@ -212,18 +209,18 @@ public class TableTopCameraController : MonoBehaviour
             return;
         }
 
+        if (!camTransform) camTransform = transform;
+
         Bounds b = TableBounds();
         Vector3 center = b.center;
 
         // Straight above the surface by the zoom height, looking straight down.
         Vector3 pos = new Vector3(center.x, b.max.y + tableViewZoom, center.z);
 
-        // Orient the top-down view: 'up' on screen follows the table's forward when it's usable.
-        Vector3 up = currentTable.transform.forward;
-        if (up.sqrMagnitude < 0.0001f) up = tableViewUpFallback;
-        if (up.sqrMagnitude < 0.0001f) up = Vector3.forward;
-
-        Quaternion rot = Quaternion.LookRotation(Vector3.down, up.normalized);
+        // Look straight down (pitch 90) but KEEP the camera's current Y rotation (yaw) instead of
+        // snapping the screen-up to a fixed direction — the view stays oriented the way the player
+        // was already facing.
+        Quaternion rot = Quaternion.Euler(90f, camTransform.eulerAngles.y, 0f);
 
         MoveToWorld(pos, rot, instant);
     }

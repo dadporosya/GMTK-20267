@@ -346,7 +346,6 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
-  - component: {fileID: 330585549}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -421,13 +420,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38590598, y: 0, z: 0, w: 0.92253816}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 758091523}
-  m_LocalEulerAnglesHint: {x: 45.4, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488,31 +487,6 @@ MonoBehaviour:
   DefaultRotInfluence: {x: 1, y: 1, z: 1}
   RestPositionOffset: {x: 0, y: 0, z: 0}
   RestRotationOffset: {x: 0, y: 0, z: 0}
---- !u!114 &330585549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330585543}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 715bdf6955c73484bbe84b5060666496, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TableTopCameraController
-  camTransform: {fileID: 0}
-  currentTable: {fileID: 0}
-  state: 1
-  transitionDuration: 0.5
-  transitionEase: 9
-  instantOnStart: 1
-  tableViewZoom: 6
-  minTableViewZoom: 1.5
-  maxTableViewZoom: 25
-  tableViewUpFallback: {x: 0, y: 0, z: 1}
-  handViewIsInitView: 1
-  handViewLocalPosition: {x: 0, y: 0, z: 0}
-  handViewLocalEuler: {x: 0, y: 0, z: 0}
 --- !u!1 &355263336
 GameObject:
   m_ObjectHideFlags: 0
@@ -1138,6 +1112,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 758091523}
+  - component: {fileID: 758091524}
   m_Layer: 0
   m_Name: CameraParent
   m_TagString: Untagged
@@ -1153,14 +1128,38 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758091522}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.27059805, y: 0.6532815, z: -0.27059805, w: 0.6532815}
   m_LocalPosition: {x: -0.8039472, y: 1.9080069, z: -0.69060105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 330585546}
   m_Father: {fileID: 509257333}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 90, z: 0}
+--- !u!114 &758091524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758091522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 715bdf6955c73484bbe84b5060666496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TableTopCameraController
+  camTransform: {fileID: 0}
+  currentTable: {fileID: 0}
+  state: 1
+  transitionDuration: 0.5
+  transitionEase: 9
+  instantOnStart: 1
+  tableViewZoom: 20
+  minTableViewZoom: 1.5
+  maxTableViewZoom: 25
+  handViewIsInitView: 1
+  handViewLocalPosition: {x: 0, y: 0, z: 0}
+  handViewLocalEuler: {x: 0, y: 0, z: 0}
 --- !u!1 &816907031
 GameObject:
   m_ObjectHideFlags: 0
