@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc09c4ac3eed411498d84c17174622ba, type: 3}
-  m_Name: 15 CCCC (D ON PLACE)
+  m_Name: 13 CE (2 SUIT CARD)
   m_EditorClassIdentifier: Assembly-CSharp::CardDataOnPlaceEffect
   title: 
-  suits: 01000000010000000100000001000000
-  countdown: 4
-  condition: 0
-  vpPerSet: 125
+  suits: 0600000006000000
+  countdown: 3
+  condition: 1
+  vpPerSet: 325
   activation: 1
   targetSource: 2
-  suitSet: 04000000
+  suitSet: 
   fixedCount: 1
-  suitCount: 0
+  suitCount: 2
   suitsToDestroy: 
