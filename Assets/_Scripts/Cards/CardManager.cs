@@ -62,6 +62,7 @@ public class CardManager : MonoBehaviour
 
         if (shuffleAllPiles)
         {
+            h.Out(additionalPiles);
             foreach (var additionalPile in additionalPiles.Values)
             {
                 if (!additionalPile || additionalPile.scriptableObjects == null) continue;

@@ -61,6 +61,10 @@ public class CardDragController : MonoBehaviour
     [SerializeField] private float raiseTowardCameraAmount = 0.35f;
     [Tooltip("How far the other cards dip when lowerTheOtherCards is on.")]
     [SerializeField] private float lowerOthersAmount = 0.3f;
+    [Tooltip("Extra rotation (degrees) around the X axis applied to the OTHER cards while one is " +
+             "selected, tilting their tops back so they read as 'laid down'. Only used when " +
+             "lowerTheOtherCards is on.")]
+    [SerializeField] private float lowerOthersRotationX = 8f;
 
     private Card dragging;
     private Card.CardState dragOriginState;
@@ -147,7 +151,7 @@ public class CardDragController : MonoBehaviour
         if (HandManager.Instance)
             HandManager.Instance.SetHoverFocus(
                 focused, RaiseSelectedOnTop, lowerTheOtherCards,
-                raiseTowardCameraAmount, lowerOthersAmount);
+                raiseTowardCameraAmount, lowerOthersAmount, lowerOthersRotationX);
     }
 
     private void BeginDrag(Card card)

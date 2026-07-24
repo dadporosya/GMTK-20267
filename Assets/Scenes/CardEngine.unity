@@ -244,6 +244,10 @@ MonoBehaviour:
   dragFollowSmoothing: 0.0867
   placeFaceUpOnTable: 1
   maxRayDistance: 1000
+  RaiseSelectedOnTop: 1
+  lowerTheOtherCards: 1
+  raiseTowardCameraAmount: 0.367
+  lowerOthersAmount: 0.67
 --- !u!1 &270699532
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,8 +325,8 @@ Transform:
   m_Children:
   - {fileID: 1413536207}
   - {fileID: 249588255}
-  - {fileID: 1681616743}
   - {fileID: 947604499}
+  - {fileID: 1681616743}
   - {fileID: 270699533}
   m_Father: {fileID: 1772355077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1654,6 +1658,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 951c976b88d25784982d5dd8cfcc3086, type: 2}
   - {fileID: 11400000, guid: 4a2039ac57a8e6445b396c9b91c0dcea, type: 2}
   pileSuits: 00000000050000000100000004000000060000000200000003000000
+  shuffleAllPiles: 1
   targetTables: []
   countdownTickDelay: 0.1
   pfbTest: {fileID: 6556123085242673732, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
@@ -1719,6 +1724,7 @@ MonoBehaviour:
   fanAngle: 12
   cardPitch: 15
   arrangeContinuously: 1
+  lowerOthersPitch: 8
   slotted: []
 --- !u!1 &1772355076
 GameObject:

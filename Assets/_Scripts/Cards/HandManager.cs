@@ -49,11 +49,6 @@ public class HandManager : MonoBehaviour
     [Tooltip("Recompute the layout every frame so the hand follows a moving camera. Turn off to only arrange on demand.")]
     [SerializeField] private bool arrangeContinuously = true;
 
-    [Header("Hover focus (tops the selected card / lays the others down)")]
-    [Tooltip("Extra pitch (degrees) applied to the NON-selected cards while one card is focused, " +
-             "tilting their tops back so they read as 'laid down' behind the selected card.")]
-    [SerializeField] private float lowerOthersPitch = 8f;
-
     /// <summary>The cards currently in the hand. This is the layout's source of truth.</summary>
     public List<Card> Cards { get; } = new List<Card>();
 
@@ -64,6 +59,7 @@ public class HandManager : MonoBehaviour
     private bool focusLowerOthers;
     private float focusRaiseAmount;
     private float focusLowerAmount;
+    private float focusLowerRotationX;   // degrees around the X axis applied to the lowered cards
 
     // Reused each Arrange() call so the layout does not allocate.
     public List<Card> slotted = new List<Card>();
@@ -125,13 +121,14 @@ public class HandManager : MonoBehaviour
     /// Each is gated by its matching flag in the drag controller.
     /// </summary>
     public void SetHoverFocus(Card card, bool raiseSelected, bool lowerOthers,
-                              float raiseAmount, float lowerAmount)
+                              float raiseAmount, float lowerAmount, float lowerRotationX)
     {
         focusedCard = card;
         focusRaiseSelected = raiseSelected;
         focusLowerOthers = lowerOthers;
         focusRaiseAmount = raiseAmount;
         focusLowerAmount = lowerAmount;
+        focusLowerRotationX = lowerRotationX;
     }
 
     /// <summary>
@@ -207,9 +204,10 @@ public class HandManager : MonoBehaviour
                 else if (focusLowerOthers)
                 {
                     // Drop the card and push it slightly back, then tilt its top further away so
-                    // it reads as being "laid down" behind the selected card.
+                    // it reads as being "laid down" behind the selected card. The tilt is a
+                    // rotation around the X axis (camera right), controlled by lowerOthersRotationX.
                     pos += camUp * -focusLowerAmount + camForward * (focusLowerAmount * 0.4f);
-                    rot = Quaternion.AngleAxis(lowerOthersPitch, camRight) * rot;
+                    rot = Quaternion.AngleAxis(focusLowerRotationX, camRight) * rot;
                 }
             }
 
