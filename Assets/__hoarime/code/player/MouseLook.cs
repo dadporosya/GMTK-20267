@@ -69,6 +69,8 @@ public class MouseLook : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cam = Camera.main;
         camHolder = cam.transform.parent.gameObject;
+        // Pitch is applied to camHolder (the camera's parent), so the camera itself carries no rotation of its own.
+        cam.transform.localRotation = Quaternion.identity;
         monologue = GetComponent<Monologue>();
         movement = GetComponent<Movement>();
         characterController = GetComponent<CharacterController>();
@@ -157,7 +159,7 @@ public class MouseLook : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
         xRot -= mouseY;
         xRot = Mathf.Clamp(xRot, minY, maxY);
-        cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, Quaternion.Euler(xRot, cam.transform.eulerAngles.y, 0), smoothing * Time.deltaTime);
+        camHolder.transform.localRotation = Quaternion.Slerp(camHolder.transform.localRotation, Quaternion.Euler(xRot, 0, 0), smoothing * Time.deltaTime);
     }
 
     public void FreezeCamera(bool freeze)
@@ -181,7 +183,7 @@ public class MouseLook : MonoBehaviour
 
     private void ResetMouseLookRotation()
     {
-        xRot = cam.transform.localEulerAngles.x;
+        xRot = camHolder.transform.localEulerAngles.x;
         yRot = transform.localEulerAngles.y;
 
         if (xRot > 180) xRot -= 360;
@@ -204,26 +206,27 @@ public class MouseLook : MonoBehaviour
         float elapsedTime = 0;
         float progress;
 
-        Quaternion startCamRot = cam.transform.rotation;
+        Quaternion startHolderRot = camHolder.transform.localRotation;
         Quaternion startTransformRot = transform.rotation;
 
         Vector3 directionToTarget = (obj.position - transform.position).normalized;
         Quaternion targetTransformRot = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
-        Quaternion targetCamRot = Quaternion.LookRotation(directionToTarget);
+        float targetPitch = -Mathf.Asin(Mathf.Clamp(directionToTarget.y, -1f, 1f)) * Mathf.Rad2Deg;
+        Quaternion targetHolderRot = Quaternion.Euler(targetPitch, 0, 0);
 
         while (elapsedTime < rotationTime)
         {
             progress = Mathf.Clamp01(elapsedTime / rotationTime);
 
             transform.rotation = Quaternion.Slerp(startTransformRot, targetTransformRot, progress);
-            cam.transform.rotation = Quaternion.Slerp(startCamRot, targetCamRot, progress);
+            camHolder.transform.localRotation = Quaternion.Slerp(startHolderRot, targetHolderRot, progress);
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         transform.rotation = targetTransformRot;
-        cam.transform.rotation = targetCamRot;
+        camHolder.transform.localRotation = targetHolderRot;
         ResetMouseLookRotation();
         isAnimating = false;
 
@@ -242,10 +245,10 @@ public class MouseLook : MonoBehaviour
     {
 
         Quaternion targetTransformRot = Quaternion.Euler(transform.eulerAngles.x, reference.eulerAngles.y, transform.eulerAngles.z);
-        Quaternion targetCamRot = Quaternion.Euler(reference.eulerAngles.x, cam.transform.eulerAngles.y, cam.transform.eulerAngles.z);
+        Quaternion targetHolderRot = Quaternion.Euler(reference.eulerAngles.x, 0, 0);
 
         transform.rotation = targetTransformRot;
-        cam.transform.rotation = targetCamRot;
+        camHolder.transform.localRotation = targetHolderRot;
         ResetMouseLookRotation();
     }
 
@@ -268,25 +271,25 @@ public class MouseLook : MonoBehaviour
         float progress;
         isAnimating = true;
 
-        Quaternion startCamRot = cam.transform.rotation;
+        Quaternion startHolderRot = camHolder.transform.localRotation;
         Quaternion startTransformRot = transform.rotation;
 
         Quaternion targetTransformRot = Quaternion.Euler(transform.eulerAngles.x, rotation.y, transform.eulerAngles.z);
-        Quaternion targetCamRot = Quaternion.Euler(rotation.x, cam.transform.eulerAngles.y, cam.transform.eulerAngles.z);
+        Quaternion targetHolderRot = Quaternion.Euler(rotation.x, 0, 0);
 
         while (elapsedTime < rotationTime)
         {
             progress = Mathf.Clamp01(elapsedTime / rotationTime);
 
             transform.rotation = Quaternion.Slerp(startTransformRot, targetTransformRot, progress);
-            cam.transform.rotation = Quaternion.Slerp(startCamRot, targetCamRot, progress);
+            camHolder.transform.localRotation = Quaternion.Slerp(startHolderRot, targetHolderRot, progress);
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         transform.rotation = targetTransformRot;
-        cam.transform.rotation = targetCamRot;
+        camHolder.transform.localRotation = targetHolderRot;
         ResetMouseLookRotation();
         canLook = true;
         isAnimating = false;
