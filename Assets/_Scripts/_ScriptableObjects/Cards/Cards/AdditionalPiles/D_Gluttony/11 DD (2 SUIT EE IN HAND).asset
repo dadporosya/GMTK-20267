@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8668d63a175058d409513ed9345c62f2, type: 3}
+  m_Name: 11 DD (2 SUIT EE IN HAND)
+  m_EditorClassIdentifier: Assembly-CSharp::CardDataOnPlaceEffect
+  title: 
+  suits: 0400000004000000
+  countdown: 3
+  condition: 3
+  vpPerSet: 325
+  activation: 1
+  targetSource: 1
+  suitSet: 0600000006000000
+  fixedCount: 1
+  suitCount: 2
+  suitsToDestroy: 
