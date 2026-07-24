@@ -65,6 +65,9 @@ public class TableTopCameraController : MonoBehaviour
     [SerializeField] private float minTableViewZoom = 1.5f;
     [Tooltip("Upper clamp for tableViewZoom.")]
     [SerializeField] private float maxTableViewZoom = 25f;
+    [Tooltip("Camera LOCAL X rotation (pitch) in table view. 90 = looking straight down. Only X is " +
+             "set; the camera's local Y and Z (heading/roll) are kept exactly as they were.")]
+    [SerializeField] private float tableViewPitchX = 90f;
 
     [Header("Hand view")]
     [Tooltip("If true, the camera's local pose at startup is captured as the hand-view pose, so the " +
@@ -251,17 +254,17 @@ public class TableTopCameraController : MonoBehaviour
     {
         if (mouseLook) mouseLook.canLook = true;
         SetCardsFollow(false);
-
-        if (!camTransform) camTransform = transform;
-
-        // Keep the current heading (yaw) but drop pitch/roll so the camera looks straight ahead.
-        Vector3 fwd = Vector3.ProjectOnPlane(camTransform.forward, Vector3.up);
-        if (fwd.sqrMagnitude < 0.0001f && camTransform.parent)
-            fwd = Vector3.ProjectOnPlane(camTransform.parent.forward, Vector3.up);
-        if (fwd.sqrMagnitude < 0.0001f) fwd = Vector3.forward;
-
-        Quaternion rot = Quaternion.LookRotation(fwd.normalized, Vector3.up);
-        MoveToWorld(camTransform.position, rot, instant);
+        //
+        // if (!camTransform) camTransform = transform;
+        //
+        // // Keep the current heading (yaw) but drop pitch/roll so the camera looks straight ahead.
+        // Vector3 fwd = Vector3.ProjectOnPlane(camTransform.forward, Vector3.up);
+        // if (fwd.sqrMagnitude < 0.0001f && camTransform.parent)
+        //     fwd = Vector3.ProjectOnPlane(camTransform.parent.forward, Vector3.up);
+        // if (fwd.sqrMagnitude < 0.0001f) fwd = Vector3.forward;
+        //
+        // Quaternion rot = Quaternion.LookRotation(fwd.normalized, Vector3.up);
+        // MoveToWorld(camTransform.position, rot, instant);
     }
 
     // ---- helpers ------------------------------------------------------------
