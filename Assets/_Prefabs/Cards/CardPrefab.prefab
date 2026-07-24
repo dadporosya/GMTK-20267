@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 1151556060434694084}
   - component: {fileID: 4272509372706565112}
   - component: {fileID: 4723358133863387075}
+  - component: {fileID: 7104926207303897076}
   m_Layer: 0
   m_Name: ClockSprite
   m_TagString: Untagged
@@ -62,7 +63,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.46, y: 0.46, z: 0.46}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 349624734322937389}
   m_Father: {fileID: 4644588000603010055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -162,6 +164,42 @@ MonoBehaviour:
   defaultGapsBetweenFrames: 0.6
   shuffleOrder: 0
   initialSprite: {fileID: 0}
+--- !u!114 &7104926207303897076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903930537393839134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd533f4306c8b34bba6eb8f7199b8c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloatingAnimation
+  disable: 0
+  type: 1
+  loop: 1
+  playOnStart: 1
+  returningEasing: 0
+  returningTime: 0.3
+  customInitialState: 0
+  returnToTheInittialState: 0
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  directions:
+  - {x: 0, y: 1, z: 0}
+  - {x: 0, y: -1, z: 0}
+  distances:
+  - 0.03
+  - 0.03
+  durations: []
+  defaultDuration: 5
+  sharpness: 1
+  ease: 3
+  randomPhase: 1
+  initialState: {x: 0, y: 0, z: 0}
 --- !u!1 &2832768547768142534
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,15 +340,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2903545929745801349}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.0067000017}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.014565221}
+  m_LocalScale: {x: 2.173913, y: 2.173913, z: 2.173913}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3580995678143851773}
+  m_Father: {fileID: 1151556060434694084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.925, y: 1.34}
+  m_AnchoredPosition: {x: -0.0065218806, y: -0.12391329}
   m_SizeDelta: {x: 1.2477, y: 0.826}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2091862797486572172
@@ -499,6 +537,7 @@ GameObject:
   - component: {fileID: 1052347065591354313}
   - component: {fileID: 9190375845582017650}
   - component: {fileID: 4373866463501028708}
+  - component: {fileID: 985884740556716453}
   m_Layer: 0
   m_Name: Suits
   m_TagString: Untagged
@@ -701,6 +740,42 @@ MonoBehaviour:
   shuffleOrder: 0
   target: {fileID: 0}
   initialText: 
+--- !u!114 &985884740556716453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4595660310542942647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd533f4306c8b34bba6eb8f7199b8c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloatingAnimation
+  disable: 0
+  type: 1
+  loop: 1
+  playOnStart: 1
+  returningEasing: 0
+  returningTime: 0.3
+  customInitialState: 0
+  returnToTheInittialState: 0
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  directions:
+  - {x: 0, y: 1, z: 0}
+  - {x: 0, y: -1, z: 0}
+  distances:
+  - 0.03
+  - 0.03
+  durations: []
+  defaultDuration: 5
+  sharpness: 1
+  ease: 3
+  randomPhase: 1
+  initialState: {x: 0, y: 0, z: 0}
 --- !u!1 &6304494058496946124
 GameObject:
   m_ObjectHideFlags: 0
@@ -713,6 +788,7 @@ GameObject:
   - component: {fileID: 8582043965350781348}
   - component: {fileID: 5589938961515234598}
   - component: {fileID: 1461385755962007387}
+  - component: {fileID: 4410571513625675237}
   m_Layer: 0
   m_Name: Description
   m_TagString: Untagged
@@ -913,6 +989,42 @@ MonoBehaviour:
   shuffleOrder: 0
   target: {fileID: 0}
   initialText: 
+--- !u!114 &4410571513625675237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6304494058496946124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd533f4306c8b34bba6eb8f7199b8c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloatingAnimation
+  disable: 0
+  type: 1
+  loop: 1
+  playOnStart: 1
+  returningEasing: 0
+  returningTime: 0.3
+  customInitialState: 0
+  returnToTheInittialState: 0
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  directions:
+  - {x: 0, y: 1, z: 0}
+  - {x: 0, y: -1, z: 0}
+  distances:
+  - 0.03
+  - 0.03
+  durations: []
+  defaultDuration: 5
+  sharpness: 1
+  ease: 3
+  randomPhase: 1
+  initialState: {x: 0, y: 0, z: 0}
 --- !u!1 &8042637533860296657
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,7 +1227,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8751861722574177083}
-  - {fileID: 349624734322937389}
   - {fileID: 2654620852795938805}
   m_Father: {fileID: 4644588000603010055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

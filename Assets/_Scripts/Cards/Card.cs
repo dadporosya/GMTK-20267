@@ -114,6 +114,9 @@ public class Card : MonoBehaviour
     [SerializeField] private Ease burnDissolveEase = Ease.InQuad;
     [Tooltip("Extra delay after the dissolve completes before the card is destroyed.")]
     [SerializeField] private float burnDestroyDelay = 0f;
+    [Tooltip("For cards whose activation is Burn: pause (seconds) after the effect resolves " +
+             "before the card burns away. Sequence is: activate -> wait delayBeforeBurn -> burn.")]
+    [SerializeField] private float delayBeforeBurn = 0.25f;
 
     [Header("Countdown tick")]
     [Tooltip("Scale multiplier for the little squish when the countdown ticks down (1 = no squish).")]
@@ -394,8 +397,14 @@ public class Card : MonoBehaviour
         TableManager.Instance.AddScore(vp);
         TextAlertManager.Instance.CreateDamageAlert(vp, transform);
 
-        // Burning is handled centrally by CardManager's countdown phase (BurnNow / TickCountdown),
-        // so a card is never destroyed straight from its effect resolution here.
+        // Cards whose activation is Burn resolve their effect and then burn away after a short
+        // delay: activate -> wait delayBeforeBurn -> burn. (Every other card is burned centrally
+        // by CardManager's countdown phase via BurnNow / TickCountdown, never straight from here.)
+        if (cardData.activation == CP.ActivateCond.Burn)
+        {
+            if (delayBeforeBurn > 0f) yield return new WaitForSeconds(delayBeforeBurn);
+            BurnNow();
+        }
     }
 
     /// <summary>
