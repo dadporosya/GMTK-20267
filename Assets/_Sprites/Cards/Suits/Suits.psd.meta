@@ -219,6 +219,182 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Suits_5
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 1413
+        width: 116
+        height: 176
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09f3e3e2be87ef54abdc7bfdb4afbf10
+      internalID: 1711479626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_7
+      rect:
+        serializedVersion: 2
+        x: 477
+        y: 1414
+        width: 143
+        height: 180
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f465ec31a9f5af43aa5754f1887f851
+      internalID: 252038422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_8
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 1406
+        width: 166
+        height: 164
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80ba4dda6ffc18e4985bccea97f33c18
+      internalID: -1693522246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_10
+      rect:
+        serializedVersion: 2
+        x: 1078
+        y: 1414
+        width: 168
+        height: 168
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f902d0aa149c2934abcc420a9cc7f0ae
+      internalID: -192667623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_12
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 1048
+        width: 156
+        height: 171
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f5a7b3131e442749addf7c58fd3c9a7
+      internalID: 477930734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_14
+      rect:
+        serializedVersion: 2
+        x: 629
+        y: 1046
+        width: 140
+        height: 173
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f5af8bfce7ca384682f660be1b020eb
+      internalID: 978826722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_16
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 1055
+        width: 147
+        height: 157
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e21d3cab6c220544dbdb456aec400b59
+      internalID: 342620999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_6
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 830
+        width: 127
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4faa1119fe06ac74bbf71b350a1883d6
+      internalID: -740010426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -237,9 +413,21 @@ TextureImporter:
     nameFileIdTable:
       Suits_0: -1645795626
       Suits_1: 56604756
+      Suits_10: -192667623
+      Suits_11: -501262238
+      Suits_12: 477930734
+      Suits_13: 1091785165
+      Suits_14: 978826722
+      Suits_15: -1227096364
+      Suits_16: 342620999
       Suits_2: -102163122
       Suits_3: -682787072
       Suits_4: 2092796997
+      Suits_5: 1711479626
+      Suits_6: -740010426
+      Suits_7: 252038422
+      Suits_8: -1693522246
+      Suits_9: -1390332061
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

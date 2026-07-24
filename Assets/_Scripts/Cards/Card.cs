@@ -34,6 +34,7 @@ public class Card : MonoBehaviour
 
     [Header("Info texts")]
     [SerializeField] private TMP_Text titleText;
+    [SerializeField] private TMP_Text suitsText;
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private TMP_Text countDownText;
     
@@ -171,7 +172,7 @@ public class Card : MonoBehaviour
         // reacting; countdown <= 0 means "resolve once, then burn").
         countdown = cardData.countdown;
 
-        titleText.text = cardData.GenerateTitle();
+        suitsText.text = cardData.GenerateTitle();
         descriptionText.text = cardData.GenerateDescription();
         countDownText.text = cardData.countdown.ToString();
 

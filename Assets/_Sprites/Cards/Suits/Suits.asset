@@ -42,27 +42,62 @@ MonoBehaviour:
     m_Unicode: 65534
     m_GlyphIndex: 0
     m_Scale: 1
-    m_Name: Love
+    m_Name: red
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 1
     m_Scale: 1
-    m_Name: Grief
+    m_Name: pink
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 2
     m_Scale: 1
-    m_Name: Fear
+    m_Name: cyan
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 3
     m_Scale: 1
-    m_Name: Pride
+    m_Name: gree
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 4
     m_Scale: 1
-    m_Name: Hate
+    m_Name: blue
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 5
+    m_Scale: 1
+    m_Name: pride
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 6
+    m_Scale: 1
+    m_Name: Suits_7
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 7
+    m_Scale: 1
+    m_Name: love
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 8
+    m_Scale: 1
+    m_Name: fear
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 9
+    m_Scale: 1
+    m_Name: Suits_12
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 10
+    m_Scale: 1
+    m_Name: hate
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 11
+    m_Scale: 1
+    m_Name: grief
   m_GlyphTable:
   - m_Index: 0
     m_Metrics:
@@ -144,6 +179,118 @@ MonoBehaviour:
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
     sprite: {fileID: 2092796997, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
+  - m_Index: 5
+    m_Metrics:
+      m_Width: 116
+      m_Height: 176
+      m_HorizontalBearingX: -58
+      m_HorizontalBearingY: 88
+      m_HorizontalAdvance: 116
+    m_GlyphRect:
+      m_X: 185
+      m_Y: 1413
+      m_Width: 116
+      m_Height: 176
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: 1711479626, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
+  - m_Index: 6
+    m_Metrics:
+      m_Width: 143
+      m_Height: 180
+      m_HorizontalBearingX: -71.5
+      m_HorizontalBearingY: 90
+      m_HorizontalAdvance: 143
+    m_GlyphRect:
+      m_X: 477
+      m_Y: 1414
+      m_Width: 143
+      m_Height: 180
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: 252038422, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
+  - m_Index: 7
+    m_Metrics:
+      m_Width: 166
+      m_Height: 164
+      m_HorizontalBearingX: -83
+      m_HorizontalBearingY: 82
+      m_HorizontalAdvance: 166
+    m_GlyphRect:
+      m_X: 769
+      m_Y: 1406
+      m_Width: 166
+      m_Height: 164
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: -1693522246, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
+  - m_Index: 8
+    m_Metrics:
+      m_Width: 168
+      m_Height: 168
+      m_HorizontalBearingX: -84
+      m_HorizontalBearingY: 84
+      m_HorizontalAdvance: 168
+    m_GlyphRect:
+      m_X: 1078
+      m_Y: 1414
+      m_Width: 168
+      m_Height: 168
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: -192667623, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
+  - m_Index: 9
+    m_Metrics:
+      m_Width: 156
+      m_Height: 171
+      m_HorizontalBearingX: -78
+      m_HorizontalBearingY: 85.5
+      m_HorizontalAdvance: 156
+    m_GlyphRect:
+      m_X: 278
+      m_Y: 1048
+      m_Width: 156
+      m_Height: 171
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: 477930734, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
+  - m_Index: 10
+    m_Metrics:
+      m_Width: 140
+      m_Height: 173
+      m_HorizontalBearingX: -70
+      m_HorizontalBearingY: 86.5
+      m_HorizontalAdvance: 140
+    m_GlyphRect:
+      m_X: 629
+      m_Y: 1046
+      m_Width: 140
+      m_Height: 173
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: 978826722, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
+  - m_Index: 11
+    m_Metrics:
+      m_Width: 147
+      m_Height: 157
+      m_HorizontalBearingX: -73.5
+      m_HorizontalBearingY: 78.5
+      m_HorizontalAdvance: 147
+    m_GlyphRect:
+      m_X: 950
+      m_Y: 1055
+      m_Width: 147
+      m_Height: 157
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: 342620999, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []
 --- !u!21 &4603080491362251918
