@@ -61,6 +61,7 @@ public class PlacingArea : MonoBehaviour
         card.AnimateTo(pos, FlatRotation(card));
         card.Lock();
 
+        card.placingArea = this;
         cards.Add(card);
 
         // Notify the card it has been placed.

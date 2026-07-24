@@ -19,10 +19,11 @@ public class CardManager : MonoBehaviour
     public Dictionary<CP.Suit, ScriptableObjectContainer> additionalPiles = new Dictionary<CP.Suit, ScriptableObjectContainer>();
 
     [Header("Turn effects")]
-    [Tooltip("Tables whose placed cards receive OnTurnStart / OnTurnEnd each turn.")]
+    [Tooltip("Tables whose placed cards receive turn effects and count down each time a card is played.")]
     public List<PlacingArea> targetTables = new List<PlacingArea>();
-    [Tooltip("Delay (seconds) between each card's turn-effect activation.")]
-    [SerializeField] private float delayBetweenTurnEffects = 0.25f;
+    [Tooltip("Very small delay (seconds) before each OTHER card ticks its countdown down, so " +
+             "the countdowns reduce one after another instead of all at once.")]
+    [SerializeField] private float countdownTickDelay = 0.1f;
 
     [SerializeField] private Card pfbTest;
 
@@ -129,11 +130,18 @@ public class CardManager : MonoBehaviour
 
     /// <summary>
     /// Records <paramref name="placedCard"/> as <see cref="currentPlacedCard"/> (so reacting
-    /// cards can read what was just played), then queues every OTHER card on the tracked tables
-    /// whose activation is <see cref="CP.ActivateCond.OtherCardPlaced"/> and whose
-    /// <see cref="Card.countdown"/> is still &gt; 0. The placed card is skipped so it never
-    /// triggers itself (it already queued its own effect first, in <see cref="Card.OnPlace"/>).
-    /// Once every effect has resolved consecutively, the turn ends and the next one starts.
+    /// cards can read what was just played), then resolves every card's effect in a fixed order
+    /// and finally ticks the table's countdowns.
+    ///
+    /// Effect resolution order (one card at a time, via <see cref="EffectResolverManager"/>):
+    ///   1. cards that react to another card being placed (<see cref="CP.ActivateCond.OtherCardPlaced"/>),
+    ///   2. the freshly placed card itself, if it activates on placement (<see cref="CP.ActivateCond.Burn"/>),
+    ///   3. every card whose effect fires each turn (<see cref="CP.ActivateCond.OnTurnEnd"/> /
+    ///      <see cref="CP.ActivateCond.OnTurnStart"/> — now one and the same phase).
+    ///
+    /// Then the countdown phase runs (see <see cref="ReduceCountdownsCoroutine"/>): the placed
+    /// card does NOT tick on the turn it was placed (it burns immediately if its countdown is 0,
+    /// otherwise it is left untouched), and every OTHER card counts down one step, staggered.
     /// </summary>
     private IEnumerator OnCardPlacedCoroutine(Card placedCard)
     {
@@ -141,74 +149,67 @@ public class CardManager : MonoBehaviour
 
         h.Out("current placed card", placedCard);
 
-        // Queue every OTHER reacting card so it responds to the freshly placed card. The placed
-        // card sits first in the queue (queued in Card.OnPlace), so it resolves before these.
+        // --- Effect resolution, queued in order so the resolver plays them 1 -> 2 -> 3. ---
+
+        // 1. Cards reacting to another card being placed (never the placed card itself).
         foreach (Card card in CardsOnTargetTables())
         {
-            if (!card || card == placedCard) continue;   // don't self-trigger the placed card
-            if (card.countdown <= 0) continue;            // only cards still counting down react
+            if (!card || card == placedCard) continue;   // the placed card never triggers itself here
+            if (card.countdown <= 0) continue;            // cards on their way out don't react
             if (card.cardData && card.cardData.activation == CP.ActivateCond.OtherCardPlaced)
                 card.PrepareForActivation();
         }
 
-        // Resolve the whole queue one effect at a time.
-        if (EffectResolverManager.Instance)
-            yield return EffectResolverManager.Instance.EffectResolveCoroutine();
+        // 2. The placed card's own effect, if it resolves on placement ("burn" effect).
+        if (placedCard && placedCard.cardData
+            && placedCard.cardData.activation == CP.ActivateCond.Burn)
+            placedCard.PrepareForActivation();
 
-        // End the current turn, then start the next.
-        yield return OnTurnEndCoroutine();
-        yield return OnTurnStartCoroutine();
-    }
-
-    /// <summary>
-    /// Fires <see cref="Card.OnTurnStart"/> on every card placed on <see cref="targetTables"/>,
-    /// waiting <see cref="delayBetweenTurnEffects"/> between each activation.
-    /// </summary>
-    public void OnTurnStart()
-    {
-        StartCoroutine(OnTurnStartCoroutine());
-    }
-
-    /// <summary>
-    /// Fires <see cref="Card.OnTurnEnd"/> on every card placed on <see cref="targetTables"/>,
-    /// waiting <see cref="delayBetweenTurnEffects"/> between each activation.
-    /// </summary>
-    public void OnTurnEnd()
-    {
-        StartCoroutine(OnTurnEndCoroutine());
-    }
-
-    private IEnumerator OnTurnStartCoroutine()
-    {
-        var wait = new WaitForSeconds(delayBetweenTurnEffects);
-        foreach (Card card in CardsOnTargetTables())
-        {
-            card.OnTurnStart();
-            yield return wait;
-        }
-
-        // Queue every card on the tracked tables whose activation is OnTurnStart so its effect
-        // resolves at the start of the turn (mirrors how OnCardPlaced queues reacting cards).
+        // 3. Every card whose effect fires each turn. OnTurnEnd and OnTurnStart are the same
+        //    phase now — both resolve here, after each card was played.
         foreach (Card card in CardsOnTargetTables())
         {
             if (!card) continue;
-            if (card.countdown <= 0) continue;            // expired cards are being destroyed already
-            if (card.cardData && card.cardData.activation == CP.ActivateCond.OnTurnStart)
+            if (card.countdown <= 0) continue;
+            if (card.cardData &&
+                (card.cardData.activation == CP.ActivateCond.OnTurnEnd
+                 || card.cardData.activation == CP.ActivateCond.OnTurnStart))
                 card.PrepareForActivation();
         }
 
-        // Resolve the whole queue one effect at a time, after all cards have been looked through.
+        // Resolve the whole queue one effect at a time (order preserved: 1 -> 2 -> 3).
         if (EffectResolverManager.Instance)
             yield return EffectResolverManager.Instance.EffectResolveCoroutine();
+
+        // --- Countdown phase. ---
+        yield return ReduceCountdownsCoroutine(placedCard);
     }
 
-    private IEnumerator OnTurnEndCoroutine()
+    /// <summary>
+    /// Ticks the table's countdowns after the placed card's effects have resolved.
+    ///
+    /// The freshly placed card is handled first and does NOT tick on the turn it was placed:
+    ///   - countdown 0  -> it was a "resolve once" card: burn it immediately, with no tick SFX/anim,
+    ///   - countdown > 0 -> leave its countdown untouched this turn (it starts counting next turn).
+    ///
+    /// Then every OTHER card on the tracked tables counts down by one, one after another with a
+    /// very small <see cref="countdownTickDelay"/> before each, and burns the moment it hits 0.
+    /// </summary>
+    private IEnumerator ReduceCountdownsCoroutine(Card placedCard)
     {
-        var wait = new WaitForSeconds(delayBetweenTurnEffects);
+        if (placedCard)
+        {
+            if (placedCard.countdown <= 0)
+                placedCard.BurnNow();   // burn at once — no tick SFX/animation
+            // else: its countdown is left alone on the turn it was placed.
+        }
+
+        var wait = new WaitForSeconds(countdownTickDelay);
         foreach (Card card in CardsOnTargetTables())
         {
-            card.OnTurnEnd();
-            yield return wait;
+            if (!card || card == placedCard) continue;
+            yield return wait;         // small beat so countdowns reduce one after another
+            card.TickCountdown();      // reduce by 1, tick SFX/anim, and burn if it reaches 0
         }
     }
 

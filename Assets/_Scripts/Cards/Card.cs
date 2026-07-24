@@ -27,7 +27,9 @@ public class Card : MonoBehaviour
 {
     public CardDataBase cardData;
     [HideInInspector] public int countdown=0;
-    
+    /// <summary>The area this card is placed on, so it can remove itself from that area when it burns.</summary>
+    [HideInInspector] public PlacingArea placingArea;
+
     public enum CardState { InHand, Dragging, OnTable }
 
     [Header("Info texts")]
@@ -104,6 +106,16 @@ public class Card : MonoBehaviour
     [Tooltip("Extra delay after the dissolve completes before the card is destroyed.")]
     [SerializeField] private float burnDestroyDelay = 0f;
 
+    [Header("Countdown tick")]
+    [Tooltip("Scale multiplier for the little squish when the countdown ticks down (1 = no squish).")]
+    [SerializeField] private float countdownSquishStrength = 1.25f;
+    [Tooltip("How long the countdown squish takes.")]
+    [SerializeField] private float countdownSquishDuration = 0.14f;
+
+    // Resting scale of the countdown label, captured in Awake so the squish always returns to it.
+    private Vector3 countdownTextBaseScale = Vector3.one;
+    private Tween countdownSquishTween;
+
     private bool burning;
     // Cached material instances + property id, resolved when the burn starts so the tween
     // writes straight to the materials instead of re-fetching them every frame.
@@ -138,6 +150,7 @@ public class Card : MonoBehaviour
         if (!Col) h.Out($"Card '{name}' has no collider assigned or in its children; it cannot be picked.");
 
         baseScale = transform.localScale;
+        if (countDownText) countdownTextBaseScale = countDownText.transform.localScale;
         if (burnRenderers == null || burnRenderers.Length == 0)
             burnRenderers = GetComponentsInChildren<Renderer>(true);
         ApplyFace();
@@ -258,9 +271,10 @@ public class Card : MonoBehaviour
 
     /// <summary>
     /// Called by <see cref="PlacingArea"/> right after the card is placed on its surface.
-    /// Queues this card's own effect (unless it is a "react to another card" card) and hands
-    /// off to <see cref="CardManager.OnCardPlaced"/>, which queues every reacting card, resolves
-    /// the whole queue one effect at a time and then runs turn-end -> turn-start.
+    /// Hands off to <see cref="CardManager.OnCardPlaced"/>, which resolves every card's effect
+    /// in order (reacting cards, then this card's own "burn" effect, then the turn-effect cards)
+    /// and finally ticks the table's countdowns. This card's own effect is queued by CardManager
+    /// (phase 2) rather than here, so the resolution order is correct.
     /// </summary>
     public virtual void OnPlace()
     {
@@ -269,15 +283,8 @@ public class Card : MonoBehaviour
             R.PROJECT.Audio.Cards.dropCard,
         });
 
-        // Queue this card's own effect first. A "react to another card being placed" card
-        // (activation == OtherCardPlaced) must NOT resolve on its OWN placement — it only fires
-        // from CardManager.OnCardPlaced when a LATER card lands — so it is skipped here.
-        if (!cardData
-            || cardData.activation == CP.ActivateCond.Burn)
-            PrepareForActivation();
-
-        // Hand off to CardManager: it records this as the freshly placed card, queues every
-        // reacting card, resolves the queue consecutively, then advances the turn.
+        // Hand off to CardManager: it records this as the freshly placed card, resolves every
+        // effect in order, then runs the countdown phase.
         if (CardManager.Instance) CardManager.Instance.OnCardPlaced(this);
     }
 
@@ -315,17 +322,8 @@ public class Card : MonoBehaviour
         TableManager.Instance.AddScore(vp);
         TextAlertManager.Instance.CreateDamageAlert(vp, transform);
 
-        if (countdown <= 0)
-        {
-            StartCoroutine(DestroyCoroutine());
-        }
-    }
-
-    public IEnumerator DestroyCoroutine()
-    {
-        yield return 0;
-        yield return new WaitForSeconds(1f);
-        yield return Burn();
+        // Burning is handled centrally by CardManager's countdown phase (BurnNow / TickCountdown),
+        // so a card is never destroyed straight from its effect resolution here.
     }
 
     /// <summary>
@@ -351,7 +349,10 @@ public class Card : MonoBehaviour
         Lock();
         if (scaleTween.isAlive) scaleTween.Stop();
         if (placeTween.isAlive) placeTween.Stop();
+        if (countdownSquishTween.isAlive) countdownSquishTween.Stop();
         if (handManager) handManager.RemoveCard(this);
+        // Leave the table's card list so it isn't ticked / resolved again while dissolving.
+        if (placingArea) placingArea.cards.Remove(this);
 
         PrepareBurnMaterials();
 
@@ -458,18 +459,15 @@ public class Card : MonoBehaviour
     }
 
     /// <summary>
-    /// Called by <see cref="CardManager.OnTurnEnd"/> for every card on the tracked tables,
-    /// staggered by CardManager's delay between turn effects. Empty by design — override /
-    /// extend to trigger the card's end-of-turn behaviour.
+    /// Reduces this card's countdown by one and shows it ticking: plays a clock-tick SFX,
+    /// updates the countdown label and gives it a small squish. When the countdown reaches 0 the
+    /// card burns away. Called once per card, staggered, during CardManager's countdown phase.
+    /// The freshly placed card is NOT ticked on the turn it is placed.
     /// </summary>
-    public virtual void OnTurnEnd()
-    {
-
-    }
-
-    public void OnTurnStart()
+    public void TickCountdown()
     {
         countdown--;
+
         SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {
             R.PROJECT.Audio.Clock.Tick.clockTick1,
@@ -477,15 +475,43 @@ public class Card : MonoBehaviour
             R.PROJECT.Audio.Clock.Tick.clockTick3,
             R.PROJECT.Audio.Clock.Tick.clockTick4
         });
-        countDownText.text = countdown.ToString();
-        // TODO squish anim
-        if (countdown <= 0f)
-        {
-            StartCoroutine(DestroyCoroutine());
-        }
-        
-        
 
-        
+        if (countDownText)
+        {
+            countDownText.text = countdown.ToString();
+            PlayCountdownSquish();
+        }
+
+        if (countdown <= 0)
+            BurnNow();
+    }
+
+    /// <summary>A small scale punch on the countdown label so a tick reads visibly.</summary>
+    private void PlayCountdownSquish()
+    {
+        if (!countDownText) return;
+
+        Transform t = countDownText.transform;
+        if (countdownSquishTween.isAlive) countdownSquishTween.Stop();
+        t.localScale = countdownTextBaseScale;
+
+        // Squish out to the boosted scale and back (base -> boosted -> base) via a 2-cycle yoyo.
+        countdownSquishTween = Tween.Scale(
+            t,
+            countdownTextBaseScale * countdownSquishStrength,
+            countdownSquishDuration,
+            Ease.OutQuad,
+            cycles: 2,
+            cycleMode: CycleMode.Yoyo);
+    }
+
+    /// <summary>
+    /// Burns the card immediately, with no countdown tick — used for a "resolve once" card
+    /// (countdown 0) once its effect has been resolved. Idempotent: <see cref="Burn"/> guards
+    /// against a second call while already burning.
+    /// </summary>
+    public void BurnNow()
+    {
+        StartCoroutine(Burn());
     }
 }
