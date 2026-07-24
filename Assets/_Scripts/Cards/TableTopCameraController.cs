@@ -144,7 +144,7 @@ public class TableTopCameraController : MonoBehaviour
             SwitchToFree();
         } else if (state == State.TableView)
         {
-            SwitchToTableView();
+            SwitchToHandView();
         }
     }
 
