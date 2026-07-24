@@ -30,7 +30,10 @@ public class CardManager : MonoBehaviour
     [HideInInspector] public Card currentPlacedCard;
 
     [SerializeField] private List<CardDataBase> startCards = new List<CardDataBase>();
-
+    
+    
+    [Header("Card Appearance")]
+    public List<Texture2D> cardTextures = new List<Texture2D>();
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
@@ -115,6 +118,9 @@ public class CardManager : MonoBehaviour
         Card card = Instantiate(cardPrefab);
         if (dataBase) card.cardData = dataBase;
         Cards.Add(card);
+        
+        /// TASK: Acces card's front and back model's material and assign random texture from cardTextures to CardTexture property
+        
         return card;
     }
 

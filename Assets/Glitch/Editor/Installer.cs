@@ -340,7 +340,7 @@ namespace VolFx.Editor
             // It's a trap, see: https://github.com/Unity-Technologies/Graphics/blob/b57fcac51bb88e1e589b01e32fd610c991f16de9/Packages/com.unity.render-pipelines.universal/Runtime/Data/UniversalRenderPipelineAsset.cs#L719
             var data = GetDefaultRenderer(asset);
             
-            return data.rendererFeatures.Any(type.IsInstanceOfType);
+            return data.rendererFeatures.Any(type.IsInstanceOfType);//
         }
         
         private static ScriptableRendererData GetDefaultRenderer(UniversalRenderPipelineAsset asset)
