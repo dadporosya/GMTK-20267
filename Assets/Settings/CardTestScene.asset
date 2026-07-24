@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
   m_Name: LiftGammaGain
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   lift:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: 0}
@@ -369,7 +369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3049d7fe12ad3f248b06c5523cca638e, type: 3}
   m_Name: DissolveVol
   m_EditorClassIdentifier: VolFx::VolFx.DissolveVol
-  active: 1
+  active: 0
   m_Weight:
     m_OverrideState: 1
     m_Value: 0
@@ -741,7 +741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b447969f02741db89b76840f68e7812, type: 3}
   m_Name: DistortVol
   m_EditorClassIdentifier: VolFx::VolFx.DistortVol
-  active: 1
+  active: 0
   m_Weight:
     m_OverrideState: 1
     m_Value: 0
@@ -1707,7 +1707,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: DefaultVolumeProfile
+  m_Name: CardTestScene
   m_EditorClassIdentifier: 
   components:
   - {fileID: -9167874883656233139}
@@ -1767,7 +1767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aebac967aa993140ab1982d43b8450a, type: 3}
   m_Name: GlitchVol
   m_EditorClassIdentifier: GlitchFx.Runtime::VolFx.GlitchVol
-  active: 1
+  active: 0
   _weight:
     m_OverrideState: 1
     m_Value: 0
@@ -2102,7 +2102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06437c1ff663d574d9447842ba0a72e4, type: 3}
   m_Name: ScreenSpaceLensFlare
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   intensity:
     m_OverrideState: 1
     m_Value: 0
@@ -2169,7 +2169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
   m_Name: ShadowsMidtonesHighlights
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   shadows:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: 0}
@@ -2291,7 +2291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 584f4d053daa4e17a331821f306111c9, type: 3}
   m_Name: ChromaticVol
   m_EditorClassIdentifier: VolFx::VolFx.ChromaticVol
-  active: 1
+  active: 0
   _Weight:
     m_OverrideState: 1
     m_Value: 1
@@ -2517,7 +2517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e021b4c809a781e468c2988c016ebbea, type: 3}
   m_Name: ColorLookup
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   texture:
     m_OverrideState: 1
     m_Value: {fileID: 0}
@@ -2683,7 +2683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba95ee541be4fe3b76c758f1424e975, type: 3}
   m_Name: FlowVol
   m_EditorClassIdentifier: VolFx::VolFx.FlowVol
-  active: 1
+  active: 0
   m_Fade:
     m_OverrideState: 1
     m_Value: 0
@@ -2797,7 +2797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96468967439741488ad1b1af1ab44b9b, type: 3}
   m_Name: ScanlinesVol
   m_EditorClassIdentifier: VolFx::VolFx.ScanlinesVol
-  active: 1
+  active: 0
   m_Intensity:
     m_OverrideState: 1
     m_Value: 0
@@ -2883,7 +2883,7 @@ MonoBehaviour:
     m_Value: 0
   m_NoiseScale:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 7
   m_Noise:
     m_OverrideState: 1
     m_Value: {fileID: 0}

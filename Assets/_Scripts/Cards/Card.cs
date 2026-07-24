@@ -40,11 +40,11 @@ public class Card : MonoBehaviour
 
     [Header("Info text animations (looped 2-frame suit flip-books)")]
     [Tooltip("ChangingTextAnimation on the title text. Auto-found on the title TMP if left empty.")]
-    [SerializeField] private ChangingTextAnimation titleAnim;
+    [SerializeField] private ChangingTextAnimationn titleAnim;
     [Tooltip("ChangingTextAnimation on the suits text. Auto-found on the suits TMP if left empty.")]
-    [SerializeField] private ChangingTextAnimation suitsAnim;
+    [SerializeField] private ChangingTextAnimationn suitsAnim;
     [Tooltip("ChangingTextAnimation on the description text. Auto-found on the description TMP if left empty.")]
-    [SerializeField] private ChangingTextAnimation descriptionAnim;
+    [SerializeField] private ChangingTextAnimationn descriptionAnim;
 
     
     [Header("Faces (two quads)")]
@@ -184,9 +184,9 @@ public class Card : MonoBehaviour
         countdown = cardData.countdown;
 
         // Resolve the ChangingTextAnimations from their TMP objects if they weren't wired in the inspector.
-        if (!titleAnim && titleText) titleAnim = titleText.GetComponentInChildren<ChangingTextAnimation>();
-        if (!suitsAnim && suitsText) suitsAnim = suitsText.GetComponentInChildren<ChangingTextAnimation>();
-        if (!descriptionAnim && descriptionText) descriptionAnim = descriptionText.GetComponentInChildren<ChangingTextAnimation>();
+        if (!titleAnim && titleText) titleAnim = titleText.GetComponentInChildren<ChangingTextAnimationn>();
+        if (!suitsAnim && suitsText) suitsAnim = suitsText.GetComponentInChildren<ChangingTextAnimationn>();
+        if (!descriptionAnim && descriptionText) descriptionAnim = descriptionText.GetComponentInChildren<ChangingTextAnimationn>();
 
         // Title has no suit tags, so it's a single static frame (fed through the animation when
         // present so it doesn't overwrite it with an empty string).
@@ -220,10 +220,10 @@ public class Card : MonoBehaviour
     }
 
     /// <summary>
-    /// Feeds the generated text frames into a <see cref="ChangingTextAnimation"/> and starts it.
+    /// Feeds the generated text frames into a <see cref="ChangingTextAnimationn"/> and starts it.
     /// The component's own <c>loop</c> flag (set in the inspector) keeps the frames cycling.
     /// </summary>
-    private void PlayFrames(ChangingTextAnimation anim, List<string> frames)
+    private void PlayFrames(ChangingTextAnimationn anim, List<string> frames)
     {
         if (!anim) return;
         anim.frames = frames;
