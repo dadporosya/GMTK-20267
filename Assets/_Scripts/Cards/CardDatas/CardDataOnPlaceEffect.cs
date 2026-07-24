@@ -15,7 +15,6 @@ public class CardDataOnPlaceEffect : CardDataBase
         int vp = 0;
 
         if (CardManager.Instance.currentPlacedCard == null) return vp;
-        h.Out("DENERATE FOR ON PLACRED");
         if (condition == CP.Condition.SuitSet)
         {
             vp = CalculateForSuitSets();
@@ -26,19 +25,11 @@ public class CardDataOnPlaceEffect : CardDataBase
         {
             
             int tempVp = CalculateForSuitCount();
-            h.Out("tempvp,", tempVp);
             if (tempVp > 0)
             {
-                h.Out(targetSource);
                 vp = CalculateForSuitSets();
-                h.Out("not temp,", vp);
             }
         }
-        
-        
-        h.Out("activate place card", vp);
-        
-        h.Out("VP:", vp);
         return vp;
     }
 
@@ -69,10 +60,5 @@ public class CardDataOnPlaceEffect : CardDataBase
         {
             CardManager.Instance.currentPlacedCard
         });
-    }
-    
-    protected override string BuildDescription(int id)
-    {
-        return base.BuildDescription(id) + "\nON PLACED CARD";
     }
 }

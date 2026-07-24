@@ -418,14 +418,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Suits_20
+      name: Suits_8
       rect:
         serializedVersion: 2
-        x: 74
-        y: 862
-        width: 127
-        height: 126
-      alignment: 6
+        x: 68
+        y: 851
+        width: 140
+        height: 140
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -433,21 +433,21 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 78252351f13e94e4a9d3cc0963efe753
-      internalID: -1569283296
+      spriteID: 1d7b17d7d5796a346bbac261e94d2fb8
+      internalID: -1693522246
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Suits_21
+      name: Suits_3
       rect:
         serializedVersion: 2
-        x: 249
-        y: 862
-        width: 127
-        height: 126
-      alignment: 6
+        x: 243
+        y: 853
+        width: 140
+        height: 140
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -455,8 +455,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fa597fba3db4bef47b42de89e63283c7
-      internalID: 777203317
+      spriteID: 41fb001a8baf68a46ac17095376d2952
+      internalID: -682787072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_11
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 855
+        width: 140
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb3aaa33d68aaa04fa2ef14026075d5b
+      internalID: -501262238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_13
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 852
+        width: 140
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 792a073d54a172f4fb83258a26ecf68f
+      internalID: 1091785165
       vertices: []
       indices: 
       edges: []

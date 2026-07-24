@@ -157,11 +157,14 @@ public class CardDragController : MonoBehaviour
     private void BeginDrag(Card card)
     {
         if (hovered) { hovered.SetHovered(false); hovered = null; }
-        // No card is hovered while dragging: release the focus so the hand returns to normal.
-        PushHoverFocus(null);
 
         dragging = card;
         dragOriginState = card.state;
+
+        // Keep the other hand cards lowered for the WHOLE drag. The picked-up card leaves the
+        // hand (it becomes the focus but takes no layout slot), so every remaining hand card
+        // stays dipped until release. Dragging a table card has no hand focus, so clear it.
+        PushHoverFocus(dragOriginState == Card.CardState.InHand ? card : null);
         card.SetHovered(false);
         card.SetState(Card.CardState.Dragging);
         // Ignore the dragged card in raycasts so the drop-surface ray can't hit the card
@@ -261,6 +264,10 @@ public class CardDragController : MonoBehaviour
         // (while the card was still non-blocking), not on a fresh cast.
         foreach (Collider c in dragColliders) if (c) c.enabled = true;
         dragColliders.Clear();
+
+        // Drag is over: release the focus so the lowered cards rise back to their normal layout.
+        // A fresh hover next frame re-establishes focus if the pointer is still over a hand card.
+        PushHoverFocus(null);
 
         // Released over another hand card: swap the two cards' places in the hand instead of
         // placing. Checked before the table branches so a table behind the cards can't hijack it.

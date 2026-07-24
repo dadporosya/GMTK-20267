@@ -248,6 +248,7 @@ MonoBehaviour:
   lowerTheOtherCards: 1
   raiseTowardCameraAmount: 0.367
   lowerOthersAmount: 0.67
+  lowerOthersRotationX: 16.7
 --- !u!1 &270699532
 GameObject:
   m_ObjectHideFlags: 0
@@ -1724,7 +1725,6 @@ MonoBehaviour:
   fanAngle: 12
   cardPitch: 15
   arrangeContinuously: 1
-  lowerOthersPitch: 8
   slotted: []
 --- !u!1 &1772355076
 GameObject:

@@ -41,7 +41,7 @@ public class CardManager : MonoBehaviour
 
         // Work on runtime copies so drawing / editing never mutates the original SO assets on disk.
         if (fullPile) fullPile = Instantiate(fullPile);
-        for (int i = 0; i < additionalPiles.Count; i++)
+        for (int i = 0; i < rawAdditionalPiles.Count; i++)
         {
             additionalPiles.Add(pileSuits[i], Instantiate(rawAdditionalPiles[i]));
         }
