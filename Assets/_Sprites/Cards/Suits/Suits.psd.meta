@@ -382,7 +382,7 @@ TextureImporter:
         width: 127
         height: 123
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -391,6 +391,28 @@ TextureImporter:
       bones: []
       spriteID: 4faa1119fe06ac74bbf71b350a1883d6
       internalID: -740010426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_9
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 1201
+        width: 116
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1963d6a391412d242948b8e0566a9c14
+      internalID: -1390332061
       vertices: []
       indices: 
       edges: []

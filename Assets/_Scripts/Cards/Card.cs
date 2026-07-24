@@ -122,6 +122,9 @@ public class Card : MonoBehaviour
     // writes straight to the materials instead of re-fetching them every frame.
     private Material[] burnMats;
     private int burnAmountId;
+    // The card's dissolve amount at the moment the burn starts, captured in PrepareBurnMaterials
+    // so BurnDissolve tweens onward from the card's current state instead of snapping to intact.
+    private float burnStartAmount;
 
     // Home pose assigned by HandManager, eased toward while InHand.
     private Vector3 homePosition;
@@ -410,13 +413,17 @@ public class Card : MonoBehaviour
 
     /// <summary>
     /// Grabs per-renderer material instances (via <c>.material</c>, never touching the asset on
-    /// disk), enables the dissolve feature and pins the amount at 0 so the flip shows the intact
-    /// card before it burns away. Call once before <see cref="BurnDissolve"/>.
+    /// disk) and enables the dissolve feature. Captures the material's current
+    /// <c>_Dissolve_amount</c> into <see cref="burnStartAmount"/> so the burn dissolves onward
+    /// from the card's present state rather than snapping to intact first. Call once before
+    /// <see cref="BurnDissolve"/>.
     /// </summary>
     public void PrepareBurnMaterials()
     {
         int enableId = Shader.PropertyToID(dissolveEnableProperty);
         burnAmountId = Shader.PropertyToID(dissolveAmountProperty);
+        burnStartAmount = 0f;
+        bool captured = false;
         var mats = new System.Collections.Generic.List<Material>();
         if (burnRenderers != null)
             foreach (var r in burnRenderers)
@@ -425,7 +432,13 @@ public class Card : MonoBehaviour
                 var m = r.material;
                 if (!m) continue;
                 m.SetFloat(enableId, 1f);
-                m.SetFloat(burnAmountId, 0f);
+                // Seed the tween start from the card's current dissolve state (do NOT force it to 0,
+                // so the burn continues from whatever amount the material is already showing).
+                if (!captured)
+                {
+                    burnStartAmount = m.GetFloat(burnAmountId);
+                    captured = true;
+                }
                 mats.Add(m);
             }
         burnMats = mats.ToArray();
@@ -472,12 +485,8 @@ public class Card : MonoBehaviour
             R.PROJECT.Audio.Fire.burn2,
         });
         if (burnMats == null) yield break;
-        float startBurn = 0f;
-        foreach (var m in burnMats)
-            if (m) startBurn = m.GetFloat(burnAmountId);
-        h.Out(startBurn);
-        // task start burn always 0, despite in the mat it is not
-        yield return Tween.Custom(startBurn, 1f, burnDissolveDuration, SetBurnAmount, burnDissolveEase)
+        // Dissolve from the card's current amount (captured in PrepareBurnMaterials) up to 1.
+        yield return Tween.Custom(burnStartAmount, 1f, burnDissolveDuration, SetBurnAmount, burnDissolveEase)
             .ToYieldInstruction();
     }
 

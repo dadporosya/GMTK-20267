@@ -98,6 +98,16 @@ MonoBehaviour:
     m_GlyphIndex: 11
     m_Scale: 1
     m_Name: grief
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 12
+    m_Scale: 1
+    m_Name: Suits_6
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 13
+    m_Scale: 1
+    m_Name: Suits_9
   m_GlyphTable:
   - m_Index: 0
     m_Metrics:
@@ -291,6 +301,38 @@ MonoBehaviour:
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
     sprite: {fileID: 342620999, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
+  - m_Index: 12
+    m_Metrics:
+      m_Width: 127
+      m_Height: 123
+      m_HorizontalBearingX: -63.5
+      m_HorizontalBearingY: 61.5
+      m_HorizontalAdvance: 127
+    m_GlyphRect:
+      m_X: 324
+      m_Y: 830
+      m_Width: 127
+      m_Height: 123
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: -740010426, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
+  - m_Index: 13
+    m_Metrics:
+      m_Width: 116
+      m_Height: 176
+      m_HorizontalBearingX: -58
+      m_HorizontalBearingY: 88
+      m_HorizontalAdvance: 116
+    m_GlyphRect:
+      m_X: 185
+      m_Y: 1201
+      m_Width: 116
+      m_Height: 176
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: -1390332061, guid: e32cb92564345364ca5290f1eee015f2, type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []
 --- !u!21 &4603080491362251918
