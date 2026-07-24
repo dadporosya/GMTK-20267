@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using PrimeTween;
 
@@ -102,6 +103,42 @@ public class TableTopCameraController : MonoBehaviour
         if (!currentTable) currentTable = FindTable();
 
         SwitchState(state, instant: instantOnStart);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            ChangeStateUp();
+        }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            SwitchToHandView();
+        }
+    }
+
+    public void ChangeStateUp()
+    {
+        if (state == State.TableView) return;
+        if (state == State.HandView)
+        {
+            SwitchToTableView();
+        } else if (state == State.Free)
+        {
+            SwitchToHandView();
+        }
+    }
+    
+    public void ChangeStateDown()
+    {
+        if (state == State.Free) return;
+        if (state == State.HandView)
+        {
+            SwitchToFree();
+        } else if (state == State.TableView)
+        {
+            SwitchToTableView();
+        }
     }
 
     // ---- public API ---------------------------------------------------------
