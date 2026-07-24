@@ -255,37 +255,29 @@ public class TableTopCameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// Free look: rotate the camera pitch (local X) to 0 so it looks level at the horizon, hide the
-    /// cursor and hand control over to MouseLook. The hand does not follow the camera here.
+    /// Free look: INSTANTLY level the camera pitch (X -> 0), keeping the current yaw, then hand full
+    /// control to MouseLook. The controller does NO further rotation — MouseLook owns all free-look
+    /// rotation. The hand does not follow the camera here.
     /// </summary>
     private void ApplyFreeView(bool instant)
     {
         SetCardsFollow(false);
         SetCursorVisible(false);
+        StopTweens(); // cancel any hand/table move still tweening the camera
 
-        if (!camTransform) camTransform = transform;
+        // Instant one-off pitch reset on the camera MouseLook actually drives (its cam = Camera.main),
+        // so the reset matches what mouse look continues from. Keep the current yaw, zero the roll.
+        Transform cam = Camera.main ? Camera.main.transform : (camTransform ? camTransform : transform);
+        cam.rotation = Quaternion.Euler(0f, cam.eulerAngles.y, 0f);
 
-        // Mouse look stays OFF while we rotate so it doesn't fight the tween; it's switched on (and
-        // resynced) once the camera has settled at pitch 0 (see EnableMouseLook).
-        if (mouseLook) mouseLook.canLook = false;
-
-        // Level out: only the camera's local X (pitch) goes to 0; keep its local Y and Z.
-        Vector3 le = camTransform.localEulerAngles;
-        Quaternion target = Quaternion.Euler(0f, le.y, le.z);
-
-        StopTweens();
-        if (instant || transitionDuration <= 0f)
+        // Resync MouseLook's internal look angles to this levelled pose (FreezeCamera(false) calls its
+        // internal reset) so it doesn't snap the pitch back, then enable looking. Existing API — no
+        // MouseLook changes.
+        if (mouseLook)
         {
-            camTransform.localRotation = target;
-            EnableMouseLook();
+            mouseLook.FreezeCamera(false);
+            mouseLook.canLook = true;
         }
-        else
-        {
-            rotTween = Tween.LocalRotation(camTransform, target, transitionDuration, transitionEase)
-                            .OnComplete(EnableMouseLook);
-        }
-        h.Out("free");
-
     }
 
     // ---- helpers ------------------------------------------------------------
@@ -302,13 +294,6 @@ public class TableTopCameraController : MonoBehaviour
         Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
-    /// <summary>Turns MouseLook back on, first resyncing its internal angles so the view doesn't snap.</summary>
-    private void EnableMouseLook()
-    {
-        if (!mouseLook) return;
-        mouseLook.SyncRotation();
-        mouseLook.canLook = true;
-    }
 
     /// <summary>World-space move + rotate (used by the table/free views).</summary>
     private void MoveToWorld(Vector3 worldPos, Quaternion worldRot, bool instant)

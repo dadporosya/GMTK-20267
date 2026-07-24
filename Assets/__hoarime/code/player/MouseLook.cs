@@ -188,12 +188,6 @@ public class MouseLook : MonoBehaviour
         if (yRot > 180) yRot -= 360;
     }
 
-
-    public void SyncRotation()
-    {
-        ResetMouseLookRotation();
-    }
-
     public void LimitXAxis(bool limit)
     {
         NormalizeYRotation();
