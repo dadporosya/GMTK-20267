@@ -198,6 +198,10 @@ public class Card : MonoBehaviour
         List<string> suitFrames = cardData.GenerateSuits();
         if (suitsAnim) PlayFrames(suitsAnim, suitFrames);
         else if (suitsText) suitsText.text = suitFrames.Count > 0 ? suitFrames[0] : "";
+        if (suitsText.text.Length <= 1)
+            suitsText.alignment = TextAlignmentOptions.Center;
+        else
+            suitsText.alignment = TextAlignmentOptions.Flush; // or Justified
 
         List<string> descriptionFrames = cardData.GenerateDescription();
         if (descriptionAnim) PlayFrames(descriptionAnim, descriptionFrames);
