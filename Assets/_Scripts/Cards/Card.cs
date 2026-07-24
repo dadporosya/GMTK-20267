@@ -39,12 +39,12 @@ public class Card : MonoBehaviour
     [SerializeField] private TMP_Text countDownText;
 
     [Header("Info text animations (looped 2-frame suit flip-books)")]
-    [Tooltip("Frame animator on the title text. Auto-found on the title TMP if left empty.")]
-    [SerializeField] private TextChangeAnimation titleAnim;
-    [Tooltip("Frame animator on the suits text. Auto-found on the suits TMP if left empty.")]
-    [SerializeField] private TextChangeAnimation suitsAnim;
-    [Tooltip("Frame animator on the description text. Auto-found on the description TMP if left empty.")]
-    [SerializeField] private TextChangeAnimation descriptionAnim;
+    [Tooltip("ChangingTextAnimation on the title text. Auto-found on the title TMP if left empty.")]
+    [SerializeField] private ChangingTextAnimation titleAnim;
+    [Tooltip("ChangingTextAnimation on the suits text. Auto-found on the suits TMP if left empty.")]
+    [SerializeField] private ChangingTextAnimation suitsAnim;
+    [Tooltip("ChangingTextAnimation on the description text. Auto-found on the description TMP if left empty.")]
+    [SerializeField] private ChangingTextAnimation descriptionAnim;
 
     
     [Header("Faces (two quads)")]
@@ -183,24 +183,24 @@ public class Card : MonoBehaviour
         // reacting; countdown <= 0 means "resolve once, then burn").
         countdown = cardData.countdown;
 
-        // Resolve the frame animators from their TMP objects if they weren't wired in the inspector.
-        if (!titleAnim && titleText) titleAnim = titleText.GetComponentInChildren<TextChangeAnimation>();
-        if (!suitsAnim && suitsText) suitsAnim = suitsText.GetComponentInChildren<TextChangeAnimation>();
-        if (!descriptionAnim && descriptionText) descriptionAnim = descriptionText.GetComponentInChildren<TextChangeAnimation>();
+        // Resolve the ChangingTextAnimations from their TMP objects if they weren't wired in the inspector.
+        if (!titleAnim && titleText) titleAnim = titleText.GetComponentInChildren<ChangingTextAnimation>();
+        if (!suitsAnim && suitsText) suitsAnim = suitsText.GetComponentInChildren<ChangingTextAnimation>();
+        if (!descriptionAnim && descriptionText) descriptionAnim = descriptionText.GetComponentInChildren<ChangingTextAnimation>();
 
-        // Title has no suit tags, so it's a single static frame (fed through the animator when
-        // present so the animator doesn't overwrite it with an empty string).
-        if (titleAnim) titleAnim.SetFrames(new List<string> { cardData.title });
+        // Title has no suit tags, so it's a single static frame (fed through the animation when
+        // present so it doesn't overwrite it with an empty string).
+        if (titleAnim) PlayFrames(titleAnim, new List<string> { cardData.title });
         else if (titleText) titleText.text = cardData.title;
 
-        // Suits + description are multi-frame flip-books: one text frame per suit-sprite frame.
-        // Assigning the frames auto-starts the looped animation (loop is set on the component).
+        // Suits + description are multi-frame flip-books: each string is one frame from the
+        // card data generators. The ChangingTextAnimation cycles them, looped (set on the component).
         List<string> suitFrames = cardData.GenerateSuits();
-        if (suitsAnim) suitsAnim.SetFrames(suitFrames);
+        if (suitsAnim) PlayFrames(suitsAnim, suitFrames);
         else if (suitsText) suitsText.text = suitFrames.Count > 0 ? suitFrames[0] : "";
 
         List<string> descriptionFrames = cardData.GenerateDescription();
-        if (descriptionAnim) descriptionAnim.SetFrames(descriptionFrames);
+        if (descriptionAnim) PlayFrames(descriptionAnim, descriptionFrames);
         else if (descriptionText) descriptionText.text = descriptionFrames.Count > 0 ? descriptionFrames[0] : "";
 
         countDownText.text = cardData.countdown.ToString();
@@ -210,8 +210,19 @@ public class Card : MonoBehaviour
         // so PlayAnimations() runs exactly those matching animation bases.
         if (activateAnimController) StartCoroutine(activateAnimController.PlayAnimations());
     }
-    
-    
+
+    /// <summary>
+    /// Feeds the generated text frames into a <see cref="ChangingTextAnimation"/> and starts it.
+    /// The component's own <c>loop</c> flag (set in the inspector) keeps the frames cycling.
+    /// </summary>
+    private void PlayFrames(ChangingTextAnimation anim, List<string> frames)
+    {
+        if (!anim) return;
+        anim.frames = frames;
+        StartCoroutine(anim.Play());
+    }
+
+
 
     private void Update()
     {
