@@ -243,7 +243,7 @@ MonoBehaviour:
   dragFollowSmoothing: 0.0867
   placeFaceUpOnTable: 1
   maxRayDistance: 1000
-  hoverScaleMultiplier: 1.1
+  hoverScaleMultiplier: 1.2
   RaiseSelectedOnTop: 1
   lowerTheOtherCards: 1
   raiseTowardCameraAmount: 0.367

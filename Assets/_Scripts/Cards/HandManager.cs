@@ -131,6 +131,21 @@ public class HandManager : MonoBehaviour
         focusLowerRotationX = lowerRotationX;
     }
 
+    /// <summary>Whether the hand currently re-anchors to the camera every frame (cards "follow" the camera).</summary>
+    public bool FollowCamera => arrangeContinuously;
+
+    /// <summary>
+    /// Turns the per-frame camera-anchored layout on/off. When ON the hand glues to the camera and
+    /// follows it every frame; when OFF the cards keep their last pose and stay put while the camera
+    /// moves. Re-enabling snaps the hand back in front of the camera immediately. Used by
+    /// <see cref="TableTopCameraController"/> to make the hand follow only in the hand view.
+    /// </summary>
+    public void SetFollowCamera(bool follow)
+    {
+        arrangeContinuously = follow;
+        if (follow) Arrange();
+    }
+
     /// <summary>
     /// Recomputes and assigns the home pose for every InHand card. Runs automatically
     /// whenever a card is added or removed, and each frame if arrangeContinuously is on.
