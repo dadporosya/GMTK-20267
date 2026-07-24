@@ -328,10 +328,18 @@ public class Card : MonoBehaviour
         placeTween = Tween.Rotation(transform, rotation, placeDuration, placeEase);
     }
 
-    public void SetHovered(bool value)
+    /// <summary>
+    /// Hover highlight: lifts the card (in <see cref="Update"/>) and scales it. Pass
+    /// <paramref name="scaleMultiplier"/> &gt; 0 to override the card's own
+    /// <see cref="hoverScaleMultiplier"/> for this hover (e.g. so CardDragController can drive the
+    /// hover scale centrally); any value &lt;= 0 keeps the card's inspector default.
+    /// </summary>
+    public void SetHovered(bool value, float scaleMultiplier = -1f)
     {
         if (hovered == value) return;
         hovered = value;
+
+        if (scaleMultiplier > 0f) hoverScaleMultiplier = scaleMultiplier;
 
         if (scaleTween.isAlive) scaleTween.Stop();
         Vector3 target = hovered ? baseScale * hoverScaleMultiplier : baseScale;

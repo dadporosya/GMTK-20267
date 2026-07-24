@@ -884,7 +884,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Description sample for the card
+  m_text: "Description sample for the card \u0435\u0443\u0447\u0435 lorum ispum"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
   m_sharedMaterial: {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
@@ -924,7 +924,7 @@ MonoBehaviour:
   m_characterSpacing: 3.63
   m_characterHorizontalScale: 1
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 25.95
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1015,7 +1015,7 @@ MonoBehaviour:
   animationSpeed: 1
   directions:
   - {x: 0, y: 1, z: 0}
-  - {x: 0, y: -1, z: 0}
+  - {x: 0, y: -0.9, z: 0}
   distances:
   - 0.03
   - 0.03
@@ -1111,6 +1111,7 @@ MonoBehaviour:
   burnDissolveDuration: 0.8
   burnDissolveEase: 5
   burnDestroyDelay: 0
+  delayBeforeBurn: 0.25
   countdownSquishStrength: 1.25
   countdownSquishDuration: 0.14
   handManager: {fileID: 0}

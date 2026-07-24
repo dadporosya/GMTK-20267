@@ -517,7 +517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0e86679a2284a4ca49d75916bcd95c3, type: 3}
   m_Name: SliceVol
   m_EditorClassIdentifier: VolFx::VolFx.SliceVol
-  active: 1
+  active: 0
   m_Value:
     m_OverrideState: 1
     m_Value: 0.033

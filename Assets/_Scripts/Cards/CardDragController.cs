@@ -51,6 +51,10 @@ public class CardDragController : MonoBehaviour
     [SerializeField] private float maxRayDistance = 1000f;
 
     [Header("Hover focus (make the selected hand card readable)")]
+    [Tooltip("Scale multiplier applied to a hand card while it is hovered. Drives the hover 'pop' " +
+             "centrally from here so every card scales the same amount; overrides each card's own " +
+             "hoverScaleMultiplier. 1 = no scaling.")]
+    [SerializeField] private float hoverScaleMultiplier = 1.1f;
     [Tooltip("When ON, the hovered/selected hand card is pulled toward the camera so it renders " +
              "ON TOP of its neighbours (in addition to the card's own hover lift).")]
     [SerializeField] private bool RaiseSelectedOnTop = true;
@@ -126,7 +130,7 @@ public class CardDragController : MonoBehaviour
         {
             if (hovered) hovered.SetHovered(false);
             hovered = hoverTarget;
-            if (hovered) hovered.SetHovered(true);
+            if (hovered) hovered.SetHovered(true, hoverScaleMultiplier);
 
             // Tell the hand which card is focused so it can raise it on top and/or lower the
             // others. Both effects are gated by their matching flag above.
