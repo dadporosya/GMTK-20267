@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 349624734322937389}
   - component: {fileID: 2091862797486572172}
   - component: {fileID: 5145997676384685177}
+  - component: {fileID: 7948160399744089664}
   m_Layer: 0
   m_Name: TURN countDown
   m_TagString: Untagged
@@ -424,6 +425,36 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 2091862797486572172}
   m_maskType: 0
+--- !u!114 &7948160399744089664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2903545929745801349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d461a6c109ec84fb51df9044234e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangingTextAnimation
+  disable: 0
+  type: 0
+  loop: 1
+  playOnStart: 0
+  returningEasing: 0
+  returningTime: 0.3
+  customInitialState: 0
+  returnToTheInittialState: 0
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  frames: []
+  gapsBetweenFrames: []
+  defaultGap: 0.6
+  shuffleOrder: 0
+  target: {fileID: 0}
+  initialText: 
 --- !u!1 &4595660310542942647
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,6 +466,7 @@ GameObject:
   - component: {fileID: 8751861722574177083}
   - component: {fileID: 1052347065591354313}
   - component: {fileID: 9190375845582017650}
+  - component: {fileID: 5879537065685107757}
   m_Layer: 0
   m_Name: Suits
   m_TagString: Untagged
@@ -605,6 +637,36 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 1052347065591354313}
   m_maskType: 0
+--- !u!114 &5879537065685107757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4595660310542942647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d461a6c109ec84fb51df9044234e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangingTextAnimation
+  disable: 0
+  type: 0
+  loop: 1
+  playOnStart: 0
+  returningEasing: 0
+  returningTime: 0.3
+  customInitialState: 0
+  returnToTheInittialState: 0
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  frames: []
+  gapsBetweenFrames: []
+  defaultGap: 0.6
+  shuffleOrder: 0
+  target: {fileID: 0}
+  initialText: 
 --- !u!1 &6304494058496946124
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,6 +678,7 @@ GameObject:
   - component: {fileID: 2654620852795938805}
   - component: {fileID: 8582043965350781348}
   - component: {fileID: 5589938961515234598}
+  - component: {fileID: 3451859763174348759}
   m_Layer: 0
   m_Name: Description
   m_TagString: Untagged
@@ -786,6 +849,36 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 8582043965350781348}
   m_maskType: 0
+--- !u!114 &3451859763174348759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6304494058496946124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d461a6c109ec84fb51df9044234e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangingTextAnimation
+  disable: 0
+  type: 0
+  loop: 1
+  playOnStart: 0
+  returningEasing: 0
+  returningTime: 0.3
+  customInitialState: 0
+  returnToTheInittialState: 0
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  frames: []
+  gapsBetweenFrames: []
+  defaultGap: 0.6
+  shuffleOrder: 0
+  target: {fileID: 0}
+  initialText: 
 --- !u!1 &8042637533860296657
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,6 +936,9 @@ MonoBehaviour:
   suitsText: {fileID: 9190375845582017650}
   descriptionText: {fileID: 5589938961515234598}
   countDownText: {fileID: 5145997676384685177}
+  titleAnim: {fileID: 0}
+  suitsAnim: {fileID: 0}
+  descriptionAnim: {fileID: 0}
   frontFace: {fileID: 8397760802324866212}
   backFace: {fileID: 2832768547768142534}
   dataParent: {fileID: 4644588000603010055}

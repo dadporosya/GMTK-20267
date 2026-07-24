@@ -113,12 +113,12 @@ TextureImporter:
       name: Suits_0
       rect:
         serializedVersion: 2
-        x: 135
-        y: 1743
-        width: 158
-        height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 81
+        y: 1712
+        width: 128
+        height: 181
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -135,12 +135,12 @@ TextureImporter:
       name: Suits_1
       rect:
         serializedVersion: 2
-        x: 346
-        y: 1743
-        width: 158
-        height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 377
+        y: 1709
+        width: 148
+        height: 204
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -157,12 +157,12 @@ TextureImporter:
       name: Suits_2
       rect:
         serializedVersion: 2
-        x: 557
-        y: 1743
-        width: 158
-        height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 662
+        y: 1704
+        width: 175
+        height: 178
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -176,37 +176,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Suits_3
-      rect:
-        serializedVersion: 2
-        x: 756
-        y: 1743
-        width: 158
-        height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5bd54cef12cc25745a544c251fb00c20
-      internalID: -682787072
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Suits_4
       rect:
         serializedVersion: 2
-        x: 955
-        y: 1743
-        width: 158
-        height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 973
+        y: 1713
+        width: 178
+        height: 178
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -223,12 +201,12 @@ TextureImporter:
       name: Suits_5
       rect:
         serializedVersion: 2
-        x: 185
-        y: 1413
-        width: 116
-        height: 176
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 81
+        y: 1500
+        width: 128
+        height: 181
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -245,12 +223,12 @@ TextureImporter:
       name: Suits_7
       rect:
         serializedVersion: 2
-        x: 477
-        y: 1414
-        width: 143
-        height: 180
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 662
+        y: 1492
+        width: 178
+        height: 178
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -264,37 +242,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Suits_8
-      rect:
-        serializedVersion: 2
-        x: 769
-        y: 1406
-        width: 166
-        height: 164
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 80ba4dda6ffc18e4985bccea97f33c18
-      internalID: -1693522246
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Suits_10
       rect:
         serializedVersion: 2
-        x: 1078
-        y: 1414
+        x: 56
+        y: 1258
         width: 168
-        height: 168
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 194
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -311,12 +267,12 @@ TextureImporter:
       name: Suits_12
       rect:
         serializedVersion: 2
-        x: 278
-        y: 1048
-        width: 156
-        height: 171
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 407
+        y: 1266
+        width: 148
+        height: 193
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -333,12 +289,12 @@ TextureImporter:
       name: Suits_14
       rect:
         serializedVersion: 2
-        x: 629
-        y: 1046
-        width: 140
-        height: 173
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 729
+        y: 1269
+        width: 156
+        height: 178
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -352,37 +308,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Suits_16
-      rect:
-        serializedVersion: 2
-        x: 950
-        y: 1055
-        width: 147
-        height: 157
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e21d3cab6c220544dbdb456aec400b59
-      internalID: 342620999
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Suits_6
       rect:
         serializedVersion: 2
-        x: 324
-        y: 830
-        width: 127
-        height: 123
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 377
+        y: 1497
+        width: 148
+        height: 204
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -399,11 +333,11 @@ TextureImporter:
       name: Suits_9
       rect:
         serializedVersion: 2
-        x: 185
-        y: 1201
-        width: 116
-        height: 176
-      alignment: 0
+        x: 973
+        y: 1501
+        width: 178
+        height: 178
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -413,6 +347,116 @@ TextureImporter:
       bones: []
       spriteID: 1963d6a391412d242948b8e0566a9c14
       internalID: -1390332061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_15
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 1046
+        width: 168
+        height: 194
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 721f7675d50a5d94984e60a6e4a7badc
+      internalID: -1227096364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_17
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 1054
+        width: 148
+        height: 193
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d090daa65f002ce44957eddafdd298d7
+      internalID: -775815801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_19
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 1057
+        width: 156
+        height: 178
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98417ddeb2288fe47b2e52cbeda2ce2e
+      internalID: -428943645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_20
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 862
+        width: 127
+        height: 126
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78252351f13e94e4a9d3cc0963efe753
+      internalID: -1569283296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_21
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 862
+        width: 127
+        height: 126
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa597fba3db4bef47b42de89e63283c7
+      internalID: 777203317
       vertices: []
       indices: 
       edges: []
@@ -431,7 +475,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":6,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Suits_0: -1645795626
       Suits_1: 56604756
@@ -442,7 +486,12 @@ TextureImporter:
       Suits_14: 978826722
       Suits_15: -1227096364
       Suits_16: 342620999
+      Suits_17: -775815801
+      Suits_18: -959267203
+      Suits_19: -428943645
       Suits_2: -102163122
+      Suits_20: -1569283296
+      Suits_21: 777203317
       Suits_3: -682787072
       Suits_4: 2092796997
       Suits_5: 1711479626
