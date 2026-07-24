@@ -8,21 +8,24 @@ public static class CP
 {
     public enum Suit
     {
-        Love,
-        Grief,
-        Fear,
         Pride,
-        Hate
+        Greed,
+        Lust,
+        Envy,
+        Gluttony,
+        Wrath,
+        Sloth
     }
 
     /// <summary>Display color for each suit.</summary>
+    /// task: generate new colors
     public static readonly Dictionary<Suit, Color> SuitColors = new Dictionary<Suit, Color>
     {
-        { Suit.Love,  new Color(0.93f, 0.29f, 0.47f) }, // pink/rose
-        { Suit.Grief, new Color(0.30f, 0.53f, 0.85f) }, // blue
-        { Suit.Fear,  new Color(0.55f, 0.36f, 0.79f) }, // purple
-        { Suit.Pride, new Color(0.95f, 0.73f, 0.20f) }, // gold
-        { Suit.Hate,  new Color(0.80f, 0.20f, 0.18f) }, // crimson
+        // { Suit.Love,  new Color(0.93f, 0.29f, 0.47f) }, // pink/rose
+        // { Suit.Grief, new Color(0.30f, 0.53f, 0.85f) }, // blue
+        // { Suit.Fear,  new Color(0.55f, 0.36f, 0.79f) }, // purple
+        // { Suit.Pride, new Color(0.95f, 0.73f, 0.20f) }, // gold
+        // { Suit.Hate,  new Color(0.80f, 0.20f, 0.18f) }, // crimson
     };
 
     /// <summary>Returns the color for a suit (white if none assigned).</summary>
@@ -62,9 +65,10 @@ public static class CP
         PlacedCard
     }
 
-    public static string SuitTag(CP.Suit suit)
+    public static string SuitTag(CP.Suit suit, int id=-1)
     {
-        string result = $"<sprite name={suit.ToString()}>";
+        string idText = id == -1 ? "" :  id.ToString();
+        string result = $"<sprite name={suit.ToString()}{idText}>";
         
         return result;
     }

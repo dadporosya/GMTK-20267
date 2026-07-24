@@ -138,7 +138,7 @@ public class CardDataBase : ScriptableObject
         return vp;
     }
 
-    public virtual string GenerateTitle()
+    public virtual string GenerateSuits()
     {
         string result = "";
         foreach (CP.Suit suit in suits)

@@ -175,7 +175,7 @@ public class Card : MonoBehaviour
         // reacting; countdown <= 0 means "resolve once, then burn").
         countdown = cardData.countdown;
 
-        suitsText.text = cardData.GenerateTitle();
+        suitsText.text = cardData.GenerateSuits();
         descriptionText.text = cardData.GenerateDescription();
         countDownText.text = cardData.countdown.ToString();
 
