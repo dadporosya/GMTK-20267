@@ -471,7 +471,13 @@ public class Card : MonoBehaviour
             R.PROJECT.Audio.Fire.burn1,
             R.PROJECT.Audio.Fire.burn2,
         });
-        yield return Tween.Custom(0f, 1f, burnDissolveDuration, SetBurnAmount, burnDissolveEase)
+        if (burnMats == null) yield break;
+        float startBurn = 0f;
+        foreach (var m in burnMats)
+            if (m) startBurn = m.GetFloat(burnAmountId);
+        h.Out(startBurn);
+        // task start burn always 0, despite in the mat it is not
+        yield return Tween.Custom(startBurn, 1f, burnDissolveDuration, SetBurnAmount, burnDissolveEase)
             .ToYieldInstruction();
     }
 

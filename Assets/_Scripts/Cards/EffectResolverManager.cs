@@ -24,6 +24,7 @@ public class EffectResolverManager : MonoBehaviour
     [Tooltip("Pause (seconds) before each card's effect resolves, so effects play one after " +
              "another instead of all at once.")]
     [SerializeField] private float delayBeforeActivations = 0.2f;
+    [SerializeField] private float delayBeforeFirstActivation = 0.4f;
 
     private void Awake()
     {
@@ -51,7 +52,7 @@ public class EffectResolverManager : MonoBehaviour
     public IEnumerator EffectResolveCoroutine()
     {
         var wait = new WaitForSeconds(delayBeforeActivations);
-        yield return wait;
+        yield return new WaitForSeconds(delayBeforeFirstActivation);
         while (cardsToResolve.Count > 0)
         {
             Card card = cardsToResolve.Dequeue();

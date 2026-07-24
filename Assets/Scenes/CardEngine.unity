@@ -288,7 +288,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf19038cf18f451a8831e4f010ca9a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EffectResolverManager
-  delayBeforeActivations: 0.2
+  delayBeforeActivations: 0.267
+  delayBeforeFirstActivation: 0.1
 --- !u!1 &281960573
 GameObject:
   m_ObjectHideFlags: 0

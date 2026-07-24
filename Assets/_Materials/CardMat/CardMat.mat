@@ -68,14 +68,14 @@ Material:
     - _Contrast: 0
     - _Contrast_Amount: 15.3
     - _Disslove: 1
-    - _DissloveOutlinesthickness: 0.2
-    - _DissloveScale: 25
+    - _DissloveOutlinesthickness: 0
+    - _DissloveScale: 500
     - _DissloveTwirl: 0
     - _DissloveTwirlStrength: 1
-    - _DissolvePixelation: 1000
-    - _Dissolve_amount: 0
+    - _DissolvePixelation: 670
+    - _Dissolve_amount: 0.552
     - _Distortion: 0
-    - _DistortionScale: 10
+    - _DistortionScale: 26.9
     - _DistortionStrength: 1
     - _Emission: 0
     - _Emission_Mult: 1
@@ -88,12 +88,12 @@ Material:
     - _HueShiftAnimationSpeed: 1
     - _Negative: 0
     - _Negative_Amount: 117.11
-    - _OffsetTilling: 0
+    - _OffsetTilling: 1
     - _Outline: 0
     - _Outline_Thickness: 0
-    - _Pixel_Resolution: 25.86
+    - _Pixel_Resolution: 1914.5
     - _Pixelation: 0
-    - _PixelationShape: 1
+    - _PixelationShape: 0
     - _PolarCoordinates: 0
     - _PolarLengthScale: 1
     - _PolarRadialScale: 1
@@ -104,7 +104,7 @@ Material:
     - _Twirl: 0
     - _TwirlStrength: 5
     - _XDir: 0
-    - _YDir: 0
+    - _YDir: 32.73
     m_Colors:
     - _Distortion_Direction: {r: 0, g: 1, b: 0, a: 0}
     - _EdgeColor: {r: 16, g: 14.684007, b: 8.075472, a: 1}
