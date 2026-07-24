@@ -240,6 +240,29 @@ public class Card : MonoBehaviour
         if (backFace) backFace.SetActive(!faceUp);
     }
 
+    // Shader texture slot on CardMat (see MasterShaderGraphForCard) that carries the card art.
+    private static readonly int CardTextureId = Shader.PropertyToID("_CardTexture");
+
+    /// <summary>
+    /// Assigns <paramref name="texture"/> to the "_CardTexture" slot on the front and back
+    /// face materials. Writes through each renderer's <c>.material</c> instance, so every card
+    /// gets its own material and the shared CardMat asset on disk is never modified.
+    /// </summary>
+    public void SetCardTexture(Texture2D texture)
+    {
+        if (!texture) return;
+        SetFaceTexture(frontFace, texture);
+        SetFaceTexture(backFace, texture);
+    }
+
+    private static void SetFaceTexture(GameObject face, Texture2D texture)
+    {
+        if (!face) return;
+        if (!face.TryGetComponent(out Renderer rend))
+            rend = face.GetComponentInChildren<Renderer>(true);
+        if (rend && rend.material) rend.material.SetTexture(CardTextureId, texture);
+    }
+
     /// <summary>Positions the card directly (used by the drag controller every frame).</summary>
     public void SetPoseImmediate(Vector3 position, Quaternion rotation)
     {

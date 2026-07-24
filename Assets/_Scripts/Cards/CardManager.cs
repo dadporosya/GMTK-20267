@@ -118,9 +118,12 @@ public class CardManager : MonoBehaviour
         Card card = Instantiate(cardPrefab);
         if (dataBase) card.cardData = dataBase;
         Cards.Add(card);
-        
-        /// TASK: Acces card's front and back model's material and assign random texture from cardTextures to CardTexture property
-        
+
+        // Give the card a random look: pick one texture from cardTextures and assign it to the
+        // "_CardTexture" slot of both the front and back face materials.
+        if (cardTextures != null && cardTextures.Count > 0)
+            card.SetCardTexture(h.RandChoice(cardTextures));
+
         return card;
     }
 
