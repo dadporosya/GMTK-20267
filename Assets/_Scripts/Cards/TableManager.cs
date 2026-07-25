@@ -36,16 +36,10 @@ public class TableManager : MonoBehaviour
     [SerializeField] private List<CP.Suit> startSuits = new List<CP.Suit>();
     [SerializeField] private List<int> startSuitCount = new List<int>();
 
-    [Tooltip("Prefab for a single suit line: a TMP_Text with a TextChangeAnimation component.")]
-    [SerializeField] private GameObject suitTextPrefab;
-    [Tooltip("Parent the suit lines are instantiated under (arranged top to bottom).")]
-    [SerializeField] private Transform suitTextParent;
-    [Tooltip("Vertical gap between suit lines, in the parent's local units.")]
-    [SerializeField] private float suitLineSpacing = 40f;
-    [Tooltip("If true, a suit line loops its change animation for suitChangeAnimDuration after each change. If false, it just plays once.")]
-    [SerializeField] private bool loopSuitAnimation = false;
-    [Tooltip("How long a suit line keeps looping its change animation after its count changes, in seconds. Only used when loopSuitAnimation is true.")]
-    [SerializeField] private float suitChangeAnimDuration = 0.5f;
+    [Tooltip("One SuitTracker per suit (7 total). Order doesn't matter — each tracker is keyed by its own targetSuit.")]
+    [SerializeField] private List<SuitTracker> rawSuitTrackers = new List<SuitTracker>();
+    // Built on Start from rawSuitTrackers: suit -> its tracker.
+    public Dictionary<CP.Suit, SuitTracker> suitTrackers = new Dictionary<CP.Suit, SuitTracker>();
 
     public UnityEvent onScoreReached;
 
@@ -56,11 +50,6 @@ public class TableManager : MonoBehaviour
 
     // Guards onScoreReached so it only fires once until the score leaves the reached state again.
     private bool _scoreReached;
-
-    // Per-suit views spawned from suitTextPrefab.
-    private readonly Dictionary<CP.Suit, TMP_Text> _suitTexts = new Dictionary<CP.Suit, TMP_Text>();
-    private readonly Dictionary<CP.Suit, TextChangeAnimation> _suitAnims = new Dictionary<CP.Suit, TextChangeAnimation>();
-    private readonly Dictionary<CP.Suit, Tween> _suitStopTweens = new Dictionary<CP.Suit, Tween>();
 
     [Header("On Score Reached Stuff")]
     [SerializeField] private List<CutSceneBase> rawSinCutscenes;
@@ -91,7 +80,7 @@ public class TableManager : MonoBehaviour
         _displayedScore = currentScore;
         RefreshScoreText(currentScore);
 
-        BuildSuitLines();
+        BuildSuitTrackers();
     }
 
     private void Update()
@@ -102,10 +91,19 @@ public class TableManager : MonoBehaviour
         }
     }
     
-    // Spawns one suit line (TMP + TextChangeAnimation) per suit and stacks them vertically.
-    private void BuildSuitLines()
+    // Keys every SuitTracker by its own suit, then seeds each suit's starting count and
+    // initializes the matching tracker. Expects one tracker per suit (7 total); list order
+    // doesn't matter since the dictionary is keyed by each tracker's targetSuit.
+    private void BuildSuitTrackers()
     {
-        int i = 0;
+        suitTrackers.Clear();
+
+        foreach (SuitTracker tracker in rawSuitTrackers)
+        {
+            if (tracker == null) continue;
+            suitTrackers[tracker.targetSuit] = tracker;
+        }
+
         foreach (CP.Suit suit in System.Enum.GetValues(typeof(CP.Suit)))
         {
             int startValue = 0;
@@ -116,28 +114,9 @@ public class TableManager : MonoBehaviour
 
             suits[suit] = startValue;
 
-            if (suitTextPrefab != null)
-            {
-                Transform parent = suitTextParent != null ? suitTextParent : transform;
-                GameObject go = Instantiate(suitTextPrefab, parent);
-                go.name = $"SuitLine_{suit}";
-
-                // Stack vertically (top to bottom). Works whether the line is UI or world-space.
-                if (go.transform is RectTransform rt)
-                    rt.anchoredPosition = new Vector2(0f, -i * suitLineSpacing);
-                else
-                    go.transform.localPosition = new Vector3(0f, -i * suitLineSpacing, 0f);
-
-                TMP_Text text = go.GetComponentInChildren<TMP_Text>();
-                TextChangeAnimation anim = go.GetComponentInChildren<TextChangeAnimation>();
-
-                if (text != null) _suitTexts[suit] = text;
-                if (anim != null) _suitAnims[suit] = anim;
-
-                RefreshSuitText(suit);
-            }
-
-            i++;
+            // Trackers always start at 0, regardless of the suit's seeded start count.
+            if (suitTrackers.TryGetValue(suit, out SuitTracker tracker) && tracker != null)
+                tracker.Initialize(suit, 0);
         }
     }
 
@@ -308,10 +287,9 @@ public class TableManager : MonoBehaviour
         if (!suits.ContainsKey(suit)) suits[suit] = 0;
         suits[suit]++;
 
-        RefreshSuitText(suit);
-        PlaySuitChangeAnimation(suit);
+        UpdateSuitTracker(suit);
     }
-    
+
     public void RemoveSuits(List<CP.Suit> suitsToRemove)
     {
         foreach (var suit in suitsToRemove)
@@ -322,41 +300,15 @@ public class TableManager : MonoBehaviour
     {
         if (!suits.ContainsKey(suit)) suits[suit] = 0;
         suits[suit] = h.Max(suits[suit]-1, 0);
-        
 
-        RefreshSuitText(suit);
-        PlaySuitChangeAnimation(suit);
+        UpdateSuitTracker(suit);
     }
 
-    // Rebuilds a single suit line: "{SuitTag} {count}", colored with that suit's color.
-    private void RefreshSuitText(CP.Suit suit)
+    // Pushes the current count for a suit into its tracker (which plays its count-change animation).
+    private void UpdateSuitTracker(CP.Suit suit)
     {
-        if (!_suitTexts.TryGetValue(suit, out TMP_Text text) || text == null)
-            return;
-
         int count = suits.TryGetValue(suit, out int value) ? value : 0;
-        string hex = ColorUtility.ToHtmlStringRGB(CP.SuitColor(suit));
-        text.text = $"<color=#{hex}>{CP.SuitTag(suit)} {count}</color>";
-    }
-
-    // Plays the suit line's change animation: once, or looping for suitChangeAnimDuration.
-    private void PlaySuitChangeAnimation(CP.Suit suit)
-    {
-        if (!_suitAnims.TryGetValue(suit, out TextChangeAnimation anim) || anim == null)
-            return;
-
-        if (!loopSuitAnimation)
-        {
-            anim.PlayOnce();
-            return;
-        }
-
-        anim.Play();
-
-        // Restart the stop timer so repeated changes keep the animation alive.
-        if (_suitStopTweens.TryGetValue(suit, out Tween running) && running.isAlive)
-            running.Stop();
-
-        _suitStopTweens[suit] = Tween.Delay(suitChangeAnimDuration, anim.Stop);
+        if (suitTrackers.TryGetValue(suit, out SuitTracker tracker) && tracker != null)
+            tracker.SetCount(count);
     }
 }

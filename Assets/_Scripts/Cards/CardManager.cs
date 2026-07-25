@@ -5,6 +5,8 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     public static CardManager Instance;
+    public Transform cardsParent;
+    public Transform cardsSpawnPoint;
     public List<Card> Cards;
 
     [Header("Piles")]
@@ -87,7 +89,7 @@ public class CardManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             DrawCard();
         }
@@ -149,7 +151,7 @@ public class CardManager : MonoBehaviour
             // R.PROJECT.Audio.Cards.TakeCard.takeCard4,
         });
 
-        Card card = Instantiate(cardPrefab);
+        Card card = Instantiate(cardPrefab, cardsSpawnPoint.transform.position, Quaternion.identity,cardsParent);
         if (dataBase) card.cardData = dataBase;
         Cards.Add(card);
 
