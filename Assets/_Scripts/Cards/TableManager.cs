@@ -252,6 +252,7 @@ public class TableManager : MonoBehaviour
             CutSceneManager.Instance.RunCutscene(cutscene);
             if (!playedCutScenes.Contains(mostPlayed))
                 playedCutScenes.Add(mostPlayed);
+            // TASK: if some suits are tied, play the one which wasnt played yet. if stil tied, play random. if all was played, play random
         }
     }
 
