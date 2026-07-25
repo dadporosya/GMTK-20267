@@ -408,9 +408,15 @@ public class Card : MonoBehaviour
         }, randomPitchRange: new Vector2(0.9f, 1.1f));
         StartCoroutine(activateAnimController.PlayAnimations());
 
+        Color brightColor = Color.Lerp(CP.SuitColors[cardData.suits[0]], Color.white, 0.4f);
+        
         int vp = cardData.GenerateVP();
         TableManager.Instance.AddScore(vp);
-        TextAlertManager.Instance.CreateDamageAlert(vp, transform);
+        TextAlertManager.Instance.CreateDamageAlert(
+            vp,
+            transform,
+            color:brightColor,
+            offset:new Vector3(0,1.67f,0));
 
         // Cards whose activation is Burn resolve their effect and then burn away after a short
         // delay: activate -> wait delayBeforeBurn -> burn. (Every other card is burned centrally

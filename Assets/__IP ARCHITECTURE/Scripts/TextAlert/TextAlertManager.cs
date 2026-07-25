@@ -16,11 +16,11 @@ public class TextAlertManager : MonoBehaviour
         h.CreateStaticInstance(this, ref Instance);
     }
 
-    public void CreateDamageAlert(int damage, Transform target, Color? color = null, string label = null)
+    public void CreateDamageAlert(int damage, Transform target, Color? color = null, string label = null, Vector3 offset = default(Vector3))
     {
         AlertDamageText alert = Instantiate(
             damageTextPfb,
-            target.position + h.RandomPositionInCircle(spread),
+            target.position + h.RandomPositionInCircle(spread) + offset,
             Quaternion.identity);
         alert.damageText.text  = label != null ? $"{label}{damage}" : damage.ToString();
         alert.holdDuration    = holdDuration;
