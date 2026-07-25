@@ -3759,15 +3759,15 @@ MonoBehaviour:
   maxSpeed: 333
   currentSpeed: 30
   acceleration: 1
-  roadSpeedScale: 1
-  speedThreshHoldForCameraShake: 0
+  roadSpeedScale: 1.267
+  speedThreshHoldForCameraShake: 100
   maxCameraShake: 100
   cameraShakeRoughness: 10
   text: {fileID: 503708338}
   label: KM
   decimalPlaces: 2
   kmValue: 0
-  timeInMinutes: 0.5
+  timeInMinutes: 1
 --- !u!4 &3570303577819389374
 Transform:
   m_ObjectHideFlags: 0

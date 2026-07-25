@@ -149,16 +149,17 @@ public class Taximeter : MonoBehaviour
             // Sustained shake we keep alive and scale each frame. Influence vectors
             // must be set explicitly, otherwise the shaker multiplies the shake by
             // zero and nothing moves.
-            shakeInstance = new CameraShakeInstance(maxCameraShake, cameraShakeRoughness)
-            {
-                DeleteOnInactive  = false,
-                PositionInfluence = CameraShaker.Instance.DefaultPosInfluence,
-                RotationInfluence = CameraShaker.Instance.DefaultRotInfluence
-            };
-            CameraShaker.Instance.Shake(shakeInstance);
+            // shakeInstance = new CameraShakeInstance(maxCameraShake, cameraShakeRoughness)
+            // {
+            //     DeleteOnInactive  = false,
+            //     PositionInfluence = CameraShaker.Instance.DefaultPosInfluence,
+            //     RotationInfluence = CameraShaker.Instance.DefaultRotInfluence
+            // };
+            shakeInstance = CameraShaker.Instance.StartShake(0, cameraShakeRoughness, 0);
         }
 
-        shakeInstance.ScaleMagnitude = intensity;
+        shakeInstance.Magnitude = intensity;
+        h.Out(shakeInstance.Magnitude);
     }
 
     /// <summary>Fades the shake out and lets it clean itself up.</summary>
