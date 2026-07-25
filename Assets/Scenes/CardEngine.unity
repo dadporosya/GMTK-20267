@@ -246,6 +246,122 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1001 &781424460
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: ease
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: playOnStart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: returningTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: defaultDuration
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: returningEasing
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: distances.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: 'distances.Array.data[0]'
+      value: 0.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: directions.Array.data[0].y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860111264258832675, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: directions.Array.data[0].z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.795
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -7.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520416763016050792, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8042637533860296657, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      propertyPath: m_Name
+      value: CardPrefab
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6556123085242673732, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+    - {fileID: 3753440124336302830, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+    - {fileID: 3595019471363852253, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2903545929745801349, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4595660310542942647, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2922170446506060746, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6304494058496946124, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+  m_SourcePrefab: {fileID: 100100000, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,9 +455,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0d23056a670de479873b8eec61eb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionManager
-  initialScore: 500
-  constPerLevel: 500
-  constBoostPerLevel: 250
+  initialScore: 2000
+  constPerLevel: 1000
+  constBoostPerLevel: 500
   level: 1
 --- !u!1 &1279035260
 GameObject:
@@ -1562,6 +1678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardDragController
   cam: {fileID: 6115056781952060414}
+  draggingEnabled: 1
   cardMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -4053,3 +4170,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 1279035261}
   - {fileID: 1128023985745765558}
+  - {fileID: 781424460}
