@@ -21,13 +21,13 @@ public static class CP
     /// distinct from one another.</summary>
     public static readonly Dictionary<Suit, Color> SuitColors = new Dictionary<Suit, Color>
     {
-        { Suit.Pride,    new Color(0.55f, 0.30f, 0.80f) }, // royal purple
-        { Suit.Greed,    new Color(0.93f, 0.75f, 0.20f) }, // gold
-        { Suit.Lust,     new Color(0.90f, 0.25f, 0.55f) }, // magenta / rose
-        { Suit.Envy,     new Color(0.20f, 0.70f, 0.40f) }, // emerald green
-        { Suit.Gluttony, new Color(0.95f, 0.55f, 0.20f) }, // orange
-        { Suit.Wrath,    new Color(0.85f, 0.18f, 0.16f) }, // crimson red
-        { Suit.Sloth,    new Color(0.40f, 0.55f, 0.75f) }, // slate blue
+        { Suit.Pride,    new Color(0.2706f, 0.3059f, 0.1843f) }, // royal purple
+        { Suit.Greed,    new Color(0.5333f, 0.4431f, 0.3294f) }, // gold
+        { Suit.Lust,     new Color(0.4235f, 0.1882f, 0.1882f) }, // magenta / rose
+        { Suit.Envy,     new Color(0.3373f, 0.2667f, 0.3255f) }, // emerald green
+        { Suit.Gluttony, new Color(0.4353f, 0.3373f, 0.2314f) }, // orange
+        { Suit.Wrath,    new Color(0.5725f, 0.2353f, 0.1373f) }, // crimson red
+        { Suit.Sloth,    new Color(0.4588f, 0.3490f, 0.4471f) }, // slate blue
     };
 
     /// <summary>How many sprite frames each suit tag has in the TMP sprite asset
