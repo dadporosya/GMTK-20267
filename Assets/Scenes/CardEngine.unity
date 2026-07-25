@@ -2941,6 +2941,7 @@ MonoBehaviour:
   currentModel: 0
   models:
   - {fileID: 1269781819}
+  idleModelId: 0
   nodesAdditionalSettings: []
   beforeDialogueStartAnimation: {fileID: 0}
   onDialogueStartAnimation: {fileID: 0}

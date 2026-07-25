@@ -8,6 +8,10 @@ public class TalkableWithModels : Talkable
     [Header("Petya Talkable")]
     [SerializeField] private int currentModel = 0;
     public List<GameObject> models = new List<GameObject>();
+
+    [Tooltip("Model this object rests on when a dialogue ends. -1 = disable the object " +
+             "entirely (old behaviour); >= 0 = keep the object visible showing that model.")]
+    [SerializeField] private int idleModelId = -1;
     public List<PetyaAdditionalNodeSettings> nodesAdditionalSettings = new List<PetyaAdditionalNodeSettings>();
 
     [Header("Dialogue Animations")]
@@ -119,7 +123,26 @@ public class TalkableWithModels : Talkable
         endCutscenePlaying = false;
         endCutsceneCo = null;
 
-        if (deactivateAfter) gameObject.SetActive(false);
+        if (deactivateAfter) ApplyIdleState();
+    }
+
+    /// <summary>
+    /// Puts the object into its post-dialogue resting state. When idleModelId is -1 the whole
+    /// object is disabled (the original behaviour); when idleModelId points at a valid model
+    /// the object stays visible showing that model instead of disappearing.
+    /// </summary>
+    private void ApplyIdleState()
+    {
+        if (idleModelId >= 0 && idleModelId < models.Count && models[idleModelId])
+        {
+            gameObject.SetActive(true);
+            ActivateModel(idleModelId);
+            SetEyes(false);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -407,8 +430,9 @@ public class TalkableWithModels : Talkable
 
     /// <summary>
     /// Returns the object to its resting state when a multi-object dialogue ends:
-    /// stops animations, disables all models, restores the captured transform, and
-    /// deactivates the object.
+    /// stops animations, disables all models, restores the captured transform, and then
+    /// applies the idle state - either deactivating the object (idleModelId == -1) or leaving
+    /// it visible on its idle model (idleModelId >= 0).
     /// </summary>
     public void ResetAfterDialogue()
     {
@@ -416,7 +440,7 @@ public class TalkableWithModels : Talkable
         if (animController) animController.StopAnimations();
         DisableModels();
         ResetTransform();
-        gameObject.SetActive(false);
+        ApplyIdleState();
     }
 
     // private void Update()
