@@ -94,8 +94,20 @@ public class TableTopCameraController : MonoBehaviour
     [SerializeField] private Vector3 handViewPlayerLocalEuler;
 
     [Header("Free view / mouse look")]
+    [Tooltip("If true, Free view is full mouse-look 'free aspect' (levels the pitch and hands control " +
+             "to MouseLook). If false, Free view is just another fixed pose: the camera moves/rotates " +
+             "to freeViewLocalPosition / freeViewLocalEuler like the other states, with no mouse look.")]
+    [SerializeField] private bool freeAspectCamera = false;
+    [Tooltip("Camera LOCAL position (relative to its parent) used for Free view when freeAspectCamera " +
+             "is OFF.")]
+    [SerializeField] private Vector3 freeViewLocalPosition;
+    [Tooltip("Camera LOCAL rotation, in euler degrees, used for Free view when freeAspectCamera is OFF.")]
+    [SerializeField] private Vector3 freeViewLocalEuler;
+    [Tooltip("If true, entering Free view is hold-to-peek from Hand view: hold S for Free view and " +
+             "release to return to Hand view. If false, S latches Free view via the normal ladder.")]
+    [SerializeField] private bool holdToFreeAspect = false;
     [Tooltip("Mouse-look on the camera rig (usually on CameraParent). Auto-found up the parent chain " +
-             "if left empty. Enabled only in Free view; disabled in Hand/Table view.")]
+             "if left empty. Enabled only in Free view when freeAspectCamera is ON; disabled otherwise.")]
     [SerializeField] private MouseLook mouseLook;
 
     [Header("Taxometer view")]
@@ -160,7 +172,7 @@ public class TableTopCameraController : MonoBehaviour
             {
                 ChangeStateUp();
             }
-            else if (Input.GetKeyDown(KeyCode.S))
+            else if (!holdToFreeAspect && Input.GetKeyDown(KeyCode.S))
             {
                 ChangeStateDown();
             }
@@ -171,15 +183,28 @@ public class TableTopCameraController : MonoBehaviour
 
     /// <summary>
     /// Hold D to peek at the Taxometer view and A to peek at the Window view (both restore whatever
-    /// state was active before the peek). When <see cref="holdToTable"/> is on, hold W for the Table
-    /// view and release to return to Hand view. Only the key that started the peek ends it, so pressing
-    /// another hold key mid-hold is ignored.
+    /// state was active before the peek). When <see cref="holdToTable"/> is on, W climbs the ladder:
+    /// from Free view a press switches to Hand view (a normal, latched switch), and from Hand view
+    /// holding W peeks the Table view and releasing W returns to Hand view. When
+    /// <see cref="holdToFreeAspect"/> is on, holding S from Hand view peeks the Free view and releasing
+    /// S returns to Hand view. Only the key that started the peek ends it, so pressing another hold key
+    /// mid-hold is ignored.
     /// </summary>
     private void HandleHoldViews()
     {
         if (!isHoldingView)
         {
-            if (holdToTable && Input.GetKeyDown(KeyCode.W)) BeginHoldView(KeyCode.W, State.TableView, State.HandView);
+            if (holdToTable && Input.GetKeyDown(KeyCode.W))
+            {
+                // Free --W--> Hand (latched), Hand --W(hold)--> Table (release returns to Hand).
+                if (state == State.Free) SwitchToHandView();
+                else if (state == State.HandView) BeginHoldView(KeyCode.W, State.TableView, State.HandView);
+            }
+            else if (holdToFreeAspect && Input.GetKeyDown(KeyCode.S) && state == State.HandView)
+            {
+                // Hand --S(hold)--> Free (release returns to Hand).
+                BeginHoldView(KeyCode.S, State.Free, State.HandView);
+            }
             else if (Input.GetKeyDown(KeyCode.D)) BeginHoldView(KeyCode.D, State.TaxometerView, state);
             else if (Input.GetKeyDown(KeyCode.A)) BeginHoldView(KeyCode.A, State.WindowView, state);
         }
@@ -332,6 +357,9 @@ public class TableTopCameraController : MonoBehaviour
         Vector3 localPos = parent ? parent.InverseTransformPoint(worldPos) : worldPos;
 
         MoveToLocal(localPos, localRot, instant);
+        // Free look yaws the player; restore the saved yaw so the top-down framing lines up with the
+        // table instead of inheriting wherever mouse look left the player.
+        RestorePlayerYaw(instant);
     }
 
     /// <summary>Return to the saved hand pose; hand follows the camera.</summary>
@@ -341,18 +369,34 @@ public class TableTopCameraController : MonoBehaviour
         SetCursorVisible(true);
         SetCardsFollow(true);
         MoveToLocal(handViewLocalPosition, Quaternion.Euler(handViewLocalEuler), instant);
-        // Free look yaws the player, so restore the player's remembered rotation too, otherwise the
+        // Free look yaws the player, so restore the player's remembered yaw too, otherwise the
         // hand view would come back facing wherever mouse look left the player.
-        RotatePlayerLocal(Quaternion.Euler(handViewPlayerLocalEuler), instant);
+        RestorePlayerYaw(instant);
     }
 
     /// <summary>
-    /// Free look: INSTANTLY level the camera pitch (X -> 0), keeping the current yaw, then hand full
-    /// control to MouseLook. The controller does NO further rotation — MouseLook owns all free-look
-    /// rotation. The hand does not follow the camera here.
+    /// Free view. Two modes, switched by <see cref="freeAspectCamera"/>:
+    ///   - OFF (default): a plain fixed pose — move/rotate the camera to
+    ///     <see cref="freeViewLocalPosition"/> / <see cref="freeViewLocalEuler"/> like the other
+    ///     states, with mouse look disabled.
+    ///   - ON: INSTANTLY level the camera pitch (X -> 0), keeping the current yaw, then hand full
+    ///     control to MouseLook. The controller does NO further rotation — MouseLook owns all
+    ///     free-look rotation.
+    /// The hand does not follow the camera here either way.
     /// </summary>
     private void ApplyFreeView(bool instant)
     {
+        if (!freeAspectCamera)
+        {
+            // Fixed free pose: behaves like the other fixed views.
+            if (mouseLook) mouseLook.canLook = false;
+            SetCursorVisible(true);
+            SetCardsFollow(false);
+            MoveToLocal(freeViewLocalPosition, Quaternion.Euler(freeViewLocalEuler), instant);
+            RestorePlayerYaw(instant);
+            return;
+        }
+
         SetCardsFollow(false);
         SetCursorVisible(false);
         StopTweens(); // cancel any hand/table move still tweening the camera
@@ -379,6 +423,7 @@ public class TableTopCameraController : MonoBehaviour
         SetCursorVisible(true);
         SetCardsFollow(false);
         MoveToLocal(taxometerViewLocalPosition, Quaternion.Euler(taxometerViewLocalEuler), instant);
+        RestorePlayerYaw(instant);
     }
 
     /// <summary>Peek pose held while A is down; hand stops following the camera. Restored on release.</summary>
@@ -388,6 +433,7 @@ public class TableTopCameraController : MonoBehaviour
         SetCursorVisible(true);
         SetCardsFollow(false);
         MoveToLocal(windowViewLocalPosition, Quaternion.Euler(windowViewLocalEuler), instant);
+        RestorePlayerYaw(instant);
     }
 
     // ---- helpers ------------------------------------------------------------
@@ -436,6 +482,20 @@ public class TableTopCameraController : MonoBehaviour
 
         posTween = Tween.LocalPosition(camTransform, localPos, transitionDuration, transitionEase);
         rotTween = Tween.LocalRotation(camTransform, localRot, transitionDuration, transitionEase);
+    }
+
+    /// <summary>
+    /// Restores ONLY the Y rotation (yaw) of the player root (the MouseLook object) to the saved
+    /// hand-view yaw, keeping its current X/Z. Fixed views (hand/table/window/taxometer) call this so
+    /// that after free look has yawed the player, they snap back to a consistent facing instead of
+    /// inheriting wherever mouse look left the player.
+    /// </summary>
+    private void RestorePlayerYaw(bool instant)
+    {
+        if (!playerTransform) return;
+        Vector3 cur = playerTransform.localEulerAngles;
+        Quaternion target = Quaternion.Euler(cur.x, handViewPlayerLocalEuler.y, cur.z);
+        RotatePlayerLocal(target, instant);
     }
 
     /// <summary>Rotates the player root to <paramref name="localRot"/> (used by the hand view).</summary>

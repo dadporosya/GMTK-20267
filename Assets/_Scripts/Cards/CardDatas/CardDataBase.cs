@@ -25,6 +25,23 @@ public class CardDataBase : ScriptableObject
     [Header("SuitDestroying")]
     public List<CP.Suit> suitsToDestroy = new List<CP.Suit>();
 
+    /// <summary>
+    /// Returns the card's title: the UPPERCASE name of the first suit the card has
+    /// (e.g. three Envy suits -> "ENVY"; suits [A, B] -> the first suit "A"). Falls back
+    /// to the authored <see cref="title"/> when the card has no suits.
+    /// </summary>
+    public virtual string GenerateTitle()
+    {
+        if (suits != null && suits.Count > 0)
+        {
+            string result = CP.SuitTag(suits[0]) + suits[0].ToString().ToUpperInvariant();
+            return result;
+        }
+            
+
+        return title;
+    }
+
     public virtual int GenerateVP()
     {
         int vp = 0;
