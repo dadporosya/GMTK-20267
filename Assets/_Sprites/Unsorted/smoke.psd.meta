@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 22f6ccd503d879f4685a0bbec34c1eae
+guid: da4af9cdf2000ad4d8fce07a09b5cdee
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,133 +110,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: AngelModels_0
+      name: smoke_0
       rect:
         serializedVersion: 2
-        x: 1668
-        y: 587
-        width: 689
-        height: 1348
-      alignment: 9
-      pivot: {x: 0.5538481, y: 0.06552577}
+        x: 0
+        y: 0
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: de99e1c8d1d793041b83ee7798f340a3
-      internalID: -1854229576
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AngelModels_1
-      rect:
-        serializedVersion: 2
-        x: 2491
-        y: 1078
-        width: 670
-        height: 749
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bef5d68f91c9f9d4aa337c82d1f60453
-      internalID: -2094360743
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AngelModels_2
-      rect:
-        serializedVersion: 2
-        x: 2491
-        y: 296
-        width: 670
-        height: 749
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9c3e45e57855b4947ac7a5eb8ee6b503
-      internalID: 1481304865
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AngelModels_3
-      rect:
-        serializedVersion: 2
-        x: 941
-        y: 589
-        width: 689
-        height: 1348
-      alignment: 9
-      pivot: {x: 0.5538481, y: 0.06552577}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 42ed65b3977e7014fb1e1ff171a98b4d
-      internalID: 2137303657
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AngelModels_4
-      rect:
-        serializedVersion: 2
-        x: 254
-        y: 589
-        width: 689
-        height: 1348
-      alignment: 9
-      pivot: {x: 0.5538481, y: 0.06552577}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 89683cd7279d4264cbd77b4b90e53b22
-      internalID: 1673380847
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AngelModels_5
-      rect:
-        serializedVersion: 2
-        x: 3291
-        y: 1078
-        width: 670
-        height: 749
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4da4d18b1acacfb4b91c0aa18ec91370
-      internalID: 673166362
+      spriteID: df7f1f88056a6bd4f96adb5ffb52acdc
+      internalID: -28149283
       vertices: []
       indices: 
       edges: []
@@ -245,7 +135,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: da54bbe6dfc4a8946943ae65d3cef4b0
+    spriteID: cfec94562ec6b9b49882ae0943cff1fc
     internalID: 0
     vertices: []
     indices: 
@@ -255,12 +145,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      AngelModels_0: -1854229576
-      AngelModels_1: -2094360743
-      AngelModels_2: 1481304865
-      AngelModels_3: 2137303657
-      AngelModels_4: 1673380847
-      AngelModels_5: 673166362
+      smoke_0: -28149283
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
