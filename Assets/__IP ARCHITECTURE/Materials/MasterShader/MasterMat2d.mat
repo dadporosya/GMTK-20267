@@ -54,9 +54,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Brightness: 1
+    - _Brightness: 0
     - _Brightness_Amount: 170.9
-    - _Contrast: 1
+    - _Contrast: 0
     - _Contrast_Amount: 578.5
     - _Disslove: 1
     - _DissloveOutlinesthickness: 0.07
@@ -68,11 +68,11 @@ Material:
     - _Distortion: 0
     - _DistortionScale: 0.2
     - _DistortionStrength: 0.0101
-    - _Emission: 1
-    - _Emission_Mult: 116.92
+    - _Emission: 0
+    - _Emission_Mult: 188.7
     - _Hit_Blend: 110.61
-    - _Hit_Effect: 1
-    - _Hit_Glow: 81.96
+    - _Hit_Effect: 0
+    - _Hit_Glow: 43.9
     - _Hue: 0
     - _HueShiftAmount: 2.48
     - _HueShiftAnimation: 1
@@ -93,7 +93,7 @@ Material:
     - _Saturation: 1
     - _Saturation_Amount: 64.8
     - _Twirl: 0
-    - _TwirlStrength: 5.58
+    - _TwirlStrength: 0.2
     - _XDir: 10
     - _YDir: 0
     m_Colors:

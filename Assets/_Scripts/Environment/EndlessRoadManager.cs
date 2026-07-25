@@ -18,6 +18,7 @@ using UnityEngine;
 /// </summary>
 public class EndlessRoadManager : MonoBehaviour
 {
+    public static EndlessRoadManager Instance;
     [Header("Chunk prefab")]
     [Tooltip("The road chunk prefab. Should contain the road, both terrains and any fences/props.")]
     public GameObject chunkPrefab;
@@ -70,6 +71,7 @@ public class EndlessRoadManager : MonoBehaviour
 
     private void Start()
     {
+        h.CreateStaticInstance(this, ref Instance);
         if (chunkPrefab == null)
         {
             Debug.Log("EndlessRoadManager: no chunkPrefab assigned — nothing to spawn.");
