@@ -84,12 +84,10 @@ public class SinCutsceneBase : CutSceneBase
     
     public virtual IEnumerator OnWin()
     {
-        // TODO: some onWin effects like sfx and stuff
-        yield return new WaitForSeconds(delayAfterWin);
-
         // Burn every card on the table and in hand.
         yield return BurnAllCards();
-
+        // TODO: some onWin effects like sfx and stuff
+        yield return new WaitForSeconds(delayAfterWin);
         yield return null;
     }
 
