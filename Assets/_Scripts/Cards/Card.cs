@@ -191,12 +191,12 @@ public class Card : MonoBehaviour
         if (!suitsAnim && suitsText) suitsAnim = suitsText.GetComponentInChildren<ChangingTextAnimationn>();
         if (!descriptionAnim && descriptionText) descriptionAnim = descriptionText.GetComponentInChildren<ChangingTextAnimationn>();
 
-        // Title has no suit tags, so it's a single static frame (fed through the animation when
-        // present so it doesn't overwrite it with an empty string). The title is the UPPERCASE
-        // name of the card's first suit (see CardDataBase.GenerateTitle).
-        string title = cardData.GenerateTitle();
-        if (titleAnim) PlayFrames(titleAnim, new List<string> { title });
-        else if (titleText) titleText.text = title;
+        // Title is now a multi-frame flip-book too: its suit sprite advances with the rest of the
+        // card (see CardDataBase.GenerateTitle). Each string is one frame; the ChangingTextAnimation
+        // cycles them, looped (set on the component). Cards with no suits emit a single title frame.
+        List<string> titleFrames = cardData.GenerateTitle();
+        if (titleAnim) PlayFrames(titleAnim, titleFrames);
+        else if (titleText) titleText.text = titleFrames.Count > 0 ? titleFrames[0] : "";
 
         // Suits + description are multi-frame flip-books: each string is one frame from the
         // card data generators. The ChangingTextAnimation cycles them, looped (set on the component).

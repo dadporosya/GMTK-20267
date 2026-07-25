@@ -26,20 +26,24 @@ public class CardDataBase : ScriptableObject
     public List<CP.Suit> suitsToDestroy = new List<CP.Suit>();
 
     /// <summary>
-    /// Returns the card's title: the UPPERCASE name of the first suit the card has
-    /// (e.g. three Envy suits -> "ENVY"; suits [A, B] -> the first suit "A"). Falls back
-    /// to the authored <see cref="title"/> when the card has no suits.
+    /// Builds one title text frame per suit-sprite animation frame (id 1..CP.SuitFrameCount),
+    /// mirroring <see cref="GenerateSuits"/> / <see cref="GenerateDescription"/> so the title's
+    /// suit sprite flip-books along with the rest of the card. Each frame is the first suit's
+    /// sprite tag (pinned to that frame's id) followed by the UPPERCASE suit name
+    /// (e.g. three Envy suits -> "&lt;sprite name=Envy1&gt;ENVY", "&lt;sprite name=Envy2&gt;ENVY").
+    /// Falls back to a single frame with the authored <see cref="title"/> when the card has no suits.
     /// </summary>
-    public virtual string GenerateTitle()
+    public virtual List<string> GenerateTitle()
     {
         if (suits != null && suits.Count > 0)
         {
-            string result = CP.SuitTag(suits[0]) + suits[0].ToString().ToUpperInvariant();
-            return result;
+            List<string> titleFrames = new List<string>();
+            for (int id = 1; id <= CP.SuitFrameCount; id++)
+                titleFrames.Add(CP.SuitTag(suits[0], id) + suits[0].ToString().ToUpperInvariant());
+            return titleFrames;
         }
-            
 
-        return title;
+        return new List<string> { title };
     }
 
     public virtual int GenerateVP()
