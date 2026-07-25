@@ -13,7 +13,7 @@ public class DialogueManager : MonoBehaviour
     public GameObject dialogueWindow;
     public Image portraitImage;
     public TextMeshProUGUI portraitTitle;
-    public TextMeshProUGUI dialogueText;
+    public TMP_Text dialogueText; // TASK make it TMP_Text everywhere
     private TextAnimation textAnimationComp;
     [HideInInspector] public ScalingText portraitScalingTitle;
     [HideInInspector] public ScalingText dialogueScalingText;
