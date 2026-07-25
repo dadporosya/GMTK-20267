@@ -368,6 +368,11 @@ public class Card : MonoBehaviour
             R.PROJECT.Audio.Cards.dropCard,
         });
 
+        // Suits are contributed to the table once, at the moment the card is placed — NOT every
+        // time the card's effect resolves. (A card with a countdown resolves its effect on many
+        // turns; adding suits in ActivateCard would stack them again on every activation.)
+        if (cardData) TableManager.Instance.AddSuits(cardData.suits);
+
         // Hand off to CardManager: it records this as the freshly placed card, resolves every
         // effect in order, then runs the countdown phase.
         if (CardManager.Instance) CardManager.Instance.OnCardPlaced(this);
@@ -402,8 +407,6 @@ public class Card : MonoBehaviour
             
         }, randomPitchRange: new Vector2(0.9f, 1.1f));
         StartCoroutine(activateAnimController.PlayAnimations());
-        
-        TableManager.Instance.AddSuits(cardData.suits);
 
         int vp = cardData.GenerateVP();
         TableManager.Instance.AddScore(vp);
