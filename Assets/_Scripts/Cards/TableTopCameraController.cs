@@ -73,11 +73,16 @@ public class TableTopCameraController : MonoBehaviour
     [Tooltip("Camera LOCAL X rotation (pitch) in table view. 90 = looking straight down. Only X is " +
              "set; the camera's local Y and Z (heading/roll) are kept exactly as they were.")]
     [SerializeField] private float tableViewPitchX = 90f;
+    [Tooltip("Player local rotation, in euler degrees, restored when entering the table view (only its " +
+             "Y/yaw is applied). Overwritten from the scene pose on Start when handViewIsInitView is on.")]
+    [SerializeField] private Vector3 tableViewPlayerLocalEuler;
 
     [Header("Hand view")]
     [Tooltip("If true, the camera's local pose at startup is captured as the hand-view pose, so the " +
-             "hand view = wherever the camera starts in the scene. Turn OFF to author " +
-             "handViewLocalPosition / handViewLocalEuler by hand.")]
+             "hand view = wherever the camera starts in the scene. This also seeds EVERY state's player " +
+             "rotation (table/free/taxometer/window) from the startup player yaw, so by default every " +
+             "state restores the player to the same starting facing. Turn OFF to author " +
+             "handViewLocalPosition / handViewLocalEuler and each state's *PlayerLocalEuler by hand.")]
     [SerializeField] private bool handViewIsInitView = true;
     [Tooltip("Camera local position (relative to its parent) used for the hand view. " +
              "Overwritten from the scene pose on Start when handViewIsInitView is on.")]
@@ -103,6 +108,9 @@ public class TableTopCameraController : MonoBehaviour
     [SerializeField] private Vector3 freeViewLocalPosition;
     [Tooltip("Camera LOCAL rotation, in euler degrees, used for Free view when freeAspectCamera is OFF.")]
     [SerializeField] private Vector3 freeViewLocalEuler;
+    [Tooltip("Player local rotation, in euler degrees, restored when entering the fixed Free view (only " +
+             "its Y/yaw is applied). Overwritten from the scene pose on Start when handViewIsInitView is on.")]
+    [SerializeField] private Vector3 freeViewPlayerLocalEuler;
     [Tooltip("If true, entering Free view is hold-to-peek from Hand view: hold S for Free view and " +
              "release to return to Hand view. If false, S latches Free view via the normal ladder.")]
     [SerializeField] private bool holdToFreeAspect = false;
@@ -115,12 +123,18 @@ public class TableTopCameraController : MonoBehaviour
     [SerializeField] private Vector3 taxometerViewLocalPosition;
     [Tooltip("Camera LOCAL rotation, in euler degrees, used while the Taxometer view is held (D).")]
     [SerializeField] private Vector3 taxometerViewLocalEuler;
+    [Tooltip("Player local rotation, in euler degrees, restored while the Taxometer view is held (only its " +
+             "Y/yaw is applied). Overwritten from the scene pose on Start when handViewIsInitView is on.")]
+    [SerializeField] private Vector3 taxometerViewPlayerLocalEuler;
 
     [Header("Window view")]
     [Tooltip("Camera LOCAL position (relative to its parent) used while the Window view is held (A).")]
     [SerializeField] private Vector3 windowViewLocalPosition;
     [Tooltip("Camera LOCAL rotation, in euler degrees, used while the Window view is held (A).")]
     [SerializeField] private Vector3 windowViewLocalEuler;
+    [Tooltip("Player local rotation, in euler degrees, restored while the Window view is held (only its " +
+             "Y/yaw is applied). Overwritten from the scene pose on Start when handViewIsInitView is on.")]
+    [SerializeField] private Vector3 windowViewPlayerLocalEuler;
 
     // Active move/rotate tweens, stopped before a new transition starts.
     private Tween posTween;
@@ -154,7 +168,17 @@ public class TableTopCameraController : MonoBehaviour
         {
             handViewLocalPosition = camTransform.localPosition;
             handViewLocalEuler = camTransform.localEulerAngles;
-            if (playerTransform) handViewPlayerLocalEuler = playerTransform.localEulerAngles;
+            if (playerTransform)
+            {
+                handViewPlayerLocalEuler = playerTransform.localEulerAngles;
+                // Seed each per-state player rotation from the same startup pose, so by default every
+                // state restores the player to the starting yaw exactly as before. Turn handViewIsInitView
+                // OFF to author each state's player rotation independently in the inspector.
+                tableViewPlayerLocalEuler = handViewPlayerLocalEuler;
+                freeViewPlayerLocalEuler = handViewPlayerLocalEuler;
+                taxometerViewPlayerLocalEuler = handViewPlayerLocalEuler;
+                windowViewPlayerLocalEuler = handViewPlayerLocalEuler;
+            }
         }
 
         if (!currentTable) currentTable = FindTable();
@@ -357,9 +381,9 @@ public class TableTopCameraController : MonoBehaviour
         Vector3 localPos = parent ? parent.InverseTransformPoint(worldPos) : worldPos;
 
         MoveToLocal(localPos, localRot, instant);
-        // Free look yaws the player; restore the saved yaw so the top-down framing lines up with the
-        // table instead of inheriting wherever mouse look left the player.
-        RestorePlayerYaw(instant);
+        // Free look yaws the player; restore the table view's saved yaw so the top-down framing lines up
+        // with the table instead of inheriting wherever mouse look left the player.
+        RestorePlayerYaw(tableViewPlayerLocalEuler, instant);
     }
 
     /// <summary>Return to the saved hand pose; hand follows the camera.</summary>
@@ -369,9 +393,9 @@ public class TableTopCameraController : MonoBehaviour
         SetCursorVisible(true);
         SetCardsFollow(true);
         MoveToLocal(handViewLocalPosition, Quaternion.Euler(handViewLocalEuler), instant);
-        // Free look yaws the player, so restore the player's remembered yaw too, otherwise the
+        // Free look yaws the player, so restore the hand view's remembered yaw too, otherwise the
         // hand view would come back facing wherever mouse look left the player.
-        RestorePlayerYaw(instant);
+        RestorePlayerYaw(handViewPlayerLocalEuler, instant);
     }
 
     /// <summary>
@@ -393,7 +417,7 @@ public class TableTopCameraController : MonoBehaviour
             SetCursorVisible(true);
             SetCardsFollow(false);
             MoveToLocal(freeViewLocalPosition, Quaternion.Euler(freeViewLocalEuler), instant);
-            RestorePlayerYaw(instant);
+            RestorePlayerYaw(freeViewPlayerLocalEuler, instant);
             return;
         }
 
@@ -423,7 +447,7 @@ public class TableTopCameraController : MonoBehaviour
         SetCursorVisible(true);
         SetCardsFollow(false);
         MoveToLocal(taxometerViewLocalPosition, Quaternion.Euler(taxometerViewLocalEuler), instant);
-        RestorePlayerYaw(instant);
+        RestorePlayerYaw(taxometerViewPlayerLocalEuler, instant);
     }
 
     /// <summary>Peek pose held while A is down; hand stops following the camera. Restored on release.</summary>
@@ -433,7 +457,7 @@ public class TableTopCameraController : MonoBehaviour
         SetCursorVisible(true);
         SetCardsFollow(false);
         MoveToLocal(windowViewLocalPosition, Quaternion.Euler(windowViewLocalEuler), instant);
-        RestorePlayerYaw(instant);
+        RestorePlayerYaw(windowViewPlayerLocalEuler, instant);
     }
 
     // ---- helpers ------------------------------------------------------------
@@ -485,16 +509,17 @@ public class TableTopCameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// Restores ONLY the Y rotation (yaw) of the player root (the MouseLook object) to the saved
-    /// hand-view yaw, keeping its current X/Z. Fixed views (hand/table/window/taxometer) call this so
-    /// that after free look has yawed the player, they snap back to a consistent facing instead of
-    /// inheriting wherever mouse look left the player.
+    /// Restores ONLY the Y rotation (yaw) of the player root (the MouseLook object) to
+    /// <paramref name="playerEuler"/>'s yaw, keeping its current X/Z. Each fixed view
+    /// (hand/table/free/window/taxometer) passes its own per-state player euler so that after free look
+    /// has yawed the player, the view snaps back to that state's authored facing instead of inheriting
+    /// wherever mouse look left the player.
     /// </summary>
-    private void RestorePlayerYaw(bool instant)
+    private void RestorePlayerYaw(Vector3 playerEuler, bool instant)
     {
         if (!playerTransform) return;
         Vector3 cur = playerTransform.localEulerAngles;
-        Quaternion target = Quaternion.Euler(cur.x, handViewPlayerLocalEuler.y, cur.z);
+        Quaternion target = Quaternion.Euler(cur.x, playerEuler.y, cur.z);
         RotatePlayerLocal(target, instant);
     }
 
