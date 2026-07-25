@@ -92,6 +92,20 @@ public class CardManager : MonoBehaviour
                 fullPile.scriptableObjects.AddRange(additionalPile.scriptableObjects);
             }
         }
+
+        AddNewCards(
+            new Dictionary<CP.Suit, int>()
+            {
+                {CP.Suit.Envy, 1},
+                {CP.Suit.Pride, 1},
+                {CP.Suit.Lust, 1},
+                {CP.Suit.Sloth, 1},
+                {CP.Suit.Greed, 1},
+                {CP.Suit.Gluttony, 1},
+                {CP.Suit.Wrath, 1},
+            },
+            alert:false
+            );
         
         RoundStart();
     }
@@ -390,6 +404,7 @@ public class CardManager : MonoBehaviour
         Quaternion faceRot = Quaternion.LookRotation(camT.forward, camT.up);
 
         List<Card> previewCards = new List<Card>();
+        List<Transform> previewHolders = new List<Transform>();
         for (int i = 0; i < count; i++)
         {
             int row = i / cols;
@@ -402,7 +417,18 @@ public class CardManager : MonoBehaviour
             float y = ((rows - 1) * 0.5f - row) * cellHeight;
             Vector3 pos = gridCenter + camT.right * x + camT.up * y;
 
-            Card card = Instantiate(pfbTest, pos, faceRot, cardsParent);
+            // The card is parented under a holder that carries the position, facing AND the preview
+            // scale. Scaling the holder (not the card root) is essential: the card prefab runs its own
+            // ScalingAnimation/SquishAnimation on Start, which capture and overwrite the card root's
+            // localScale every frame — so any scale set on the card itself is immediately reset (the
+            // "local scale doesn't change" symptom). The holder is above that, so it always applies.
+            Transform holder = new GameObject("CardPreviewHolder").transform;
+            holder.SetParent(cardsParent, false);
+            holder.SetPositionAndRotation(pos, faceRot);
+
+            Card card = Instantiate(pfbTest, holder, false);
+            card.transform.localPosition = Vector3.zero;
+            card.transform.localRotation = Quaternion.identity;
             // Display-only: keep it off the table/hand logic and unpickable.
             card.SetState(Card.CardState.OnTable);
             card.Lock();
@@ -410,13 +436,12 @@ public class CardManager : MonoBehaviour
             if (cardTextures != null && cardTextures.Count > 0)
                 card.SetCardTexture(h.RandChoice(cardTextures));
 
-            // Fit the card to its cell so the grid covers the camera, then apply the preview scale.
-            ScaleCardToCell(card, cellWidth, cellHeight, CardPreviewScale, camT.right, camT.up);
+            // Fit the card to its cell so the grid covers the camera, then shrink by CardPreviewScale.
+            float fit = FitScaleToCell(card, cellWidth, cellHeight, camT.right, camT.up);
+            holder.localScale = Vector3.one * (fit * Mathf.Max(0f, CardPreviewScale));
 
             previewCards.Add(card);
-            
-            // TASK: the card local scale doesnt change. i need to make them significantly smaller
-            card.transform.localScale *= CardPreviewScale;
+            previewHolders.Add(holder);
         }
 
         // Wait for the player to dismiss the preview.
@@ -433,6 +458,10 @@ public class CardManager : MonoBehaviour
             if (previewBurnStagger > 0f) yield return new WaitForSeconds(previewBurnStagger);
         }
         while (running > 0) yield return null;
+
+        // Clean up the now-empty holders left behind after each card destroyed itself.
+        foreach (Transform holder in previewHolders)
+            if (holder) Destroy(holder.gameObject);
     }
 
     /// <summary>True the moment the player clicks or presses Enter / Space to dismiss the preview.</summary>
@@ -445,16 +474,17 @@ public class CardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Scales <paramref name="card"/> so its rendered size fits inside a
-    /// <paramref name="cellWidth"/> x <paramref name="cellHeight"/> cell (uniform, keeping aspect),
-    /// then multiplies by <paramref name="extraScale"/>. Width/height are measured by projecting the
-    /// card's combined world bounds onto the camera's right / up axes, so the fit stays correct no
-    /// matter how the camera is oriented.
+    /// Returns the uniform scale factor that makes <paramref name="card"/>'s rendered size fit inside
+    /// a <paramref name="cellWidth"/> x <paramref name="cellHeight"/> cell (keeping aspect). Width and
+    /// height are measured by projecting the card's combined world bounds onto the camera's right / up
+    /// axes, so the fit stays correct no matter how the camera is oriented. Applied to the card's
+    /// holder rather than the card itself (the card animates its own localScale). Returns 1 if the
+    /// card can't be measured.
     /// </summary>
-    private static void ScaleCardToCell(Card card, float cellWidth, float cellHeight, float extraScale,
+    private static float FitScaleToCell(Card card, float cellWidth, float cellHeight,
                                         Vector3 camRight, Vector3 camUp)
     {
-        if (!card) return;
+        if (!card) return 1f;
 
         Bounds? combined = null;
         foreach (Renderer r in card.GetComponentsInChildren<Renderer>(true))
@@ -463,16 +493,15 @@ public class CardManager : MonoBehaviour
             if (combined == null) combined = r.bounds;
             else { Bounds b = combined.Value; b.Encapsulate(r.bounds); combined = b; }
         }
-        if (combined == null) return;
+        if (combined == null) return 1f;
 
         // Project the world AABB extents onto the camera axes to get the card's on-screen size.
         Vector3 e = combined.Value.extents;
         float width  = 2f * (Mathf.Abs(e.x * camRight.x) + Mathf.Abs(e.y * camRight.y) + Mathf.Abs(e.z * camRight.z));
         float height = 2f * (Mathf.Abs(e.x * camUp.x)    + Mathf.Abs(e.y * camUp.y)    + Mathf.Abs(e.z * camUp.z));
-        if (width <= 1e-5f || height <= 1e-5f) return;
+        if (width <= 1e-5f || height <= 1e-5f) return 1f;
 
-        float fit = Mathf.Min(cellWidth / width, cellHeight / height);
-        card.transform.localScale *= fit * Mathf.Max(0f, extraScale);
+        return Mathf.Min(cellWidth / width, cellHeight / height);
     }
 
     /// <summary>
