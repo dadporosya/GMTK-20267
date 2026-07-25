@@ -70,6 +70,7 @@ public class SinCutsceneBase : CutSceneBase
         yield return OnWin();
         yield return TurnCameraToWindow();
         yield return ChangeEnvironment();
+        yield return DialogueStart();
 
 
         yield return null;
