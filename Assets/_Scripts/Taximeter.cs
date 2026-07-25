@@ -146,10 +146,14 @@ public class Taximeter : MonoBehaviour
 
         if (shakeInstance == null)
         {
-            // Sustained shake we keep alive and scale each frame.
+            // Sustained shake we keep alive and scale each frame. Influence vectors
+            // must be set explicitly, otherwise the shaker multiplies the shake by
+            // zero and nothing moves.
             shakeInstance = new CameraShakeInstance(maxCameraShake, cameraShakeRoughness)
             {
-                DeleteOnInactive = false
+                DeleteOnInactive  = false,
+                PositionInfluence = CameraShaker.Instance.DefaultPosInfluence,
+                RotationInfluence = CameraShaker.Instance.DefaultRotInfluence
             };
             CameraShaker.Instance.Shake(shakeInstance);
         }

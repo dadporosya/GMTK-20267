@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using PrimeTween;
 using UnityEngine;
 
 public class CardManager : MonoBehaviour
@@ -65,6 +66,18 @@ public class CardManager : MonoBehaviour
     [SerializeField] private float previewHoverRaise = 0.15f;
     [Tooltip("Smoothing (seconds-ish) for the hover pop. Smaller = snappier. 0 = instant.")]
     [SerializeField] private float previewHoverSmoothing = 0.08f;
+
+    [Header("Card drafting")]
+    [Tooltip("When ON, ExtendPileAccordingToSins lets the player CLICK draftCardCount cards to keep " +
+             "(the rest burn) instead of folding every card straight into the piles. When OFF, the " +
+             "old behaviour runs unchanged.")]
+    [SerializeField] private bool cardDrafting = true;
+    [Tooltip("How many cards the player picks during a draft before the remaining candidates burn.")]
+    [SerializeField] private int draftCardCount = 5;
+    [Tooltip("Duration (seconds) of the slide a chosen card makes toward the spawn point before it " +
+             "is destroyed at once (no burn). 0 = snap instantly.")]
+    [SerializeField] private float draftPickMoveDuration = 0.25f;
+
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
@@ -616,7 +629,234 @@ public class CardManager : MonoBehaviour
         CP.Suit? secondary = ranked.Count > 1 ? ranked[1].Key : (CP.Suit?)null;
         CP.Suit? third     = ranked.Count > 2 ? ranked[2].Key : (CP.Suit?)null;
 
-        yield return AddNewCards(primary, secondary, third, alert);
+        if (cardDrafting)
+        {
+            // Drafting: gather the cards the suits would have contributed and let the player pick
+            // draftCardCount of them by clicking. Only the chosen cards are folded into the piles;
+            // the rest burn away.
+            var cardsToDraft = new Dictionary<CP.Suit, int>();
+            if (primary.HasValue)   cardsToDraft[primary.Value]   = primarySuitCardAdd;
+            if (secondary.HasValue) cardsToDraft[secondary.Value] = secondarySuitCardAdd;
+            if (third.HasValue)     cardsToDraft[third.Value]     = thirdSuitCardAdd;
+
+            List<CardDataBase> candidates = CollectCardsToDraft(cardsToDraft);
+            yield return DraftCardsCoroutine(candidates);
+        }
+        else
+        {
+            // Old behaviour: fold every card straight into the piles and preview them.
+            yield return AddNewCards(primary, secondary, third, alert);
+        }
+    }
+
+    /// <summary>
+    /// Pulls the candidate cards for a draft out of the <see cref="additionalPiles"/> (the same
+    /// suit-weighted selection <see cref="AddNewCards(Dictionary{CP.Suit,int},bool)"/> would fold
+    /// in) WITHOUT adding them to any pile. Each pulled card is removed from its additional pile so
+    /// it is only ever offered once; whether it ends up drafted or burned, it does not return.
+    /// </summary>
+    private List<CardDataBase> CollectCardsToDraft(Dictionary<CP.Suit, int> cardsToAdd)
+    {
+        var collected = new List<CardDataBase>();
+        if (cardsToAdd == null) return collected;
+
+        foreach (var kv in cardsToAdd)
+        {
+            for (int i = 0; i < kv.Value; i++)
+            {
+                ScriptableObjectContainer source = PickSourcePile(kv.Key);
+                if (source == null) break;   // every additional pile is empty — nothing left to offer
+
+                ScriptableObject card = h.RandChoice(source.scriptableObjects);
+                source.scriptableObjects.Remove(card);
+
+                if (card is CardDataBase cardData) collected.Add(cardData);
+            }
+        }
+        return collected;
+    }
+
+    /// <summary>
+    /// Card-drafting flow. Lays every candidate card out across the screen (the same grid the
+    /// added-cards preview uses) and lets the player CLICK to keep cards. Each clicked card slides
+    /// to <see cref="cardsSpawnPoint"/> and is destroyed at once — no burn animation — while its
+    /// data is folded into both the current <see cref="pile"/> and the <see cref="fullPile"/>. Once
+    /// <see cref="draftCardCount"/> cards have been picked (or every candidate has been taken), the
+    /// remaining candidates burn away. These draft cards are display-only: they never enter the hand,
+    /// <see cref="Cards"/>, or any pile except through a deliberate pick.
+    /// </summary>
+    private IEnumerator DraftCardsCoroutine(List<CardDataBase> candidates)
+    {
+        if (candidates == null || candidates.Count == 0) yield break;
+
+        Camera cam = Camera.main ? Camera.main : FindFirstObjectByType<Camera>();
+        if (!cam || !pfbTest) yield break;
+
+        // --- Grid layout (matches ShowAddedCardsAlert so the draft reads like the preview). ---
+        int count = candidates.Count;
+        float aspect = cam.aspect <= 0f ? 1.7778f : cam.aspect;
+        int cols = Mathf.Max(1, Mathf.CeilToInt(Mathf.Sqrt(count * aspect)));
+        int rows = Mathf.Max(1, Mathf.CeilToInt((float)count / cols));
+
+        float frustumHeight = 2f * previewDistance * Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        float frustumWidth = frustumHeight * aspect;
+        float cellWidth = frustumWidth / cols;
+        float cellHeight = frustumHeight / rows;
+
+        Transform camT = cam.transform;
+        Vector3 gridCenter = camT.position + camT.forward * previewDistance;
+        Quaternion faceRot = Quaternion.LookRotation(camT.forward, camT.up);
+
+        // Parallel lists, kept in lock-step. When a card is picked its entry is removed from ALL of
+        // them, so the hover loop and the final burn only ever touch cards still on offer.
+        List<Card> draftCards = new List<Card>();
+        List<CardDataBase> draftData = new List<CardDataBase>();
+        List<Transform> holders = new List<Transform>();
+        List<float> holderBaseScale = new List<float>();
+        List<Vector3> holderBasePos = new List<Vector3>();
+        for (int i = 0; i < count; i++)
+        {
+            int row = i / cols;
+            int col = i % cols;
+            int cardsInRow = Mathf.Min(cols, count - row * cols);
+
+            float x = (col - (cardsInRow - 1) * 0.5f) * cellWidth;
+            float y = ((rows - 1) * 0.5f - row) * cellHeight;
+            Vector3 pos = gridCenter + camT.right * x + camT.up * y;
+
+            // The card is parented under a holder that carries position, facing AND the preview
+            // scale (the card animates its own root localScale, so scaling the holder is the only
+            // reliable way to size it — see ShowAddedCardsAlert).
+            Transform holder = new GameObject("CardDraftHolder").transform;
+            holder.SetParent(cardsParent, false);
+            holder.SetPositionAndRotation(pos, faceRot);
+
+            Card card = Instantiate(pfbTest, holder, false);
+            card.transform.localPosition = Vector3.zero;
+            card.transform.localRotation = Quaternion.identity;
+            card.SetState(Card.CardState.OnTable);
+            card.Lock();
+            card.cardData = candidates[i];
+            if (cardTextures != null && cardTextures.Count > 0)
+                card.SetCardTexture(h.RandChoice(cardTextures));
+
+            float fit = FitScaleToCell(card, cellWidth, cellHeight, camT.right, camT.up);
+            float baseScale = fit * Mathf.Max(0f, CardPreviewScale);
+            holder.localScale = Vector3.one * baseScale;
+
+            draftCards.Add(card);
+            draftData.Add(candidates[i]);
+            holders.Add(holder);
+            holderBaseScale.Add(baseScale);
+            holderBasePos.Add(pos);
+        }
+
+        // Never ask for more picks than there are cards on offer.
+        int picksTarget = Mathf.Min(draftCardCount, count);
+        int picked = 0;
+
+        yield return new WaitForEndOfFrame();   // swallow the click/press that opened the draft
+        while (picked < picksTarget)
+        {
+            int hoveredIndex = PreviewCardUnderMouse(cam, draftCards);
+
+            // Hover pop, identical to the preview: scale the hovered card up and pull it toward the
+            // camera so it reads on top of its neighbours.
+            for (int i = 0; i < holders.Count; i++)
+            {
+                Transform holder = holders[i];
+                if (!holder) continue;
+
+                bool isHovered = i == hoveredIndex;
+                float targetScale = holderBaseScale[i] * (isHovered ? previewHoverScale : 1f);
+                Vector3 targetPos = isHovered
+                    ? holderBasePos[i] - camT.forward * previewHoverRaise
+                    : holderBasePos[i];
+
+                if (previewHoverSmoothing <= 0f)
+                {
+                    holder.localScale = Vector3.one * targetScale;
+                    holder.position = targetPos;
+                }
+                else
+                {
+                    float t = 1f - Mathf.Exp(-Time.deltaTime / previewHoverSmoothing);
+                    holder.localScale = Vector3.Lerp(holder.localScale, Vector3.one * targetScale, t);
+                    holder.position = Vector3.Lerp(holder.position, targetPos, t);
+                }
+            }
+
+            // Click keeps the hovered card.
+            if (Input.GetMouseButtonDown(0) && hoveredIndex >= 0)
+            {
+                CardDataBase chosenData = draftData[hoveredIndex];
+                Transform chosenHolder = holders[hoveredIndex];
+
+                // Drop it from every tracking list so it is neither hovered nor burned later.
+                draftCards.RemoveAt(hoveredIndex);
+                draftData.RemoveAt(hoveredIndex);
+                holders.RemoveAt(hoveredIndex);
+                holderBaseScale.RemoveAt(hoveredIndex);
+                holderBasePos.RemoveAt(hoveredIndex);
+
+                // Fold the chosen card's data into both piles.
+                if (chosenData)
+                {
+                    if (fullPile) fullPile.scriptableObjects.Add(chosenData);
+                    if (pile) pile.scriptableObjects.Add(chosenData);
+                }
+
+                picked++;
+
+                SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
+                {
+                    R.PROJECT.Audio.Cards.TakeCard.takeCard1,
+                    R.PROJECT.Audio.Cards.TakeCard.takeCard2,
+                    R.PROJECT.Audio.Cards.TakeCard.takeCard3,
+                });
+
+                // Slide to the spawn point, then destroy at once (no burn). Runs concurrently so the
+                // draft keeps going while the card flies off.
+                StartCoroutine(MoveDraftPickToSpawnAndDestroy(chosenHolder));
+            }
+
+            yield return null;
+        }
+
+        // Every card the player didn't pick burns away, staggered.
+        int running = 0;
+        foreach (Card card in draftCards)
+        {
+            if (!card) continue;
+            running++;
+            card.StartCoroutine(card.Burn(() => running--));
+            if (previewBurnStagger > 0f) yield return new WaitForSeconds(previewBurnStagger);
+        }
+        while (running > 0) yield return null;
+
+        // Clean up the holders left behind after each card burned itself away.
+        foreach (Transform holder in holders)
+            if (holder) Destroy(holder.gameObject);
+    }
+
+    /// <summary>
+    /// Slides a chosen draft card (via its holder, so the preview scale is preserved) to
+    /// <see cref="cardsSpawnPoint"/> and then destroys the holder — and with it the card — at once.
+    /// No burn animation: the card simply vanishes when it reaches the spawn point.
+    /// </summary>
+    private IEnumerator MoveDraftPickToSpawnAndDestroy(Transform holder)
+    {
+        if (!holder) yield break;
+
+        Vector3 target = cardsSpawnPoint ? cardsSpawnPoint.position : holder.position;
+
+        if (draftPickMoveDuration > 0f)
+            yield return Tween.Position(holder, target, draftPickMoveDuration, Ease.InOutCubic)
+                .ToYieldInstruction();
+        else
+            holder.position = target;
+
+        Destroy(holder.gameObject);   // silently destroys the card too — no burn
     }
 
     /// <summary>

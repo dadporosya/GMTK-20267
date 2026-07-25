@@ -3688,7 +3688,7 @@ MonoBehaviour:
   maxX: 0
   limitX: 0
   canLook: 1
-  cameraBob: 1
+  cameraBob: 0
   bobFrequency: 0
   bobAmount: 0
   bobSmoothing: 0
@@ -3760,8 +3760,8 @@ MonoBehaviour:
   currentSpeed: 30
   acceleration: 1
   roadSpeedScale: 1
-  speedThreshHoldForCameraShake: 100
-  maxCameraShake: 2
+  speedThreshHoldForCameraShake: 0
+  maxCameraShake: 100
   cameraShakeRoughness: 10
   text: {fileID: 503708338}
   label: KM
@@ -5419,7 +5419,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4a2039ac57a8e6445b396c9b91c0dcea, type: 2}
   pileSuits: 00000000050000000100000004000000060000000200000003000000
   shuffleAllPiles: 0
-  primarySuitCardAdd: 5
+  primarySuitCardAdd: 4
   secondarySuitCardAdd: 3
   thirdSuitCardAdd: 1
   targetTables: []
@@ -5440,6 +5440,9 @@ MonoBehaviour:
   previewHoverScale: 1.15
   previewHoverRaise: 0.15
   previewHoverSmoothing: 0.08
+  cardDrafting: 1
+  draftCardCount: 5
+  draftPickMoveDuration: 0.25
 --- !u!4 &6674368213915398119
 Transform:
   m_ObjectHideFlags: 0
