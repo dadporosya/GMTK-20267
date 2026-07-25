@@ -217,9 +217,12 @@ public class SinCutsceneBase : CutSceneBase
         if (TableTopCameraController.Instance)
         {
             TableTopCameraController.Instance.SwitchToHandView();
-            TableManager.Instance.AddPlayedCutscene(sin);
-            CardManager.Instance.RoundStart();
+            
         }
+        
+        TableManager.Instance.AddPlayedCutscene(sin);
+        CardManager.Instance.ExtendPileAccordingToSins();
+        CardManager.Instance.RoundStart();
 
         yield return null;
 

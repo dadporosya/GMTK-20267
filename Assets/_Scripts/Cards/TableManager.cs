@@ -206,6 +206,17 @@ public class TableManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Resets the score for a new round, once <see cref="targetScore"/> has been set for that round.
+    /// In <see cref="decreasingScore"/> mode the player counts down from the target to 0, so the
+    /// score starts at <see cref="targetScore"/>; otherwise it starts at 0 and rises to the target.
+    /// </summary>
+    public void ResetScoreForRound()
+    {
+        _scoreReached = false;
+        SetScore(decreasingScore ? targetScore : 0, instant: true);
+    }
+
+    /// <summary>
     /// Whether the goal condition is currently met:
     /// decreasing mode -> score counted down to 0 (or below);
     /// normal mode      -> score reached targetScore (or above).

@@ -117,8 +117,10 @@ public class CardManager : MonoBehaviour
     {
         if (!pile || pile.scriptableObjects.Count == 0)
         {
-            // Pile ran out — reshuffle: create a new pile from the full pile.
-            RoundStart();
+            // Pile ran out mid-round — just rebuild the draw pile from the full pile.
+            // Do NOT call RoundStart() here: that would advance the level and reset the score
+            // in the middle of a round. Reshuffling only refills the pile.
+            pile = fullPile ? Instantiate(fullPile) : null;
 
             if (!pile || pile.scriptableObjects.Count == 0)
             {
@@ -327,6 +329,8 @@ public class CardManager : MonoBehaviour
 
                 if (fullPile) fullPile.scriptableObjects.Add(card);
                 if (pile) pile.scriptableObjects.Add(card);
+                
+                h.Out(card);
             }
         }
 
