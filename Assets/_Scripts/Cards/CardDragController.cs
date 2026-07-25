@@ -361,6 +361,32 @@ public class CardDragController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Aborts the current drag without placing the card — restores the colliders disabled at pickup,
+    /// releases the hand focus and returns the card to where it came from (its table spot or the hand
+    /// layout). Used when interaction is switched off mid-drag (see <see cref="SetDraggingEnabled"/>).
+    /// </summary>
+    private void CancelDrag()
+    {
+        Card card = dragging;
+        dragging = null;
+
+        foreach (Collider c in dragColliders) if (c) c.enabled = true;
+        dragColliders.Clear();
+        PushHoverFocus(null);
+
+        if (dragOriginState == Card.CardState.OnTable && hasTablePoint)
+        {
+            card.SetState(Card.CardState.OnTable);
+            card.AnimateTo(lastTablePoint + lastTableNormal * liftingOverTable, FlatTableRotation(card));
+        }
+        else
+        {
+            card.SetState(Card.CardState.InHand);
+            if (HandManager.Instance) HandManager.Instance.Arrange();
+        }
+    }
+
     // ---- helpers ------------------------------------------------------------
 
     /// <summary>
