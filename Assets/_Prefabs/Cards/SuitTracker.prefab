@@ -207,7 +207,7 @@ MonoBehaviour:
       m_Calls: []
   animationSpeed: 1
   squishes:
-  - {x: -0.167, y: 0.167, z: 0}
+  - {x: -0.2, y: 0.2, z: 0}
   durations: []
   defaultDuration: 0.05
   ease: 5
