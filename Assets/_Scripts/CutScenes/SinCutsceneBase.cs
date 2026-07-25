@@ -22,6 +22,11 @@ public class SinCutsceneBase : CutSceneBase
     
     [Header("After Win")]
     [SerializeField] private float delayAfterWin = 2f;
+    [Tooltip("Delay between each card starting to burn, so the table and hand clear in a cascade " +
+             "instead of all at once.")]
+    [SerializeField] private float burnCardStagger = 0.08f;
+    [Tooltip("If on, OnWin waits for every card's burn to finish before the cutscene continues.")]
+    [SerializeField] private bool waitForBurnsToFinish = false;
     
     [Header("Environment")]
     [Tooltip("Light whose color is faded to lightColor. Falls back to RenderSettings.sun, then the " +
@@ -81,8 +86,59 @@ public class SinCutsceneBase : CutSceneBase
     {
         // TODO: some onWin effects like sfx and stuff
         yield return new WaitForSeconds(delayAfterWin);
-        
+
+        // Burn every card on the table and in hand.
+        yield return BurnAllCards();
+
         yield return null;
+    }
+
+    /// <summary>
+    /// Burns every card currently placed on the tables <see cref="CardManager"/> tracks and every
+    /// card still in the player's hand, staggered by <see cref="burnCardStagger"/> so they clear in
+    /// a cascade. The card lists are snapshotted first because <see cref="Card.Burn"/> removes each
+    /// card from its table / hand list as it burns (mutating the source collection mid-iteration).
+    /// Each burn is started on the card itself so it runs to completion independently of the
+    /// cutscene; when <see cref="waitForBurnsToFinish"/> is on, this waits for all of them.
+    /// </summary>
+    public virtual IEnumerator BurnAllCards()
+    {
+        List<Card> toBurn = new List<Card>();
+
+        // Cards resting on every tracked table.
+        if (CardManager.Instance != null)
+        {
+            foreach (PlacingArea table in CardManager.Instance.targetTables)
+            {
+                if (!table) continue;
+                foreach (Card card in table.cards)
+                    if (card && !toBurn.Contains(card)) toBurn.Add(card);
+            }
+        }
+
+        // Cards still held in the player's hand.
+        if (HandManager.Instance != null)
+        {
+            foreach (Card card in HandManager.Instance.Cards)
+                if (card && !toBurn.Contains(card)) toBurn.Add(card);
+        }
+
+        if (toBurn.Count == 0) yield break;
+
+        int running = 0;
+        foreach (Card card in toBurn)
+        {
+            if (!card) continue;
+            running++;
+            // Run the burn on the card so it finishes even if the cutscene moves on; the callback
+            // lets us optionally wait for every card to finish burning. Burn is idempotent.
+            card.StartCoroutine(card.Burn(() => running--));
+
+            if (burnCardStagger > 0f) yield return new WaitForSeconds(burnCardStagger);
+        }
+
+        if (waitForBurnsToFinish)
+            while (running > 0) yield return null;
     }
 
     public virtual IEnumerator TurnCameraToWindow()

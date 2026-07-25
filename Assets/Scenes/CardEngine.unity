@@ -1398,6 +1398,7 @@ MonoBehaviour:
       m_Calls: []
   disableWindowOnStart: 1
   windowAnimations: {fileID: 0}
+  delayBeforeDialogueStart: 2
 --- !u!114 &2702239989372945549
 MonoBehaviour:
   m_ObjectHideFlags: 0
