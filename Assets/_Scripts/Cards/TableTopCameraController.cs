@@ -31,7 +31,9 @@ public class TableTopCameraController : MonoBehaviour
     {
         TableView,
         HandView,
-        Free
+        Free,
+        TaxometerView,
+        WindowView
     }
 
     [Header("References")]
@@ -93,10 +95,27 @@ public class TableTopCameraController : MonoBehaviour
              "if left empty. Enabled only in Free view; disabled in Hand/Table view.")]
     [SerializeField] private MouseLook mouseLook;
 
+    [Header("Taxometer view")]
+    [Tooltip("Camera LOCAL position (relative to its parent) used while the Taxometer view is held (D).")]
+    [SerializeField] private Vector3 taxometerViewLocalPosition;
+    [Tooltip("Camera LOCAL rotation, in euler degrees, used while the Taxometer view is held (D).")]
+    [SerializeField] private Vector3 taxometerViewLocalEuler;
+
+    [Header("Window view")]
+    [Tooltip("Camera LOCAL position (relative to its parent) used while the Window view is held (A).")]
+    [SerializeField] private Vector3 windowViewLocalPosition;
+    [Tooltip("Camera LOCAL rotation, in euler degrees, used while the Window view is held (A).")]
+    [SerializeField] private Vector3 windowViewLocalEuler;
+
     // Active move/rotate tweens, stopped before a new transition starts.
     private Tween posTween;
     private Tween rotTween;
     private Tween playerRotTween;
+
+    // Hold-to-view (D = Taxometer, A = Window): remember the state to restore on release.
+    private bool isHoldingView;
+    private KeyCode holdViewKey;
+    private State stateBeforeHold;
 
     private void Awake()
     {
@@ -130,14 +149,53 @@ public class TableTopCameraController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        // While a hold view (D/Taxometer, A/Window) is active, ignore the W/S ladder so releasing the
+        // held key restores the state the player was actually in.
+        if (!isHoldingView)
         {
-            ChangeStateUp();
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                ChangeStateUp();
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                ChangeStateDown();
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+
+        HandleHoldViews();
+    }
+
+    /// <summary>
+    /// Hold D to peek at the Taxometer view, hold A to peek at the Window view. Releasing the held key
+    /// restores whatever state was active before the peek. Only the key that started the peek ends it,
+    /// so pressing the other key mid-hold is ignored.
+    /// </summary>
+    private void HandleHoldViews()
+    {
+        if (!isHoldingView)
         {
-            ChangeStateDown();
+            if (Input.GetKeyDown(KeyCode.D)) BeginHoldView(KeyCode.D, State.TaxometerView);
+            else if (Input.GetKeyDown(KeyCode.A)) BeginHoldView(KeyCode.A, State.WindowView);
         }
+        else if (Input.GetKeyUp(holdViewKey))
+        {
+            EndHoldView();
+        }
+    }
+
+    private void BeginHoldView(KeyCode key, State view)
+    {
+        isHoldingView = true;
+        holdViewKey = key;
+        stateBeforeHold = state;   // remember the previous state
+        SwitchState(view);
+    }
+
+    private void EndHoldView()
+    {
+        isHoldingView = false;
+        SwitchState(stateBeforeHold);   // restore the previous state
     }
 
     public void ChangeStateUp()
@@ -169,6 +227,8 @@ public class TableTopCameraController : MonoBehaviour
     public void SwitchToTableView() => SwitchState(State.TableView);
     public void SwitchToHandView() => SwitchState(State.HandView);
     public void SwitchToFree() => SwitchState(State.Free);
+    public void SwitchToTaxometerView() => SwitchState(State.TaxometerView);
+    public void SwitchToWindowView() => SwitchState(State.WindowView);
 
     /// <summary>
     /// Moves + rotates the camera into <paramref name="newState"/> and updates whether the hand
@@ -190,6 +250,14 @@ public class TableTopCameraController : MonoBehaviour
 
             case State.Free:
                 ApplyFreeView(instant);
+                break;
+
+            case State.TaxometerView:
+                ApplyTaxometerView(instant);
+                break;
+
+            case State.WindowView:
+                ApplyWindowView(instant);
                 break;
         }
     }
@@ -297,6 +365,24 @@ public class TableTopCameraController : MonoBehaviour
             mouseLook.FreezeCamera(false);
             mouseLook.canLook = true;
         }
+    }
+
+    /// <summary>Peek pose held while D is down; hand stops following the camera. Restored on release.</summary>
+    private void ApplyTaxometerView(bool instant)
+    {
+        if (mouseLook) mouseLook.canLook = false;
+        SetCursorVisible(true);
+        SetCardsFollow(false);
+        MoveToLocal(taxometerViewLocalPosition, Quaternion.Euler(taxometerViewLocalEuler), instant);
+    }
+
+    /// <summary>Peek pose held while A is down; hand stops following the camera. Restored on release.</summary>
+    private void ApplyWindowView(bool instant)
+    {
+        if (mouseLook) mouseLook.canLook = false;
+        SetCursorVisible(true);
+        SetCardsFollow(false);
+        MoveToLocal(windowViewLocalPosition, Quaternion.Euler(windowViewLocalEuler), instant);
     }
 
     // ---- helpers ------------------------------------------------------------
