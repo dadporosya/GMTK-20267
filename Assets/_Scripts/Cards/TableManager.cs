@@ -254,11 +254,15 @@ public class TableManager : MonoBehaviour
         if (SinCutScenes.TryGetValue(mostPlayed, out CutSceneBase cutscene) && cutscene != null)
         {
             CutSceneManager.Instance.RunCutscene(cutscene);
-            if (!playedCutScenes.Contains(mostPlayed))
-                playedCutScenes.Add(mostPlayed);
         }
     }
 
+    public void AddPlayedCutscene(CP.Suit suit)
+    {
+        if (!playedCutScenes.Contains(suit))
+            playedCutScenes.Add(suit);
+    }
+    
     private void RefreshScoreText(int value)
     {
         if (scoreText != null)
