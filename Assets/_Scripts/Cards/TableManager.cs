@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
@@ -110,11 +111,12 @@ public class TableManager : MonoBehaviour
     private void BuildSuitTrackers()
     {
         suitTrackers.Clear();
-
-        foreach (SuitTracker tracker in rawSuitTrackers)
+        List<CP.Suit> rawSuits = Enum.GetValues(typeof(CP.Suit))
+            .Cast<CP.Suit>()
+            .ToList();
+        for (int i = 0; i < rawSuitTrackers.Count; i++)
         {
-            if (tracker == null) continue;
-            suitTrackers[tracker.targetSuit] = tracker;
+            suitTrackers.Add(rawSuits[i], rawSuitTrackers[i]);
         }
 
         foreach (CP.Suit suit in System.Enum.GetValues(typeof(CP.Suit)))
@@ -126,12 +128,13 @@ public class TableManager : MonoBehaviour
                 startValue = startSuitCount[index];
 
             suits[suit] = startValue;
-
+            
+            h.Out("ASUIT TRACKERS", suitTrackers);
             foreach (var kv in suitTrackers)
             {
                 if (kv.Value)
                 {
-                    kv.Value.Initialize(suit, suits[suit]);
+                    kv.Value.Initialize(kv.Key, suits[suit]);
                 }
             }
             
