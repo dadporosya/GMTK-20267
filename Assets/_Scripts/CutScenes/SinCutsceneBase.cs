@@ -77,8 +77,8 @@ public class SinCutsceneBase : CutSceneBase
         
         
         yield return OnWin();
-        yield return TurnCameraToWindow();
-        yield return ChangeEnvironment();
+        // yield return TurnCameraToWindow();
+        // yield return ChangeEnvironment();
         yield return DialogueStart();
 
 
@@ -219,14 +219,16 @@ public class SinCutsceneBase : CutSceneBase
 
     public virtual IEnumerator CutsceneEnd()
     {
-        if (TableTopCameraController.Instance)
-        {
-            TableTopCameraController.Instance.SwitchToHandView();
-            
-        }
+        
         
         TableManager.Instance.AddPlayedCutscene(sin);
-        CardManager.Instance.ExtendPileAccordingToSins();
+
+        // Fold the sin-based extra cards into the pile and show them full-screen; this waits for the
+        // player to dismiss the preview and for the cards to burn away before the round begins.
+        yield return CardManager.Instance.ExtendPileAccordingToSins(true);
+        
+
+        TableTopCameraController.Instance.SwitchToHandView();
         CardManager.Instance.RoundStart();
 
         // Hand card interaction back to the player now the cutscene is over.

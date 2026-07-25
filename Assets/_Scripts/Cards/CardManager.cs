@@ -49,6 +49,15 @@ public class CardManager : MonoBehaviour
     
     [Header("Card Appearance")]
     public List<Texture2D> cardTextures = new List<Texture2D>();
+
+    [Header("Add-cards preview alert")]
+    [Tooltip("Uniform scale multiplier applied to every card shown in the full-screen 'cards added' " +
+             "preview. The cards are first sized to cover the camera, then multiplied by this.")]
+    public float CardPreviewScale = 0.8f;
+    [Tooltip("Distance (world units) in front of the camera the preview cards are laid out at.")]
+    [SerializeField] private float previewDistance = 2f;
+    [Tooltip("Small delay between each preview card starting to burn, so they clear in a cascade.")]
+    [SerializeField] private float previewBurnStagger = 0.05f;
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
@@ -319,9 +328,12 @@ public class CardManager : MonoBehaviour
     /// If the suit's own additional pile is empty (or missing), a random non-empty additional
     /// pile is used instead. When every additional pile is empty, nothing happens.
     /// </summary>
-    public void AddNewCards(Dictionary<CP.Suit, int> cardsToAdd, bool alert = true)
+    public IEnumerator AddNewCards(Dictionary<CP.Suit, int> cardsToAdd, bool alert = true)
     {
-        if (cardsToAdd == null) return;
+        if (cardsToAdd == null) yield break;
+
+        // Remember exactly which cards were folded in this call so the preview can show them.
+        List<CardDataBase> addedCards = new List<CardDataBase>();
 
         foreach (var kv in cardsToAdd)
         {
@@ -335,12 +347,132 @@ public class CardManager : MonoBehaviour
 
                 if (fullPile) fullPile.scriptableObjects.Add(card);
                 if (pile) pile.scriptableObjects.Add(card);
-                
+
+                if (card is CardDataBase cardData) addedCards.Add(cardData);
+
                 h.Out(card);
             }
         }
 
-        // bool alert functionality will be added later
+        // When alerting, show every added card filling the screen and wait for the player to
+        // dismiss them (click / Enter / Space), then burn them all away.
+        if (alert && addedCards.Count > 0)
+            yield return ShowAddedCardsAlert(addedCards);
+    }
+
+    /// <summary>
+    /// Instantiates one preview card per newly added card, lays them out in a grid that completely
+    /// covers the camera view, and scales each by <see cref="CardPreviewScale"/>. Waits for the
+    /// player to click / press Enter / press Space, then burns every preview card and waits for the
+    /// burns to finish before returning. These preview cards are display-only: they are NOT added
+    /// to the hand, to <see cref="Cards"/>, or to any pile.
+    /// </summary>
+    private IEnumerator ShowAddedCardsAlert(List<CardDataBase> addedCards)
+    {
+        Camera cam = Camera.main ? Camera.main : FindFirstObjectByType<Camera>();
+        if (!cam || !pfbTest) yield break;
+
+        // Grid dimensions: roughly square, biased by the camera aspect so it fills the frame.
+        int count = addedCards.Count;
+        float aspect = cam.aspect <= 0f ? 1.7778f : cam.aspect;
+        int cols = Mathf.Max(1, Mathf.CeilToInt(Mathf.Sqrt(count * aspect)));
+        int rows = Mathf.Max(1, Mathf.CeilToInt((float)count / cols));
+
+        // Size of the camera frustum at previewDistance, so the grid spans the whole view.
+        float frustumHeight = 2f * previewDistance * Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        float frustumWidth = frustumHeight * aspect;
+        float cellWidth = frustumWidth / cols;
+        float cellHeight = frustumHeight / rows;
+
+        Transform camT = cam.transform;
+        Vector3 gridCenter = camT.position + camT.forward * previewDistance;
+        // Card front normal is +Z: aim it back toward the camera so the face is visible.
+        Quaternion faceRot = Quaternion.LookRotation(camT.forward, camT.up);
+
+        List<Card> previewCards = new List<Card>();
+        for (int i = 0; i < count; i++)
+        {
+            int row = i / cols;
+            int col = i % cols;
+
+            // How many cards on this (possibly last, partially filled) row, so it stays centered.
+            int cardsInRow = Mathf.Min(cols, count - row * cols);
+
+            float x = (col - (cardsInRow - 1) * 0.5f) * cellWidth;
+            float y = ((rows - 1) * 0.5f - row) * cellHeight;
+            Vector3 pos = gridCenter + camT.right * x + camT.up * y;
+
+            Card card = Instantiate(pfbTest, pos, faceRot, cardsParent);
+            // Display-only: keep it off the table/hand logic and unpickable.
+            card.SetState(Card.CardState.OnTable);
+            card.Lock();
+            card.cardData = addedCards[i];
+            if (cardTextures != null && cardTextures.Count > 0)
+                card.SetCardTexture(h.RandChoice(cardTextures));
+
+            // Fit the card to its cell so the grid covers the camera, then apply the preview scale.
+            ScaleCardToCell(card, cellWidth, cellHeight, CardPreviewScale, camT.right, camT.up);
+
+            previewCards.Add(card);
+            
+            // TASK: the card local scale doesnt change. i need to make them significantly smaller
+            card.transform.localScale *= CardPreviewScale;
+        }
+
+        // Wait for the player to dismiss the preview.
+        yield return new WaitForEndOfFrame();   // ignore the click/press that opened this frame
+        while (!DismissPreviewPressed()) yield return null;
+
+        // Burn them all, staggered, and wait for every burn to finish.
+        int running = 0;
+        foreach (Card card in previewCards)
+        {
+            if (!card) continue;
+            running++;
+            card.StartCoroutine(card.Burn(() => running--));
+            if (previewBurnStagger > 0f) yield return new WaitForSeconds(previewBurnStagger);
+        }
+        while (running > 0) yield return null;
+    }
+
+    /// <summary>True the moment the player clicks or presses Enter / Space to dismiss the preview.</summary>
+    private static bool DismissPreviewPressed()
+    {
+        return Input.GetMouseButtonDown(0)
+               || Input.GetKeyDown(KeyCode.Return)
+               || Input.GetKeyDown(KeyCode.KeypadEnter)
+               || Input.GetKeyDown(KeyCode.Space);
+    }
+
+    /// <summary>
+    /// Scales <paramref name="card"/> so its rendered size fits inside a
+    /// <paramref name="cellWidth"/> x <paramref name="cellHeight"/> cell (uniform, keeping aspect),
+    /// then multiplies by <paramref name="extraScale"/>. Width/height are measured by projecting the
+    /// card's combined world bounds onto the camera's right / up axes, so the fit stays correct no
+    /// matter how the camera is oriented.
+    /// </summary>
+    private static void ScaleCardToCell(Card card, float cellWidth, float cellHeight, float extraScale,
+                                        Vector3 camRight, Vector3 camUp)
+    {
+        if (!card) return;
+
+        Bounds? combined = null;
+        foreach (Renderer r in card.GetComponentsInChildren<Renderer>(true))
+        {
+            if (!r) continue;
+            if (combined == null) combined = r.bounds;
+            else { Bounds b = combined.Value; b.Encapsulate(r.bounds); combined = b; }
+        }
+        if (combined == null) return;
+
+        // Project the world AABB extents onto the camera axes to get the card's on-screen size.
+        Vector3 e = combined.Value.extents;
+        float width  = 2f * (Mathf.Abs(e.x * camRight.x) + Mathf.Abs(e.y * camRight.y) + Mathf.Abs(e.z * camRight.z));
+        float height = 2f * (Mathf.Abs(e.x * camUp.x)    + Mathf.Abs(e.y * camUp.y)    + Mathf.Abs(e.z * camUp.z));
+        if (width <= 1e-5f || height <= 1e-5f) return;
+
+        float fit = Mathf.Min(cellWidth / width, cellHeight / height);
+        card.transform.localScale *= fit * Mathf.Max(0f, extraScale);
     }
 
     /// <summary>
@@ -348,7 +480,7 @@ public class CardManager : MonoBehaviour
     /// <see cref="primarySuitCardAdd"/> / <see cref="secondarySuitCardAdd"/> /
     /// <see cref="thirdSuitCardAdd"/> cards for the given suits. Any suit left null is skipped.
     /// </summary>
-    public void AddNewCards(CP.Suit? primarySuit = null, CP.Suit? secondarySuit = null,
+    public IEnumerator AddNewCards(CP.Suit? primarySuit = null, CP.Suit? secondarySuit = null,
                             CP.Suit? thirdSuit = null, bool alert = true)
     {
         var cardsToAdd = new Dictionary<CP.Suit, int>();
@@ -356,7 +488,7 @@ public class CardManager : MonoBehaviour
         if (secondarySuit.HasValue) cardsToAdd[secondarySuit.Value] = secondarySuitCardAdd;
         if (thirdSuit.HasValue)     cardsToAdd[thirdSuit.Value]     = thirdSuitCardAdd;
 
-        AddNewCards(cardsToAdd, alert);
+        yield return AddNewCards(cardsToAdd, alert);
     }
 
     /// <summary>
@@ -365,9 +497,9 @@ public class CardManager : MonoBehaviour
     /// cards, the second <see cref="secondarySuitCardAdd"/>, the third <see cref="thirdSuitCardAdd"/>.
     /// Ties are broken randomly, and suits that aren't present at all are ignored.
     /// </summary>
-    public void ExtendPileAccordingToSins()
+    public IEnumerator ExtendPileAccordingToSins(bool alert = true)
     {
-        if (!TableManager.Instance) return;
+        if (!TableManager.Instance) yield break;
 
         // Only rank suits that are actually present.
         var ranked = new List<KeyValuePair<CP.Suit, int>>();
@@ -387,7 +519,7 @@ public class CardManager : MonoBehaviour
         CP.Suit? secondary = ranked.Count > 1 ? ranked[1].Key : (CP.Suit?)null;
         CP.Suit? third     = ranked.Count > 2 ? ranked[2].Key : (CP.Suit?)null;
 
-        AddNewCards(primary, secondary, third);
+        yield return AddNewCards(primary, secondary, third, alert);
     }
 
     /// <summary>
