@@ -54,52 +54,52 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Brightness: 0
-    - _Brightness_Amount: 104.94
-    - _Contrast: 0
-    - _Contrast_Amount: 13.22
-    - _Disslove: 0
+    - _Brightness: 1
+    - _Brightness_Amount: 170.9
+    - _Contrast: 1
+    - _Contrast_Amount: 578.5
+    - _Disslove: 1
     - _DissloveOutlinesthickness: 0.07
     - _DissloveScale: 88
     - _DissloveTwirl: 1
     - _DissloveTwirlStrength: 11.3
     - _DissolvePixelation: 1000
-    - _Dissolve_amount: 0.489
+    - _Dissolve_amount: 0.352
     - _Distortion: 0
-    - _DistortionScale: 10
+    - _DistortionScale: 0.2
     - _DistortionStrength: 0.0101
-    - _Emission: 0
-    - _Emission_Mult: 11.73
-    - _Hit_Blend: 0
+    - _Emission: 1
+    - _Emission_Mult: 116.92
+    - _Hit_Blend: 110.61
     - _Hit_Effect: 1
-    - _Hit_Glow: 10
+    - _Hit_Glow: 81.96
     - _Hue: 0
     - _HueShiftAmount: 2.48
     - _HueShiftAnimation: 1
     - _HueShiftAnimationSpeed: 2.48
     - _Negative: 0
     - _Negative_Amount: 1096.36
-    - _OffsetTilling: 0
+    - _OffsetTilling: 1
     - _Outline: 0
     - _Outline_Thickness: 5
     - _Pixel_Resolution: 100.9
     - _Pixelation: 0
-    - _PixelationShape: 1
+    - _PixelationShape: 0
     - _PolarCoordinates: 0
     - _PolarLengthScale: 32.08
     - _PolarRadialScale: -29.48
     - _QueueControl: -1
     - _QueueOffset: 0
-    - _Saturation: 0
-    - _Saturation_Amount: 48.85
+    - _Saturation: 1
+    - _Saturation_Amount: 64.8
     - _Twirl: 0
     - _TwirlStrength: 5.58
-    - _XDir: 0
+    - _XDir: 10
     - _YDir: 0
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
-    - _Distortion_Direction: {r: 0, g: 1, b: 0, a: 0}
-    - _EdgeColor: {r: 1.981132, g: 0.75394136, b: 0, a: 1}
+    - _Distortion_Direction: {r: 0, g: 0.01, b: 0, a: 0}
+    - _EdgeColor: {r: 2.2956316, g: 2.0273368, b: 0.7038493, a: 1}
     - _Hit_Color: {r: 1, g: 1, b: 1, a: 1}
     - _OUtlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

@@ -64,8 +64,8 @@ Material:
     - _DissloveTwirl: 1
     - _DissloveTwirlStrength: 11.3
     - _DissolvePixelation: 1000
-    - _Dissolve_amount: 0.489
-    - _Distortion: 0
+    - _Dissolve_amount: 0
+    - _Distortion: 1
     - _DistortionScale: 10
     - _DistortionStrength: 0.0101
     - _Emission: 0
@@ -82,7 +82,7 @@ Material:
     - _OffsetTilling: 0
     - _Outline: 0
     - _Outline_Thickness: 5
-    - _Pixel_Resolution: 0
+    - _Pixel_Resolution: -37.7
     - _Pixelation: 0
     - _PixelationShape: 1
     - _PolarCoordinates: 0
