@@ -230,29 +230,32 @@ public class TableManager : MonoBehaviour
         h.Out("ScoreReached");
         onScoreReached?.Invoke();
 
-        // Find the most played suit (largest count in the suits dictionary).
+        // Find the highest suit count in the suits dictionary.
         if (suits.Count == 0) return;
 
-        CP.Suit mostPlayed = default;
         int bestCount = int.MinValue;
-        bool found = false;
         foreach (var kvp in suits)
-        {
-            if (kvp.Value > bestCount)
-            {
-                bestCount = kvp.Value;
-                mostPlayed = kvp.Key;
-                found = true;
-            }
-        }
+            if (kvp.Value > bestCount) bestCount = kvp.Value;
+
+        // Collect every suit tied at that highest count.
+        List<CP.Suit> tied = new List<CP.Suit>();
+        foreach (var kvp in suits)
+            if (kvp.Value == bestCount) tied.Add(kvp.Key);
+
+        if (tied.Count == 0) return;
+
+        // Tie-break: prefer a tied suit whose cutscene hasn't been played yet; among those pick at
+        // random. If every tied suit has already been played, pick at random from all of them.
+        List<CP.Suit> unplayed = tied.FindAll(s => !playedCutScenes.Contains(s));
+        List<CP.Suit> pool = unplayed.Count > 0 ? unplayed : tied;
+        CP.Suit mostPlayed = h.RandChoice(pool);
 
         // Play the matching cutscene for that suit, if one is registered.
-        if (found && SinCutScenes.TryGetValue(mostPlayed, out CutSceneBase cutscene) && cutscene != null)
+        if (SinCutScenes.TryGetValue(mostPlayed, out CutSceneBase cutscene) && cutscene != null)
         {
             CutSceneManager.Instance.RunCutscene(cutscene);
             if (!playedCutScenes.Contains(mostPlayed))
                 playedCutScenes.Add(mostPlayed);
-            // TASK: if some suits are tied, play the one which wasnt played yet. if stil tied, play random. if all was played, play random
         }
     }
 
