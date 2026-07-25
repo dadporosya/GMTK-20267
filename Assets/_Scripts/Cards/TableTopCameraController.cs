@@ -60,6 +60,9 @@ public class TableTopCameraController : MonoBehaviour
     [SerializeField] private bool instantOnStart = true;
 
     [Header("Table view")]
+    [Tooltip("If true, W becomes hold-to-peek: hold W for Table view, release to return to Hand view. " +
+             "If false, W keeps the old ladder behaviour (W = step up Hand -> Table).")]
+    [SerializeField] private bool holdToTable = true;
     [Tooltip("Height in world units the camera sits above the table surface while looking straight " +
              "down. This is the table-view zoom: higher = more of the table in frame.")]
     [SerializeField] private float tableViewZoom = 6f;
@@ -112,10 +115,10 @@ public class TableTopCameraController : MonoBehaviour
     private Tween rotTween;
     private Tween playerRotTween;
 
-    // Hold-to-view (D = Taxometer, A = Window): remember the state to restore on release.
+    // Hold-to-view (W = Table, D = Taxometer, A = Window): remember the state to restore on release.
     private bool isHoldingView;
     private KeyCode holdViewKey;
-    private State stateBeforeHold;
+    private State holdRestoreState;
 
     private void Awake()
     {
@@ -149,11 +152,11 @@ public class TableTopCameraController : MonoBehaviour
 
     private void Update()
     {
-        // While a hold view (D/Taxometer, A/Window) is active, ignore the W/S ladder so releasing the
-        // held key restores the state the player was actually in.
+        // While a hold view is active, ignore the W/S ladder so releasing the held key restores the
+        // intended state. When holdToTable is on, W is consumed by the hold system (below), not the ladder.
         if (!isHoldingView)
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (!holdToTable && Input.GetKeyDown(KeyCode.W))
             {
                 ChangeStateUp();
             }
@@ -167,16 +170,18 @@ public class TableTopCameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// Hold D to peek at the Taxometer view, hold A to peek at the Window view. Releasing the held key
-    /// restores whatever state was active before the peek. Only the key that started the peek ends it,
-    /// so pressing the other key mid-hold is ignored.
+    /// Hold D to peek at the Taxometer view and A to peek at the Window view (both restore whatever
+    /// state was active before the peek). When <see cref="holdToTable"/> is on, hold W for the Table
+    /// view and release to return to Hand view. Only the key that started the peek ends it, so pressing
+    /// another hold key mid-hold is ignored.
     /// </summary>
     private void HandleHoldViews()
     {
         if (!isHoldingView)
         {
-            if (Input.GetKeyDown(KeyCode.D)) BeginHoldView(KeyCode.D, State.TaxometerView);
-            else if (Input.GetKeyDown(KeyCode.A)) BeginHoldView(KeyCode.A, State.WindowView);
+            if (holdToTable && Input.GetKeyDown(KeyCode.W)) BeginHoldView(KeyCode.W, State.TableView, State.HandView);
+            else if (Input.GetKeyDown(KeyCode.D)) BeginHoldView(KeyCode.D, State.TaxometerView, state);
+            else if (Input.GetKeyDown(KeyCode.A)) BeginHoldView(KeyCode.A, State.WindowView, state);
         }
         else if (Input.GetKeyUp(holdViewKey))
         {
@@ -184,18 +189,18 @@ public class TableTopCameraController : MonoBehaviour
         }
     }
 
-    private void BeginHoldView(KeyCode key, State view)
+    private void BeginHoldView(KeyCode key, State view, State restoreState)
     {
         isHoldingView = true;
         holdViewKey = key;
-        stateBeforeHold = state;   // remember the previous state
+        holdRestoreState = restoreState;   // where release returns to
         SwitchState(view);
     }
 
     private void EndHoldView()
     {
         isHoldingView = false;
-        SwitchState(stateBeforeHold);   // restore the previous state
+        SwitchState(holdRestoreState);   // restore on release
     }
 
     public void ChangeStateUp()
