@@ -57,6 +57,8 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private DialogueWindowAnimations windowAnimations;
 
+    [SerializeField] private float delayBeforeDialogueStart = 0f;
+    
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
@@ -205,6 +207,9 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator StartDialogueRoutine()
     {
+        // This routine only runs once, at the very start of the dialogue (before the first
+        // node), so wait the configured delay here before anything appears.
+        if (delayBeforeDialogueStart > 0f) yield return new WaitForSeconds(delayBeforeDialogueStart);
         if (windowAnimations) yield return windowAnimations.OnDialogueStart();
         // The open animation is done; the dialogue actually starts now.
         initiatingTalkable?.OnDialogueStart();
