@@ -398,6 +398,7 @@ public class Card : MonoBehaviour
             // R.PROJECT.Audio.Cards.Activate.activate1,
             // R.PROJECT.Audio.Cards.Activate.activate2,
             // R.PROJECT.Audio.Cards.Activate.activate3,
+            R.PROJECT.Audio.Cards.Activate.activateFaded1,
             
         });
         StartCoroutine(activateAnimController.PlayAnimations());
