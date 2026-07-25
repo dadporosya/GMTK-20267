@@ -1,3 +1,4 @@
+using EZCameraShake;
 using TMPro;
 using UnityEngine;
 
@@ -24,6 +25,13 @@ public class Taximeter : MonoBehaviour
 
     [Header("Road")]
     [SerializeField] private float roadSpeedScale = 1f;  // km/h -> road units
+
+    [Header("Camera shake")]
+    [SerializeField] private float speedThreshHoldForCameraShake = 40f;  // shake begins at this speed
+    [SerializeField] private float maxCameraShake = 2f;                  // magnitude at max speed
+    [SerializeField] private float cameraShakeRoughness = 6f;
+
+    private CameraShakeInstance shakeInstance;
 
     [Header("Display")]
     [SerializeField] private TMP_Text text;
@@ -74,6 +82,7 @@ public class Taximeter : MonoBehaviour
         // Instantaneous speed (for display / other systems to read).
         currentSpeed = acceleration ? Mathf.Lerp(minSpeed, maxSpeed, t) : maxSpeed;
         ApplyRoadSpeed();
+        UpdateCameraShake();
 
         // Distance already travelled = integral of the speed curve, normalized so it
         // equals totalKm at t = 1. km left is the remainder.
@@ -89,6 +98,7 @@ public class Taximeter : MonoBehaviour
             ApplyRoadSpeed();
             running      = false;
             UpdateText();
+            StopCameraShake();
 
             if (!reached)
             {
@@ -115,6 +125,49 @@ public class Taximeter : MonoBehaviour
     {
             EndlessRoadManager.Instance.speed = currentSpeed * roadSpeedScale;
     }
+
+    /// <summary>
+    /// Continuous camera shake that switches on at speedThreshHoldForCameraShake and
+    /// grows toward maxCameraShake as speed climbs from the threshold to maxSpeed.
+    /// </summary>
+    private void UpdateCameraShake()
+    {
+        if (maxCameraShake <= 0f || CameraShaker.Instance == null) return;
+
+        // 0 at the threshold, 1 at maxSpeed.
+        float range     = Mathf.Max(0.0001f, maxSpeed - speedThreshHoldForCameraShake);
+        float intensity = Mathf.Clamp01((currentSpeed - speedThreshHoldForCameraShake) / range);
+
+        if (currentSpeed < speedThreshHoldForCameraShake)
+        {
+            if (shakeInstance != null) shakeInstance.ScaleMagnitude = 0f;
+            return;
+        }
+
+        if (shakeInstance == null)
+        {
+            // Sustained shake we keep alive and scale each frame.
+            shakeInstance = new CameraShakeInstance(maxCameraShake, cameraShakeRoughness)
+            {
+                DeleteOnInactive = false
+            };
+            CameraShaker.Instance.Shake(shakeInstance);
+        }
+
+        shakeInstance.ScaleMagnitude = intensity;
+    }
+
+    /// <summary>Fades the shake out and lets it clean itself up.</summary>
+    private void StopCameraShake()
+    {
+        if (shakeInstance == null) return;
+
+        shakeInstance.DeleteOnInactive = true;
+        shakeInstance.StartFadeOut(0.5f);
+        shakeInstance = null;
+    }
+
+    private void OnDisable() => StopCameraShake();
 
     private void UpdateText()
     {

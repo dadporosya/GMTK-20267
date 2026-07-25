@@ -3688,7 +3688,7 @@ MonoBehaviour:
   maxX: 0
   limitX: 0
   canLook: 1
-  cameraBob: 0
+  cameraBob: 1
   bobFrequency: 0
   bobAmount: 0
   bobSmoothing: 0
@@ -3760,11 +3760,14 @@ MonoBehaviour:
   currentSpeed: 30
   acceleration: 1
   roadSpeedScale: 1
+  speedThreshHoldForCameraShake: 100
+  maxCameraShake: 2
+  cameraShakeRoughness: 10
   text: {fileID: 503708338}
   label: KM
   decimalPlaces: 2
   kmValue: 0
-  timeInMinutes: 1
+  timeInMinutes: 0.5
 --- !u!4 &3570303577819389374
 Transform:
   m_ObjectHideFlags: 0
