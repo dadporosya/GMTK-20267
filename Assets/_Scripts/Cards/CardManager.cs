@@ -25,6 +25,9 @@ public class CardManager : MonoBehaviour
     [Tooltip("Very small delay (seconds) before each OTHER card ticks its countdown down, so " +
              "the countdowns reduce one after another instead of all at once.")]
     [SerializeField] private float countdownTickDelay = 0.1f;
+    [Tooltip("Very small delay (seconds) between dealing each card into the hand, so cards are " +
+             "dealt one after another instead of all at once.")]
+    [SerializeField] private float dealDelay = 0.02f;
 
     [SerializeField] private Card pfbTest;
 
@@ -216,18 +219,30 @@ public class CardManager : MonoBehaviour
     public void DealFullHand()
     {
         if (!PlayerManager.Instance) return;
+        StartCoroutine(DealFullHandCoroutine());
+    }
+
+    /// <summary>
+    /// Deals cards into the hand one at a time, waiting a very small <see cref="dealDelay"/>
+    /// between each so they arrive sequentially instead of all at once.
+    /// </summary>
+    private IEnumerator DealFullHandCoroutine()
+    {
+        var wait = new WaitForSeconds(dealDelay);
 
         // Safety guard: if the hand can't be read/grown (e.g. no HandManager in scene), bail out
         // instead of spinning forever. Also cap iterations to handSize as a hard stop.
         for (int i = 0; i < PlayerManager.Instance.handSize; i++)
         {
-            if (PlayerManager.Instance.Hand == null) return;
+            if (PlayerManager.Instance.Hand == null) yield break;
             if (PlayerManager.Instance.handSize - PlayerManager.Instance.Hand.Count <= 0) break;
 
             int before = PlayerManager.Instance.Hand.Count;
             DrawCard();
             // If a draw failed to add a card to the hand, stop rather than loop endlessly.
             if (PlayerManager.Instance.Hand.Count == before) break;
+
+            yield return wait;   // small beat so cards are dealt one after another
         }
     }
     
