@@ -85,7 +85,7 @@ public class HandManager : MonoBehaviour
         card.SetState(Card.CardState.InHand);
         Cards.Add(card);
         Arrange();
-        h.Out(Cards);
+        // h.Out(Cards);
     }
 
     /// <summary>Removes a card from the hand and re-arranges immediately.</summary>

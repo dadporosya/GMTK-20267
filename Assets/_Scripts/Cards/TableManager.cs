@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
@@ -162,7 +163,7 @@ public class TableManager : MonoBehaviour
 
         currentScore = value;
 
-        CheckScoreReached();
+        
 
         // Stop any running count so a new change takes over from what's on screen now.
         if (_scoreTween.isAlive)
@@ -202,6 +203,7 @@ public class TableManager : MonoBehaviour
         ).OnComplete(() =>
         {
             if (scoreChangeAnimation != null) scoreChangeAnimation.Stop();
+            CheckScoreReached();
         });
     }
 
@@ -213,7 +215,7 @@ public class TableManager : MonoBehaviour
     public void ResetScoreForRound()
     {
         _scoreReached = false;
-        SetScore(decreasingScore ? targetScore : 0, instant: true);
+        SetScore(decreasingScore ? targetScore : 0, instant: false);
     }
 
     /// <summary>
@@ -230,6 +232,7 @@ public class TableManager : MonoBehaviour
     // if the score later leaves that state.
     private void CheckScoreReached()
     {
+        h.Out("CheckScoreReached");
         if (IsScoreReached())
         {
             if (!_scoreReached)
@@ -247,7 +250,7 @@ public class TableManager : MonoBehaviour
     public void OnScoreReached()
     {
         
-        h.Out("ScoreReached");
+        
         onScoreReached?.Invoke();
 
         // Find the highest suit count in the suits dictionary.
@@ -275,6 +278,11 @@ public class TableManager : MonoBehaviour
         {
             CutSceneManager.Instance.RunCutscene(cutscene);
         }
+        else
+        {
+            CutSceneManager.Instance.RunCutscene(h.RandChoice(SinCutScenes.Values.ToList()));
+        }
+        h.Out("ScoreReached");
     }
 
     public void AddPlayedCutscene(CP.Suit suit)

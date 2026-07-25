@@ -27,6 +27,11 @@ public class CardDragController : MonoBehaviour
     [Header("References")]
     [SerializeField] private Camera cam;
 
+    [Header("Interaction")]
+    [Tooltip("When off, cards can no longer be hovered, picked up or dragged. Cutscenes " +
+             "(e.g. SinCutsceneBase) toggle this so the player can't touch cards mid-cutscene.")]
+    [SerializeField] private bool draggingEnabled = true;
+
     [Header("Raycast layers")]
     [Tooltip("Layer(s) the card colliders live on. Used for picking/hovering cards.")]
     [SerializeField] private LayerMask cardMask = ~0;
@@ -101,10 +106,35 @@ public class CardDragController : MonoBehaviour
         if (!cam) cam = Camera.main;
     }
 
+    /// <summary>Whether cards can currently be hovered, picked up and dragged.</summary>
+    public bool DraggingEnabled => draggingEnabled;
+
+    /// <summary>
+    /// Turns all card hovering / picking / dragging on or off globally. Disabling mid-drag cancels
+    /// the current drag (returning the card to where it came from) and clears any active hover, so
+    /// no card is left stuck to the cursor. Used by cutscenes (see SinCutsceneBase) to lock out card
+    /// interaction while they play, then hand control back afterwards.
+    /// </summary>
+    public void SetDraggingEnabled(bool value)
+    {
+        if (draggingEnabled == value) return;
+        draggingEnabled = value;
+
+        if (draggingEnabled) return;
+
+        // Just disabled: don't leave a card mid-drag or a card stuck in its hover pose.
+        if (dragging) CancelDrag();
+        if (hovered) { hovered.SetHovered(false); hovered = null; }
+        PushHoverFocus(null);
+    }
+
     private void Update()
     {
         if (Mouse.current == null) return;
         if (!cam) { cam = Camera.main; if (!cam) return; }
+
+        // Interaction locked out (e.g. by a cutscene): ignore all hover / pick / drag input.
+        if (!draggingEnabled) return;
 
         Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
 

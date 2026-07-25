@@ -88,7 +88,10 @@ public class SinCutsceneBase : CutSceneBase
     
     public virtual IEnumerator OnWin()
     {
+        
         // Burn every card on the table and in hand.
+        
+        // TASK: disable ability to drag cards
         yield return BurnAllCards();
         // TODO: some onWin effects like sfx and stuff
         yield return new WaitForSeconds(delayAfterWin);
@@ -223,7 +226,7 @@ public class SinCutsceneBase : CutSceneBase
         TableManager.Instance.AddPlayedCutscene(sin);
         CardManager.Instance.ExtendPileAccordingToSins();
         CardManager.Instance.RoundStart();
-
+        // TASK: enable ability to drag cards
         yield return null;
 
         // The cutscene is only truly finished now — customDestroy kept it alive for this. Tear it down.

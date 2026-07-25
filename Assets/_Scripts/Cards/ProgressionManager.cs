@@ -53,8 +53,10 @@ public class ProgressionManager : MonoBehaviour
         // overrideScore == true means the designer pins targetScore in the inspector, so the
         // progression only writes it when overrideScore is false.
         if (TableManager.Instance && !TableManager.Instance.overrideScore)
+        {
             TableManager.Instance.targetScore = score;
-
+            TableManager.Instance.ResetScoreForRound();
+        }
         h.Out("ProgressionManager: level", levelIn, "target score", score);
 
         return score;

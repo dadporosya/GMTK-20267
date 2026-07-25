@@ -101,8 +101,12 @@ public class CardManager : MonoBehaviour
     {
         h.Out("Deal cards");
         pile = fullPile ? Instantiate(fullPile) : null;
-        if (gameStarted) ProgressionManager.Instance.level -= 1;
-        else gameStarted = true;
+        if (!gameStarted)
+        {
+            ProgressionManager.Instance.level -= 1;
+            gameStarted = true;
+        }
+        h.Out(gameStarted);
         ProgressionManager.Instance.NextLevel();
         DealFullHand();
     }

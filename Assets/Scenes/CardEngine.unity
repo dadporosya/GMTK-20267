@@ -339,9 +339,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0d23056a670de479873b8eec61eb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionManager
-  initialScore: 2000
-  constPerLevel: 1000
-  constBoostPerLevel: 500
+  initialScore: 500
+  constPerLevel: 500
+  constBoostPerLevel: 250
   level: 1
 --- !u!1 &1279035260
 GameObject:
@@ -1874,12 +1874,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TableManager
   targetScore: 6767
   currentScore: 0
+  overrideScore: 0
   decreasingScore: 1
   scoreText: {fileID: 5373146195617258183}
   scoreChangeAnimation: {fileID: 5373146195617258182}
   minCountSpeed: 15
-  maxCountSpeed: 676.767
-  speedRampDelta: 50
+  maxCountSpeed: 1000
+  speedRampDelta: 25
   startSuits: 00000000
   startSuitCount: 02000000
   suitTextPrefab: {fileID: 1463994399330094725, guid: 5196cc2cfb264e44db061045a95bc4b6, type: 3}
@@ -3382,6 +3383,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4a2039ac57a8e6445b396c9b91c0dcea, type: 2}
   pileSuits: 00000000050000000100000004000000060000000200000003000000
   shuffleAllPiles: 1
+  primarySuitCardAdd: 5
+  secondarySuitCardAdd: 3
+  thirdSuitCardAdd: 1
   targetTables: []
   countdownTickDelay: 0.1
   dealDelay: 0.02
