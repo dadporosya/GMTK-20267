@@ -123,15 +123,20 @@ public class TalkableWithModels : Talkable
         endCutscenePlaying = false;
         endCutsceneCo = null;
 
-        if (deactivateAfter) ApplyIdleState();
+        ApplyIdleState(deactivateAfter);
     }
 
     /// <summary>
-    /// Puts the object into its post-dialogue resting state. When idleModelId is -1 the whole
-    /// object is disabled (the original behaviour); when idleModelId points at a valid model
-    /// the object stays visible showing that model instead of disappearing.
+    /// Puts the object into its post-dialogue resting state.
+    ///
+    /// When idleModelId points at a valid model the object stays visible showing that model
+    /// instead of disappearing (runs in every case, single- or multi-object).
+    ///
+    /// When idleModelId is -1 the object falls back to the original behaviour: the multi-object
+    /// path (deactivateWhenNoIdle == true) deactivates the whole object, while the single-object
+    /// path (false) leaves the object active with all its models already disabled.
     /// </summary>
-    private void ApplyIdleState()
+    private void ApplyIdleState(bool deactivateWhenNoIdle)
     {
         if (idleModelId >= 0 && idleModelId < models.Count && models[idleModelId])
         {
@@ -139,7 +144,7 @@ public class TalkableWithModels : Talkable
             ActivateModel(idleModelId);
             SetEyes(false);
         }
-        else
+        else if (deactivateWhenNoIdle)
         {
             gameObject.SetActive(false);
         }
@@ -440,7 +445,7 @@ public class TalkableWithModels : Talkable
         if (animController) animController.StopAnimations();
         DisableModels();
         ResetTransform();
-        ApplyIdleState();
+        ApplyIdleState(true);
     }
 
     // private void Update()

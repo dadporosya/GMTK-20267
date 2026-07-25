@@ -104,7 +104,8 @@ public class DialogueManager : MonoBehaviour
             return;
 
         if (Input.GetKeyDown(KeyCode.Space)
-            || Input.GetKeyDown(KeyCode.Return))
+            || Input.GetKeyDown(KeyCode.Return)
+            || Input.GetKeyDown(KeyCode.Mouse0))
         {
             DisplayNextParagraph();
         } else if (Input.GetKeyDown(KeyCode.L))
