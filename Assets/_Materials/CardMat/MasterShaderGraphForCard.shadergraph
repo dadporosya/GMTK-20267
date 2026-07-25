@@ -2145,7 +2145,7 @@
     "m_ObjectId": "0c1f76cbed724045a58721df253ece11",
     "m_Title": "Brightness",
     "m_Position": {
-        "x": 2069.0,
+        "x": 2069.000244140625,
         "y": -26.0
     }
 }
@@ -3432,12 +3432,37 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
+    "m_ObjectId": "246fbf391d14498ea53f5a46ff97d32a",
+    "m_Id": 4,
+    "m_DisplayName": "emission",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "emission",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.GroupData",
     "m_ObjectId": "249810d692c8452da075ea75fb5b2997",
     "m_Title": "Distortion",
     "m_Position": {
         "x": -841.0,
-        "y": -78.0
+        "y": -78.00000762939453
     }
 }
 
@@ -3447,8 +3472,8 @@
     "m_ObjectId": "24f43e1eeaa748e0a69bc461bd93ee9d",
     "m_Title": "Emission",
     "m_Position": {
-        "x": 509.0,
-        "y": -80.0
+        "x": 509.00048828125,
+        "y": -80.00001525878906
     }
 }
 
@@ -4545,8 +4570,8 @@
     "m_ObjectId": "4c6967307c2744af8ad65e588782037d",
     "m_Title": "Hit Effect",
     "m_Position": {
-        "x": 1076.0,
-        "y": -71.0
+        "x": 1076.000244140625,
+        "y": -71.00001525878906
     }
 }
 
@@ -5263,8 +5288,8 @@
     "m_ObjectId": "5fba691d6a7242389ba772383e527afa",
     "m_Title": "Dissolve",
     "m_Position": {
-        "x": 4263.0,
-        "y": 161.0
+        "x": 4263.00048828125,
+        "y": 133.0
     }
 }
 
@@ -5529,8 +5554,8 @@
     "m_ObjectId": "6810d97d387f45258184cf5752122767",
     "m_Title": "Hue",
     "m_Position": {
-        "x": 3368.0,
-        "y": -643.0
+        "x": 3368.00048828125,
+        "y": -643.0000610351563
     }
 }
 
@@ -7005,8 +7030,8 @@
     "m_ObjectId": "8ab7efb2ed304f4dbc6c4a08697afb17",
     "m_Title": "Twirl",
     "m_Position": {
-        "x": -3126.0,
-        "y": -749.0
+        "x": -3126.000732421875,
+        "y": -749.0000610351563
     }
 }
 
@@ -7556,7 +7581,7 @@
     "m_ObjectId": "9b1666ea337347e1bdfc73efff8a8901",
     "m_Title": "Contrast",
     "m_Position": {
-        "x": 1518.0,
+        "x": 1518.000244140625,
         "y": -25.0
     }
 }
@@ -7573,10 +7598,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 4590.0,
-            "y": 219.9998779296875,
-            "width": 235.0,
-            "height": 495.0001220703125
+            "x": 4631.99951171875,
+            "y": 192.0,
+            "width": 237.0,
+            "height": 614.9999389648438
         }
     },
     "m_Slots": [
@@ -7630,6 +7655,9 @@
         },
         {
             "m_Id": "92efffdba04744df9bb73d4f21a6d278"
+        },
+        {
+            "m_Id": "246fbf391d14498ea53f5a46ff97d32a"
         }
     ],
     "synonyms": [],
@@ -9204,8 +9232,8 @@
     "m_ObjectId": "d0535c90f03949e58bf5b0250e691b41",
     "m_Title": "Negative",
     "m_Position": {
-        "x": 2264.0,
-        "y": -668.0
+        "x": 2264.00048828125,
+        "y": -668.0000610351563
     }
 }
 
@@ -9711,8 +9739,8 @@
     "m_ObjectId": "d9f2cacffc414bff8072d4ba4e75a6df",
     "m_Title": "Saturation",
     "m_Position": {
-        "x": 2788.0,
-        "y": -677.0
+        "x": 2788.000244140625,
+        "y": -677.0000610351563
     }
 }
 
@@ -10292,8 +10320,8 @@
     "m_ObjectId": "e8bf326bdd3943fe8b8d7c752fb10b21",
     "m_Title": "Pixelation",
     "m_Position": {
-        "x": -1343.0,
-        "y": -73.0
+        "x": -1343.0001220703125,
+        "y": -73.00000762939453
     }
 }
 

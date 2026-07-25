@@ -219,7 +219,7 @@ public class SinCutsceneBase : CutSceneBase
 
     public virtual IEnumerator CutsceneEnd()
     {
-        
+        TableTopCameraController.Instance.SwitchToFree();
         
         TableManager.Instance.AddPlayedCutscene(sin);
 

@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8416f347baf640da8f30bb9479d78454, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FacedAlwaysToCamera
-  lockedAxes: 
+  lockedAxes: 02000000
   rotationOffs: {x: 0, y: 0, z: 0}
   targetCamera: {fileID: 0}
 --- !u!1 &8833318993361927774

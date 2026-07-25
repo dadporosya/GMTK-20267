@@ -23,7 +23,7 @@ public class CardManager : MonoBehaviour
 
     [Header("Add cards (folding extra cards in from additional piles)")]
     [Tooltip("How many cards the most-present / primary suit adds when extending the pile.")]
-    [SerializeField] private int primarySuitCardAdd = 5;
+    [SerializeField] private int primarySuitCardAdd = 4;
     [Tooltip("How many cards the second-most-present / secondary suit adds.")]
     [SerializeField] private int secondarySuitCardAdd = 3;
     [Tooltip("How many cards the third-most-present / third suit adds.")]
@@ -58,6 +58,13 @@ public class CardManager : MonoBehaviour
     [SerializeField] private float previewDistance = 2f;
     [Tooltip("Small delay between each preview card starting to burn, so they clear in a cascade.")]
     [SerializeField] private float previewBurnStagger = 0.05f;
+    [Tooltip("Scale multiplier applied to a preview card while the mouse hovers over it (1 = no pop).")]
+    [SerializeField] private float previewHoverScale = 1.15f;
+    [Tooltip("How far (world units) a hovered preview card is pulled toward the camera so it pops " +
+             "in front of its neighbours instead of z-fighting with them.")]
+    [SerializeField] private float previewHoverRaise = 0.15f;
+    [Tooltip("Smoothing (seconds-ish) for the hover pop. Smaller = snappier. 0 = instant.")]
+    [SerializeField] private float previewHoverSmoothing = 0.08f;
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
@@ -405,6 +412,9 @@ public class CardManager : MonoBehaviour
 
         List<Card> previewCards = new List<Card>();
         List<Transform> previewHolders = new List<Transform>();
+        // The resting scale / position of each holder, so the hover pop can ease back to them.
+        List<float> holderBaseScale = new List<float>();
+        List<Vector3> holderBasePos = new List<Vector3>();
         for (int i = 0; i < count; i++)
         {
             int row = i / cols;
@@ -438,15 +448,48 @@ public class CardManager : MonoBehaviour
 
             // Fit the card to its cell so the grid covers the camera, then shrink by CardPreviewScale.
             float fit = FitScaleToCell(card, cellWidth, cellHeight, camT.right, camT.up);
-            holder.localScale = Vector3.one * (fit * Mathf.Max(0f, CardPreviewScale));
+            float baseScale = fit * Mathf.Max(0f, CardPreviewScale);
+            holder.localScale = Vector3.one * baseScale;
 
             previewCards.Add(card);
             previewHolders.Add(holder);
+            holderBaseScale.Add(baseScale);
+            holderBasePos.Add(pos);
         }
 
-        // Wait for the player to dismiss the preview.
+        // Wait for the player to dismiss the preview. While waiting, pop whichever card the mouse is
+        // hovering (scale it up and pull it toward the camera so it reads on top of its neighbours).
         yield return new WaitForEndOfFrame();   // ignore the click/press that opened this frame
-        while (!DismissPreviewPressed()) yield return null;
+        while (!DismissPreviewPressed())
+        {
+            int hoveredIndex = PreviewCardUnderMouse(cam, previewCards);
+
+            for (int i = 0; i < previewHolders.Count; i++)
+            {
+                Transform holder = previewHolders[i];
+                if (!holder) continue;
+
+                bool isHovered = i == hoveredIndex;
+                float targetScale = holderBaseScale[i] * (isHovered ? previewHoverScale : 1f);
+                Vector3 targetPos = isHovered
+                    ? holderBasePos[i] - camT.forward * previewHoverRaise   // toward the camera
+                    : holderBasePos[i];
+
+                if (previewHoverSmoothing <= 0f)
+                {
+                    holder.localScale = Vector3.one * targetScale;
+                    holder.position = targetPos;
+                }
+                else
+                {
+                    float t = 1f - Mathf.Exp(-Time.deltaTime / previewHoverSmoothing);
+                    holder.localScale = Vector3.Lerp(holder.localScale, Vector3.one * targetScale, t);
+                    holder.position = Vector3.Lerp(holder.position, targetPos, t);
+                }
+            }
+
+            yield return null;
+        }
 
         // Burn them all, staggered, and wait for every burn to finish.
         int running = 0;
@@ -462,6 +505,31 @@ public class CardManager : MonoBehaviour
         // Clean up the now-empty holders left behind after each card destroyed itself.
         foreach (Transform holder in previewHolders)
             if (holder) Destroy(holder.gameObject);
+    }
+
+    /// <summary>
+    /// Raycasts from <paramref name="cam"/> through the mouse and returns the index (into
+    /// <paramref name="previewCards"/>) of the nearest preview card under the pointer, or -1 if none.
+    /// Uses RaycastAll so a card behind another still resolves to the closest one, and matches hits
+    /// back to the preview list (ignoring any other colliders in the scene).
+    /// </summary>
+    private static int PreviewCardUnderMouse(Camera cam, List<Card> previewCards)
+    {
+        if (!cam) return -1;
+
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, 1000f, ~0, QueryTriggerInteraction.Ignore);
+        if (hits.Length == 0) return -1;
+
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+        foreach (RaycastHit hit in hits)
+        {
+            Card card = hit.collider.GetComponentInParent<Card>();
+            if (!card) continue;
+            int idx = previewCards.IndexOf(card);
+            if (idx >= 0) return idx;   // nearest preview card wins
+        }
+        return -1;
     }
 
     /// <summary>True the moment the player clicks or presses Enter / Space to dismiss the preview.</summary>
