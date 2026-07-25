@@ -395,9 +395,10 @@ public class Card : MonoBehaviour
         
         SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {
-            R.PROJECT.Audio.Cards.Activate.activate1,
-            R.PROJECT.Audio.Cards.Activate.activate2,
-            R.PROJECT.Audio.Cards.Activate.activate3,
+            // R.PROJECT.Audio.Cards.Activate.activate1,
+            // R.PROJECT.Audio.Cards.Activate.activate2,
+            // R.PROJECT.Audio.Cards.Activate.activate3,
+            
         });
         StartCoroutine(activateAnimController.PlayAnimations());
         

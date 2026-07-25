@@ -34,7 +34,8 @@ public class CardManager : MonoBehaviour
     [HideInInspector] public Card currentPlacedCard;
 
     [SerializeField] private List<CardDataBase> startCards = new List<CardDataBase>();
-    
+
+    private bool gameStarted = false;
     
     [Header("Card Appearance")]
     public List<Texture2D> cardTextures = new List<Texture2D>();
@@ -92,6 +93,8 @@ public class CardManager : MonoBehaviour
     {
         h.Out("Deal cards");
         pile = fullPile ? Instantiate(fullPile) : null;
+        if (gameStarted) ProgressionManager.Instance.NextLevel();
+        else gameStarted = true;
         DealFullHand();
     }
 
