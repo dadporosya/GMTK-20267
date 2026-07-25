@@ -44,7 +44,11 @@ public class SinCutsceneBase : CutSceneBase
     public override void Init()
     {
         base.Init();
-        
+
+        // A sin cutscene's real end point is the dialogue closing, which happens long after the step
+        // sequence finishes. Keep the instance alive until DialogueEnd runs and calls DestroyCutscene().
+        customDestroy = true;
+
         List<IEnumerator> rawSteps = new List<IEnumerator>()
         {
             DefaultStep(),
@@ -197,7 +201,7 @@ public class SinCutsceneBase : CutSceneBase
         void OnDialogueEnd()
         {
             h.Out("Dialogue End Event BEBRA");
-            StartCoroutine(DialogueEnd());
+            StartCoroutine(CutsceneEnd());
             DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
         }
         
@@ -207,14 +211,20 @@ public class SinCutsceneBase : CutSceneBase
         yield return null;
         // 
     }
-    
-    public virtual IEnumerator DialogueEnd()
+
+    public virtual IEnumerator CutsceneEnd()
     {
-        if (!TableTopCameraController.Instance) yield break;
-        TableTopCameraController.Instance.SwitchToWindowView();
-        TableManager.Instance.AddPlayedCutscene(sin);
-        CardManager.Instance.RoundStart();
+        if (TableTopCameraController.Instance)
+        {
+            TableTopCameraController.Instance.SwitchToHandView();
+            TableManager.Instance.AddPlayedCutscene(sin);
+            CardManager.Instance.RoundStart();
+        }
+
         yield return null;
+
+        // The cutscene is only truly finished now — customDestroy kept it alive for this. Tear it down.
+        DestroyCutscene();
     }
 
 }
