@@ -22,6 +22,9 @@ public class Taximeter : MonoBehaviour
     [SerializeField] private float currentSpeed;         // instantaneous speed, updated every frame
     [SerializeField] private bool  acceleration;
 
+    [Header("Road")]
+    [SerializeField] private float roadSpeedScale = 1f;  // km/h -> road units
+
     [Header("Display")]
     [SerializeField] private TMP_Text text;
     [SerializeField] private string  label = " km";
@@ -70,6 +73,7 @@ public class Taximeter : MonoBehaviour
 
         // Instantaneous speed (for display / other systems to read).
         currentSpeed = acceleration ? Mathf.Lerp(minSpeed, maxSpeed, t) : maxSpeed;
+        ApplyRoadSpeed();
 
         // Distance already travelled = integral of the speed curve, normalized so it
         // equals totalKm at t = 1. km left is the remainder.
@@ -82,6 +86,7 @@ public class Taximeter : MonoBehaviour
         {
             kmValue      = 0f;
             currentSpeed = maxSpeed;   // both profiles are at maxSpeed by the end
+            ApplyRoadSpeed();
             running      = false;
             UpdateText();
 
@@ -103,6 +108,12 @@ public class Taximeter : MonoBehaviour
         float area  = minSpeed * t + (maxSpeed - minSpeed) * t * t * 0.5f;
         float total = (minSpeed + maxSpeed) * 0.5f;
         return total <= 0f ? t : area / total;   // fallback if both speeds are 0
+    }
+
+    /// <summary>Pushes the current speed onto the road manager.</summary>
+    private void ApplyRoadSpeed()
+    {
+            EndlessRoadManager.Instance.speed = currentSpeed * roadSpeedScale;
     }
 
     private void UpdateText()
