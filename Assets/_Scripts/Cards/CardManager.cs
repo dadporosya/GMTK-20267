@@ -19,6 +19,14 @@ public class CardManager : MonoBehaviour
     public Dictionary<CP.Suit, ScriptableObjectContainer> additionalPiles = new Dictionary<CP.Suit, ScriptableObjectContainer>();
     [SerializeField] private bool shuffleAllPiles = false;
 
+    [Header("Add cards (folding extra cards in from additional piles)")]
+    [Tooltip("How many cards the most-present / primary suit adds when extending the pile.")]
+    [SerializeField] private int primarySuitCardAdd = 5;
+    [Tooltip("How many cards the second-most-present / secondary suit adds.")]
+    [SerializeField] private int secondarySuitCardAdd = 3;
+    [Tooltip("How many cards the third-most-present / third suit adds.")]
+    [SerializeField] private int thirdSuitCardAdd = 1;
+
     [Header("Turn effects")]
     [Tooltip("Tables whose placed cards receive turn effects and count down each time a card is played.")]
     public List<PlacingArea> targetTables = new List<PlacingArea>();
@@ -93,8 +101,9 @@ public class CardManager : MonoBehaviour
     {
         h.Out("Deal cards");
         pile = fullPile ? Instantiate(fullPile) : null;
-        if (gameStarted) ProgressionManager.Instance.NextLevel();
+        if (gameStarted) ProgressionManager.Instance.level -= 1;
         else gameStarted = true;
+        ProgressionManager.Instance.NextLevel();
         DealFullHand();
     }
 
@@ -291,5 +300,102 @@ public class CardManager : MonoBehaviour
                 if (card) result.Add(card);
         }
         return result;
+    }
+
+    /// <summary>
+    /// Folds extra cards from the <see cref="additionalPiles"/> into both <see cref="fullPile"/>
+    /// and the current <see cref="pile"/>. For each (suit -> count) entry, <c>count</c> random
+    /// cards are pulled from the additional pile matching that suit and moved into play (removed
+    /// from the additional pile so each extra card is only ever added once).
+    ///
+    /// If the suit's own additional pile is empty (or missing), a random non-empty additional
+    /// pile is used instead. When every additional pile is empty, nothing happens.
+    /// </summary>
+    public void AddNewCards(Dictionary<CP.Suit, int> cardsToAdd, bool alert = true)
+    {
+        if (cardsToAdd == null) return;
+
+        foreach (var kv in cardsToAdd)
+        {
+            for (int i = 0; i < kv.Value; i++)
+            {
+                ScriptableObjectContainer source = PickSourcePile(kv.Key);
+                if (source == null) break;   // all additional piles empty — nothing left to add
+
+                ScriptableObject card = h.RandChoice(source.scriptableObjects);
+                source.scriptableObjects.Remove(card);
+
+                if (fullPile) fullPile.scriptableObjects.Add(card);
+                if (pile) pile.scriptableObjects.Add(card);
+            }
+        }
+
+        // bool alert functionality will be added later
+    }
+
+    /// <summary>
+    /// Convenience overload of <see cref="AddNewCards(Dictionary{CP.Suit,int},bool)"/> that adds
+    /// <see cref="primarySuitCardAdd"/> / <see cref="secondarySuitCardAdd"/> /
+    /// <see cref="thirdSuitCardAdd"/> cards for the given suits. Any suit left null is skipped.
+    /// </summary>
+    public void AddNewCards(CP.Suit? primarySuit = null, CP.Suit? secondarySuit = null,
+                            CP.Suit? thirdSuit = null, bool alert = true)
+    {
+        var cardsToAdd = new Dictionary<CP.Suit, int>();
+        if (primarySuit.HasValue)   cardsToAdd[primarySuit.Value]   = primarySuitCardAdd;
+        if (secondarySuit.HasValue) cardsToAdd[secondarySuit.Value] = secondarySuitCardAdd;
+        if (thirdSuit.HasValue)     cardsToAdd[thirdSuit.Value]     = thirdSuitCardAdd;
+
+        AddNewCards(cardsToAdd, alert);
+    }
+
+    /// <summary>
+    /// Extends the pile based on which sins are most present on the table
+    /// (<see cref="TableManager.suits"/>): the most-present suit adds <see cref="primarySuitCardAdd"/>
+    /// cards, the second <see cref="secondarySuitCardAdd"/>, the third <see cref="thirdSuitCardAdd"/>.
+    /// Ties are broken randomly, and suits that aren't present at all are ignored.
+    /// </summary>
+    public void ExtendPileAccordingToSins()
+    {
+        if (!TableManager.Instance) return;
+
+        // Only rank suits that are actually present.
+        var ranked = new List<KeyValuePair<CP.Suit, int>>();
+        foreach (var kv in TableManager.Instance.suits)
+            if (kv.Value > 0) ranked.Add(kv);
+
+        // Shuffle first so equal counts end up in a random relative order, then sort by count
+        // descending — that way ties are resolved randomly.
+        for (int i = ranked.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (ranked[i], ranked[j]) = (ranked[j], ranked[i]);
+        }
+        ranked.Sort((a, b) => b.Value.CompareTo(a.Value));
+
+        CP.Suit? primary   = ranked.Count > 0 ? ranked[0].Key : (CP.Suit?)null;
+        CP.Suit? secondary = ranked.Count > 1 ? ranked[1].Key : (CP.Suit?)null;
+        CP.Suit? third     = ranked.Count > 2 ? ranked[2].Key : (CP.Suit?)null;
+
+        AddNewCards(primary, secondary, third);
+    }
+
+    /// <summary>
+    /// Picks the additional pile to draw an extra card from: the pile matching <paramref name="suit"/>
+    /// when it still has cards, otherwise a random non-empty additional pile. Returns null when
+    /// every additional pile is empty.
+    /// </summary>
+    private ScriptableObjectContainer PickSourcePile(CP.Suit suit)
+    {
+        if (additionalPiles.TryGetValue(suit, out var matching)
+            && matching && matching.scriptableObjects.Count > 0)
+            return matching;
+
+        var nonEmpty = new List<ScriptableObjectContainer>();
+        foreach (var p in additionalPiles.Values)
+            if (p && p.scriptableObjects.Count > 0) nonEmpty.Add(p);
+
+        if (nonEmpty.Count == 0) return null;
+        return h.RandChoice(nonEmpty);
     }
 }

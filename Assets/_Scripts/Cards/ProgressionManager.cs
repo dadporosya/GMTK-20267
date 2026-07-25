@@ -50,7 +50,9 @@ public class ProgressionManager : MonoBehaviour
                     + constPerLevel * (levelIn - 1)
                     + constBoostPerLevel * Mathf.Max(0, levelIn - 2);
 
-        if (TableManager.Instance)
+        // overrideScore == true means the designer pins targetScore in the inspector, so the
+        // progression only writes it when overrideScore is false.
+        if (TableManager.Instance && !TableManager.Instance.overrideScore)
             TableManager.Instance.targetScore = score;
 
         h.Out("ProgressionManager: level", levelIn, "target score", score);

@@ -11,6 +11,10 @@ public class TableManager : MonoBehaviour
     public int targetScore=100;
     public int currentScore=0;
 
+    [Tooltip("If false (default), targetScore is completely determined by ProgressionManager. " +
+             "If true, targetScore keeps its inspector value and ProgressionManager leaves it alone.")]
+    public bool overrideScore = false;
+
     [Tooltip("If true, gained points DECREASE the score and the player must bring it down to 0 to trigger onScoreReached. If false, the score rises toward targetScore as before.")]
     public bool decreasingScore = false;
 
@@ -64,10 +68,15 @@ public class TableManager : MonoBehaviour
     public Dictionary<CP.Suit, CutSceneBase> SinCutScenes = new Dictionary<CP.Suit, CutSceneBase>();
     public List<CP.Suit> playedCutScenes = new List<CP.Suit>();
     
-    private void Start()
+    // Created in Awake (not Start) so ProgressionManager can reliably reach TableManager.Instance
+    // from its own Start, regardless of script execution order.
+    private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
+    }
 
+    private void Start()
+    {
         for (int i = 0; i < rawSinCutscenes.Count; i++)
         {
             SinCutScenes.Add(suitsForCutscenes[i], rawSinCutscenes[i]);
@@ -76,8 +85,8 @@ public class TableManager : MonoBehaviour
         if (scoreChangeAnimation == null && scoreText != null)
             scoreChangeAnimation = scoreText.GetComponentInChildren<TextChangeAnimation>();
 
-        if (decreasingScore) currentScore = targetScore;
-        
+        // currentScore starts from the inspector value; targetScore is owned by ProgressionManager
+        // (unless overrideScore is true).
         _displayedScore = currentScore;
         RefreshScoreText(currentScore);
 

@@ -400,7 +400,7 @@ public class Card : MonoBehaviour
             // R.PROJECT.Audio.Cards.Activate.activate3,
             R.PROJECT.Audio.Cards.Activate.activateFaded1,
             
-        });
+        }, randomPitchRange: new Vector2(0.9f, 1.1f));
         StartCoroutine(activateAnimController.PlayAnimations());
         
         TableManager.Instance.AddSuits(cardData.suits);
