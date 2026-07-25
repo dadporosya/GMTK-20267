@@ -13,7 +13,7 @@ public class DialogueManager : MonoBehaviour
     public GameObject dialogueWindow;
     public Image portraitImage;
     public TextMeshProUGUI portraitTitle;
-    public TMP_Text dialogueText; // TASK make it TMP_Text everywhere
+    public TMP_Text dialogueText;
     private TextAnimation textAnimationComp;
     [HideInInspector] public ScalingText portraitScalingTitle;
     [HideInInspector] public ScalingText dialogueScalingText;
@@ -115,7 +115,7 @@ public class DialogueManager : MonoBehaviour
 
     public void SetText(
         ScalingText scalingHolder,
-        TextMeshProUGUI originalHolder, 
+        TMP_Text originalHolder,
         string text)
     {
         if (scalingHolder)
@@ -250,7 +250,7 @@ public class DialogueManager : MonoBehaviour
     private IEnumerator TypingDialogue(
         string textIn,
         ScalingText scalingTextBox,
-        TextMeshProUGUI defaultTextBox,
+        TMP_Text defaultTextBox,
         List<AudioClip> audioClips=null
         )
     {
