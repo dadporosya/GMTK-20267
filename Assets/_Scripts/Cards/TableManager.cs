@@ -57,10 +57,21 @@ public class TableManager : MonoBehaviour
     private readonly Dictionary<CP.Suit, TextChangeAnimation> _suitAnims = new Dictionary<CP.Suit, TextChangeAnimation>();
     private readonly Dictionary<CP.Suit, Tween> _suitStopTweens = new Dictionary<CP.Suit, Tween>();
 
+    [Header("On Score Reached Stuff")]
+    [SerializeField] private List<CutSceneBase> rawSinCutscenes;
+
+    [SerializeField] private List<CP.Suit> suitsForCutscenes;
+    public Dictionary<CP.Suit, CutSceneBase> SinCutScenes = new Dictionary<CP.Suit, CutSceneBase>();
+    public List<CP.Suit> playedCutScenes = new List<CP.Suit>();
+    
     private void Start()
     {
         h.CreateStaticInstance(this, ref Instance);
-        h.Out(Instance);
+
+        for (int i = 0; i < rawSinCutscenes.Count; i++)
+        {
+            SinCutScenes.Add(suitsForCutscenes[i], rawSinCutscenes[i]);
+        }
 
         if (scoreChangeAnimation == null && scoreText != null)
             scoreChangeAnimation = scoreText.GetComponentInChildren<TextChangeAnimation>();
@@ -73,6 +84,14 @@ public class TableManager : MonoBehaviour
         BuildSuitLines();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            OnScoreReached();
+        }
+    }
+    
     // Spawns one suit line (TMP + TextChangeAnimation) per suit and stacks them vertically.
     private void BuildSuitLines()
     {
@@ -207,8 +226,14 @@ public class TableManager : MonoBehaviour
 
     public void OnScoreReached()
     {
+        
         h.Out("ScoreReached");
         onScoreReached?.Invoke();
+        
+        /// TASK:
+        /// Get most played suit (the suit with the largest suit count in suits dictionary),
+        /// and play the matching cutscene from SinCutscenes using: CutSceneManager.Instance.RunCutscene(cutscene);
+        
     }
 
     private void RefreshScoreText(int value)
