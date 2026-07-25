@@ -47,12 +47,12 @@ MonoBehaviour:
   runOnStart: 0
   sin: 0
   placeholderDialogue: {fileID: 11400000, guid: 0b6556f3e56a4734ca35e2b2a2697c05, type: 2}
-  delayAfterWin: 2
+  delayAfterWin: 0
   burnCardStagger: 0.08
-  waitForBurnsToFinish: 0
+  waitForBurnsToFinish: 1
   environmentLight: {fileID: 0}
   lightColor: {r: 0.9056604, g: 0.75536186, b: 0.11534355, a: 1}
   colorFadeDuration: 3
   delayAfterColorChange: 1
-  useSinColor: 1
+  useSinColor: 0
   sinDialogue: {fileID: 11400000, guid: 9cd94644396d2844a96182a4b788490e, type: 2}

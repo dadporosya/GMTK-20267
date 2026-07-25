@@ -87,6 +87,7 @@ public class CardManager : MonoBehaviour
     /// </summary>
     public void RoundStart()
     {
+        h.Out("Deal cards");
         pile = fullPile ? Instantiate(fullPile) : null;
         DealFullHand();
     }

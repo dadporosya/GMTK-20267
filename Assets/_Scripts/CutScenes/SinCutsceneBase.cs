@@ -213,6 +213,7 @@ public class SinCutsceneBase : CutSceneBase
         if (!TableTopCameraController.Instance) yield break;
         TableTopCameraController.Instance.SwitchToWindowView();
         TableManager.Instance.AddPlayedCutscene(sin);
+        CardManager.Instance.RoundStart();
         yield return null;
     }
 
