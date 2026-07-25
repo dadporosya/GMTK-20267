@@ -711,7 +711,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 11111KM
+  m_text: 3.33km
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 70718ca6a2f773840859a60208cbcea0, type: 2}
   m_sharedMaterial: {fileID: -3462350358890353944, guid: 70718ca6a2f773840859a60208cbcea0, type: 2}
@@ -738,7 +738,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5.3
+  m_fontSize: 6.7
   m_fontSizeBase: 7
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3759,8 +3759,10 @@ MonoBehaviour:
   maxSpeed: 333
   currentSpeed: 30
   acceleration: 1
+  roadSpeedScale: 1
   text: {fileID: 503708338}
   label: KM
+  decimalPlaces: 2
   kmValue: 0
   timeInMinutes: 1
 --- !u!4 &3570303577819389374
