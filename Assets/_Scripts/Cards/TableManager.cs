@@ -229,11 +229,30 @@ public class TableManager : MonoBehaviour
         
         h.Out("ScoreReached");
         onScoreReached?.Invoke();
-        
-        /// TASK:
-        /// Get most played suit (the suit with the largest suit count in suits dictionary),
-        /// and play the matching cutscene from SinCutscenes using: CutSceneManager.Instance.RunCutscene(cutscene);
-        
+
+        // Find the most played suit (largest count in the suits dictionary).
+        if (suits.Count == 0) return;
+
+        CP.Suit mostPlayed = default;
+        int bestCount = int.MinValue;
+        bool found = false;
+        foreach (var kvp in suits)
+        {
+            if (kvp.Value > bestCount)
+            {
+                bestCount = kvp.Value;
+                mostPlayed = kvp.Key;
+                found = true;
+            }
+        }
+
+        // Play the matching cutscene for that suit, if one is registered.
+        if (found && SinCutScenes.TryGetValue(mostPlayed, out CutSceneBase cutscene) && cutscene != null)
+        {
+            CutSceneManager.Instance.RunCutscene(cutscene);
+            if (!playedCutScenes.Contains(mostPlayed))
+                playedCutScenes.Add(mostPlayed);
+        }
     }
 
     private void RefreshScoreText(int value)
