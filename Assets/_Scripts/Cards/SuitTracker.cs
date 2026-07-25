@@ -53,6 +53,7 @@ public class SuitTracker : MonoBehaviour
     /// </summary>
     public void Initialize(CP.Suit suit, int count = 0)
     {
+        h.Out("Tracker INit ", suit, count);
         ResolveRefs();
         targetSuit = suit;
 

@@ -40,6 +40,7 @@ public class TableManager : MonoBehaviour
     [SerializeField] private List<SuitTracker> rawSuitTrackers = new List<SuitTracker>();
     // Built on Start from rawSuitTrackers: suit -> its tracker.
     public Dictionary<CP.Suit, SuitTracker> suitTrackers = new Dictionary<CP.Suit, SuitTracker>();
+    public Transform suitTrackerParent;
 
     public UnityEvent onScoreReached;
 
@@ -80,6 +81,18 @@ public class TableManager : MonoBehaviour
         _displayedScore = currentScore;
         RefreshScoreText(currentScore);
 
+        if (suitTrackerParent)
+        {
+            foreach (Transform suitTracker in suitTrackerParent)
+            {
+                if (suitTracker.TryGetComponent(out SuitTracker tracker)) continue;
+                if (rawSuitTrackers.Contains(tracker)) continue;
+                rawSuitTrackers.Add(tracker);
+            }
+        }
+        // rawSuitTrackers = FindObjectsOfType<SuitTracker>().ToList();
+        
+        
         BuildSuitTrackers();
     }
 
@@ -114,9 +127,15 @@ public class TableManager : MonoBehaviour
 
             suits[suit] = startValue;
 
-            // Trackers always start at 0, regardless of the suit's seeded start count.
-            if (suitTrackers.TryGetValue(suit, out SuitTracker tracker) && tracker != null)
-                tracker.Initialize(suit, 0);
+            foreach (var kv in suitTrackers)
+            {
+                if (kv.Value)
+                {
+                    kv.Value.Initialize(suit, suits[suit]);
+                }
+            }
+            
+                
         }
     }
 

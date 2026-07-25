@@ -37,6 +37,10 @@ public class CardDragController : MonoBehaviour
     [SerializeField] private LayerMask cardMask = ~0;
     [Tooltip("Layer(s) of the table surface collider. Defines where a card may be dropped.")]
     [SerializeField] private LayerMask tableMask = ~0;
+    [Tooltip("Only colliders whose GameObject (or a parent) carries this tag count as a drop " +
+             "surface. Stops cards magnetizing to any random mesh/collider that happens to be on " +
+             "tableMask. Leave empty to accept any non-card collider (old behaviour).")]
+    [SerializeField] private string dropSurfaceTag = "Table";
 
     [Header("Drag feel")]
     [Tooltip("Fixed distance in front of the camera the card floats at while being dragged. " +
@@ -411,10 +415,33 @@ public class CardDragController : MonoBehaviour
             // already disabled for the drag, so this only filters OTHER cards.)
             if (hits[i].collider.GetComponentInParent<Card>()) continue;
 
+            // Only genuine table surfaces count. A collider qualifies when its GameObject (or a
+            // parent) carries dropSurfaceTag — this is what stops the card magnetizing to any
+            // stray mesh/collider that merely sits on tableMask.
+            if (!HasDropSurfaceTag(hits[i].collider)) continue;
+
             surfaceHit = hits[i];
             return true;
         }
 
+        return false;
+    }
+
+    /// <summary>
+    /// True when <paramref name="col"/>'s GameObject — or any ancestor — is tagged with
+    /// <see cref="dropSurfaceTag"/>. An empty/whitespace tag means "no tag requirement" and always
+    /// returns true (restores the old accept-any-non-card behaviour).
+    /// </summary>
+    private bool HasDropSurfaceTag(Collider col)
+    {
+        if (string.IsNullOrWhiteSpace(dropSurfaceTag)) return true;
+
+        Transform t = col.transform;
+        while (t)
+        {
+            if (t.CompareTag(dropSurfaceTag)) return true;
+            t = t.parent;
+        }
         return false;
     }
 
