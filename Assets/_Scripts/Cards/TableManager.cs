@@ -28,6 +28,9 @@ public class TableManager : MonoBehaviour
     [Tooltip("Sprite renderer using Tiled draw mode. Its tile size height is scaled to reflect score progress " +
              "toward the goal: full when the goal is reached, empty at the start of the round.")]
     [SerializeField] private SpriteRenderer angelFill;
+    [Tooltip("If true, angelFill is tinted with the color of the currently most frequent sin (suit). " +
+             "The renderer's existing alpha is preserved.")]
+    [SerializeField] private bool sinColorFill = false;
     // Full tile-size height captured on Start; the shown height is this * progress (0..1).
     private float _angelFillFullHeight;
 
@@ -328,6 +331,7 @@ public class TableManager : MonoBehaviour
     }
 
     // Scales the angelFill tile-size height to match score progress: 0 -> empty, 1 -> full.
+    // When sinColorFill is on, also tints it with the most frequent sin's color (keeping alpha).
     private void UpdateAngelFill(int score)
     {
         if (angelFill == null) return;
@@ -335,6 +339,35 @@ public class TableManager : MonoBehaviour
         Vector2 size = angelFill.size;
         size.y = _angelFillFullHeight * GetScoreProgress(score);
         angelFill.size = size;
+
+        if (sinColorFill && TryGetMostFrequentSuit(out CP.Suit topSuit))
+        {
+            Color color = CP.SuitColor(topSuit);
+            color.a = angelFill.color.a; // keep the alpha it already had
+            angelFill.color = color;
+        }
+    }
+
+    // Finds the suit with the highest count. Returns false if no suits are tracked yet.
+    // Ties resolve to whichever tied suit is encountered first.
+    private bool TryGetMostFrequentSuit(out CP.Suit topSuit)
+    {
+        topSuit = default;
+        if (suits.Count == 0) return false;
+
+        int bestCount = int.MinValue;
+        bool found = false;
+        foreach (var kvp in suits)
+        {
+            if (kvp.Value > bestCount)
+            {
+                bestCount = kvp.Value;
+                topSuit = kvp.Key;
+                found = true;
+            }
+        }
+
+        return found;
     }
 
     public void AddSuits(List<CP.Suit> suitsToAdd)
@@ -391,5 +424,9 @@ public class TableManager : MonoBehaviour
         int count = suits.TryGetValue(suit, out int value) ? value : 0;
         if (suitTrackers.TryGetValue(suit, out SuitTracker tracker) && tracker != null)
             tracker.SetCount(count);
+
+        // The leading sin may have changed, so re-apply the fill tint (uses the shown score).
+        if (sinColorFill)
+            UpdateAngelFill(_displayedScore);
     }
 }
