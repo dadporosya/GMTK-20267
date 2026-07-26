@@ -1997,6 +1997,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 69b40ef7ee16c834c844b3fa26e0fdda, type: 3}
+--- !u!1 &1375279500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1375279501}
+  m_Layer: 0
+  m_Name: CAR END POINT
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1375279501
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375279500}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -9.01, y: -0.04, z: -9.5}
+  m_LocalScale: {x: 3.8373, y: 3.8373, z: 3.8373}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1384954252
 GameObject:
   m_ObjectHideFlags: 0
@@ -5381,7 +5412,7 @@ Transform:
   m_GameObject: {fileID: 919132148362695385}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.01, y: -0.04, z: -9.5}
+  m_LocalPosition: {x: -9.01, y: -0.04, z: -56.38}
   m_LocalScale: {x: 3.8373, y: 3.8373, z: 3.8373}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -6264,6 +6295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543450652353529955}
   - component: {fileID: 919132148362695386}
+  - component: {fileID: 919132148362695387}
   m_Layer: 0
   m_Name: carexterior
   m_TagString: Untagged
@@ -6302,6 +6334,23 @@ MonoBehaviour:
   strength: 0.008
   frequency: 25
   initialState: {x: 0, y: 0, z: 0}
+--- !u!114 &919132148362695387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148362695385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77d0ab0ca1bce944f87288f9e6211e83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Car
+  animEndPoint: {fileID: 1375279501}
+  initSpeed: 67
+  movementEase: 9
+  wheelRadius: 0.5
+  wheels: []
 --- !u!4 &928045505417496099
 Transform:
   m_ObjectHideFlags: 0
@@ -28208,6 +28257,7 @@ SceneRoots:
   - {fileID: 1901041845}
   - {fileID: 8664635873693453186}
   - {fileID: 7576025636398618267}
+  - {fileID: 1375279501}
   - {fileID: 543450652353529955}
   - {fileID: 1342113054}
   - {fileID: 519850928}

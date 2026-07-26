@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
@@ -24,17 +25,28 @@ public class Car : MonoBehaviour
     [Tooltip("Auto-filled in Start() with every child tagged 'wheel'.")]
     public List<GameObject> wheels = new List<GameObject>();
 
+    [SerializeField] private Transform carStartPoint;
+    
     void Start()
     {
         // Find every child GameObject tagged "wheel" and assign them to the list.
         wheels.Clear();
         foreach (Transform t in GetComponentsInChildren<Transform>(true))
         {
-            if (t.CompareTag("wheel"))
+            if (t.CompareTag("Wheel"))
                 wheels.Add(t.gameObject);
         }
 
         h.Out($"Car '{name}' found {wheels.Count} wheel(s).");
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            transform.position = carStartPoint.position;
+            MoveToThePoint();
+        }
     }
 
     /// <summary>
