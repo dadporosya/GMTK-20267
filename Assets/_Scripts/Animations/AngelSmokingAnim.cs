@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AngelSmokingAnim : MonoBehaviour
@@ -58,12 +59,18 @@ public class AngelSmokingAnim : MonoBehaviour
 
       StartCoroutine(modelChangeAnim.Play());
       ChangeModel(ModelState.SmokingPrep);
-      yield return new WaitForSeconds(gapBetweenFrames);
+      SFXManager.Instance.PlayRandomClip(new List<AudioClip>(
+         ){R.PROJECT.Audio.smokesound},
+         volumeIn:1f);
+      yield return new WaitForSeconds(3.7f);
 
       StartCoroutine(modelChangeAnim.Play());
       ChangeModel(ModelState.Smoked);
       SpawnSmokeParticles();
-      yield return new WaitForSeconds(gapBetweenFrames*2);
+      SFXManager.Instance.PlayRandomClip(new List<AudioClip>(
+      ){R.PROJECT.Audio.exhalesound},
+      volumeIn:1f);
+      yield return new WaitForSeconds(4f);
 
       StartCoroutine(modelChangeAnim.Play());
       ChangeModel(ModelState.Default);

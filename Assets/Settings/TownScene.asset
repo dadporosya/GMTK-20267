@@ -679,10 +679,10 @@ MonoBehaviour:
   active: 1
   m_Radius:
     m_OverrideState: 1
-    m_Value: 0.078
+    m_Value: 0.0333
   m_Radial:
     m_OverrideState: 1
-    m_Value: 0.065
+    m_Value: 0
   m_Samples:
     m_OverrideState: 1
     m_Value: 4

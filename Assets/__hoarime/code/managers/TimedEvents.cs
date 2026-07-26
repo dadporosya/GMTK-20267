@@ -9,7 +9,8 @@ public class TimedEvents : MonoBehaviour
     [SerializeField] float[] timeMarks;
     [SerializeField] UnityEvent[] events;
 
-    private Monologue monologue;
+    [SerializeField] Monologue monologueAngel;
+    [SerializeField] Monologue monologuePlayer;
 
     private float currentTime;
     private int currentTimeMark;
@@ -32,8 +33,7 @@ public class TimedEvents : MonoBehaviour
     private void Awake()
     {
 
-        monologue = FindFirstObjectByType<Monologue>();
-        waitUntilCashed = new WaitUntil(() => !monologue.isMonologuing && !timePaused);
+        waitUntilCashed = new WaitUntil(() => !monologuePlayer.isMonologuing && !monologueAngel.isMonologuing && !timePaused);
     }
 
     private IEnumerator Timelapse()

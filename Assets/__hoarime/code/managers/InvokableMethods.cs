@@ -47,18 +47,26 @@ public class InvokableMethods : MonoBehaviour
 
 
     private Camera mainCam;
-    private Monologue monologue;
+    [SerializeField] Monologue monologuePlayer;
+    [SerializeField] Monologue monologueAngel;
+
 
     private void Awake()
     {
         AudioListener.volume = 1;
-        monologue = FindFirstObjectByType<Monologue>();
         mainCam = Camera.main;
     }
-    public void SendMonologueText(string text)
+    public void SendMonologueTextAngel(string text)
     {
         string[] separatedText = SplitString(text, textSeparator);
-        monologue.MonologueText(separatedText);
+        monologueAngel.MonologueText(separatedText);
+        Debug.Log("TESt");
+    }
+
+    public void SendMonologueTextPlayer(string text)
+    {
+        string[] separatedText = SplitString(text, textSeparator);
+        monologuePlayer.MonologueText(separatedText);
     }
 
     public void LoadSceneByName(string name)

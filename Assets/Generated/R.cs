@@ -425,17 +425,38 @@ public static class R
 
                 public static object[] All => _all.Value;
             }
+            public static class sfx
+            {
+                public static AudioClip taxometersound => Resources.Load<AudioClip>("PROJECT/Audio/sfx/taxometersound");
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                        taxometersound,
+                    };
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
+            public static AudioClip exhalesound => Resources.Load<AudioClip>("PROJECT/Audio/exhalesound");
+            public static AudioClip smokesound => Resources.Load<AudioClip>("PROJECT/Audio/smokesound");
 
             private static readonly System.Lazy<object[]> _all = new(() =>
             {
                 var list = new System.Collections.Generic.List<object>
                 {
+                    exhalesound,
+                    smokesound,
                 };
 
                 list.AddRange(AndreOst.All);
                 list.AddRange(Cards.All);
                 list.AddRange(Clock.All);
                 list.AddRange(Fire.All);
+                list.AddRange(sfx.All);
 
                 return list.ToArray();
             });
