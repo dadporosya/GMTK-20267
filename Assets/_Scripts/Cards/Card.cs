@@ -398,6 +398,9 @@ public class Card : MonoBehaviour
         yield return null;
         if (!cardData) yield break;
         
+        int vp = cardData.GenerateVP();
+        Vector2 desiredPitch = vp == 0 ? new Vector2(0.333f, 0.67f): new Vector2(0.9f, 1.1f);
+        
         SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {
             // R.PROJECT.Audio.Cards.Activate.activate1,
@@ -405,12 +408,12 @@ public class Card : MonoBehaviour
             // R.PROJECT.Audio.Cards.Activate.activate3,
             R.PROJECT.Audio.Cards.Activate.activateFaded1,
             
-        }, randomPitchRange: new Vector2(0.9f, 1.1f));
+        }, randomPitchRange: desiredPitch);
         StartCoroutine(activateAnimController.PlayAnimations());
 
         Color brightColor = Color.Lerp(CP.SuitColors[cardData.suits[0]], Color.white, 0.4f);
         
-        int vp = cardData.GenerateVP();
+        
         TableManager.Instance.AddScore(vp);
         TextAlertManager.Instance.CreateDamageAlert(
             vp,

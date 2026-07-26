@@ -66,7 +66,7 @@ Material:
     - _DissloveTwirlStrength: 9.8
     - _DissolvePixelation: 1000
     - _DissolvePixelationShape: 1
-    - _Dissolve_amount: 0.333
+    - _Dissolve_amount: 0.464
     - _Distortion: 0
     - _DistortionScale: 10
     - _DistortionStrength: 1
@@ -105,7 +105,7 @@ Material:
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
     - _Distortion_Direction: {r: 0, g: 1, b: 0, a: 0}
-    - _EdgeColor: {r: 1, g: 0.62345684, b: 0, a: 1}
+    - _EdgeColor: {r: 1, g: 1, b: 1, a: 1}
     - _Hit_Color: {r: 0, g: 0, b: 0, a: 1}
     - _OUtlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

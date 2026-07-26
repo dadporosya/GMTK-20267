@@ -188,7 +188,22 @@ public class SinCutsceneBase : CutSceneBase
 
         if (changeSkyBox)
         {
-            /// TASK change camera.environment.backgroundtypetpy esolid colorm color to lightColor
+            // Switch the camera's background from Skybox to a Solid Color fill and fade that fill to
+            // lightColor over the same duration as the light, so the whole environment takes on the
+            // sin's color. Fire-and-forget (matching the light fade above) since ChangeEnvironment
+            // itself runs as a detached coroutine.
+            Camera cam = Camera.main;
+            if (cam)
+            {
+                Color startColor = cam.backgroundColor;
+                cam.clearFlags = CameraClearFlags.SolidColor;
+                Tween.Custom(cam, startColor, lightColor, colorFadeDuration,
+                    (Camera c, Color col) => c.backgroundColor = col);
+            }
+            else
+            {
+                h.Out("SinCutsceneBase: no main camera found — skybox color change skipped.");
+            }
         }
 
         yield return new WaitForSeconds(delayAfterColorChange);

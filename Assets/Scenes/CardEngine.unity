@@ -1545,7 +1545,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: d53fdf3574b59644998f526b58021d10, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
 --- !u!4 &832575519
 Transform:
   m_ObjectHideFlags: 0
@@ -3440,7 +3440,7 @@ MonoBehaviour:
   currentCutScene: {fileID: 2395032513394667707, guid: 007b032013b6f9f41904e830eb85e133, type: 3}
   currentCutScenePath: 
   defaultLabel: Cutscenes/
-  runOnStart: 0
+  runOnStart: 1
 --- !u!1 &1058905350522729332
 GameObject:
   m_ObjectHideFlags: 0
@@ -4332,8 +4332,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1359248045
+  m_SortingOrder: 670
   m_TargetDisplay: 0
 --- !u!1 &2849439944564260609
 GameObject:
@@ -6262,6 +6262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb1aa7d54bdeb9540b2d544dcc69d8ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  startRoundOnStart: 0
   cardsParent: {fileID: 7768859113581062412}
   cardsSpawnPoint: {fileID: 7768859113581062412}
   Cards: []
@@ -6304,7 +6305,6 @@ MonoBehaviour:
   cardDrafting: 1
   draftCardCount: 5
   draftPickMoveDuration: 0.25
-  startRoundOnStart: 1
 --- !u!4 &6674368213915398119
 Transform:
   m_ObjectHideFlags: 0
