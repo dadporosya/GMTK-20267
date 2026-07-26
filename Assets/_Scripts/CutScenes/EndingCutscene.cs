@@ -39,6 +39,7 @@ public class EngingCutscene : CutSceneBase
     [Tooltip("Value the Bloom threshold fades to by the end of the cutscene.")]
     [SerializeField] private float bloomThresholdTarget = 0f;
 
+    [SerializeField] private float delayBeforeBlackScreen=2f;
     public override void Init()
     {
         base.Init();

@@ -59,4 +59,6 @@ MonoBehaviour:
   colorFadeDuration: 3
   delayAfterColorChange: 1
   useSinColor: 1
+  changeLights: 1
+  changeSkyBox: 0
   sinDialogue: {fileID: 11400000, guid: 619faff4ea5912447bfd395370ba2abd, type: 2}
