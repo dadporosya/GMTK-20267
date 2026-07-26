@@ -159,7 +159,7 @@ public class Taximeter : MonoBehaviour
         }
 
         shakeInstance.Magnitude = intensity;
-        h.Out(shakeInstance.Magnitude);
+        // h.Out(shakeInstance.Magnitude);
     }
 
     /// <summary>Fades the shake out and lets it clean itself up.</summary>

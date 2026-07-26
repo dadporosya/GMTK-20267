@@ -104,6 +104,10 @@ public class CardDragController : MonoBehaviour
     private Vector3 dragTargetPos;    // pose the card is currently easing toward
     private Quaternion dragTargetRot;
 
+    // In-plane facing captured when the card is picked up. Used in Table view to lie the card flat on
+    // the table while keeping its yaw fixed (see disableTableCardRotatoin / FlatTableRotationFixedYaw).
+    private Vector3 dragFlatUpHint = Vector3.forward;
+
     // Every collider on the card being dragged, disabled for the whole drag so the card
     // can never block the drop-surface raycast (including on the release frame).
     private readonly List<Collider> dragColliders = new List<Collider>();
@@ -247,6 +251,10 @@ public class CardDragController : MonoBehaviour
         dragTargetPos = card.transform.position;
         dragTargetRot = card.transform.rotation;
 
+        // Remember the card's in-plane facing at pickup so a table-view drag can lie it flat on the
+        // table without rotating it around Y (see disableTableCardRotatoin / FlatTableRotationFixedYaw).
+        dragFlatUpHint = Quaternion.Euler(0f, card.transform.eulerAngles.y, 0f) * Vector3.forward;
+
         // Let the rest of the hand close the gap left by the picked-up card.
         if (dragOriginState == Card.CardState.InHand && HandManager.Instance)
             HandManager.Instance.Arrange();
@@ -272,12 +280,10 @@ public class CardDragController : MonoBehaviour
         hasTablePoint = hoverHandCard == null && TryGetDropSurface(ray, out hit);
 
         // In Table view the top-down camera makes the flat-table / face-camera rotations unstable
-        // (the camera-forward projects to ~zero on the table plane), which spins a hand card as it's
-        // dragged. When enabled, hold the card at the rotation it was picked up with instead.
-        bool lockRotation = disableTableCardRotatoin
-                         && dragOriginState == Card.CardState.InHand
-                         && TableTopCameraController.Instance
-                         && TableTopCameraController.Instance.CurrentState == TableTopCameraController.State.TableView;
+        // (the camera-forward projects to ~zero on the table plane), which spins a hand card around Y
+        // as it's dragged. When enabled, the card still magnetizes flat onto the table but keeps the
+        // yaw it was picked up with, so it no longer rotates around Y.
+        bool tableViewLockYaw = TableViewYawLocked();
 
         if (hasTablePoint)
         {
@@ -288,7 +294,7 @@ public class CardDragController : MonoBehaviour
             // Magnetize: lie the card flat (face up, parallel to the surface) and float it
             // above the plane by dragLift so it hovers over the area instead of clipping into it.
             dragTargetPos = hit.point + hit.normal * dragLift;
-            if (!lockRotation) dragTargetRot = FlatTableRotation(dragging);
+            dragTargetRot = tableViewLockYaw ? FlatTableRotationFixedYaw(dragging) : FlatTableRotation(dragging);
         }
         else
         {
@@ -299,8 +305,10 @@ public class CardDragController : MonoBehaviour
             // camera and there is no horizon stretch when the cursor nears the screen edge.
             dragTargetPos = ray.origin + ray.direction.normalized * activeDragDistance;
             // Front faces straight back at the camera; camera-up is the roll hint so the
-            // orientation stays stable instead of snapping as the cursor moves.
-            if (!lockRotation) dragTargetRot = dragging.Face(-cam.transform.forward, cam.transform.up);
+            // orientation stays stable instead of snapping as the cursor moves. In table view keep it
+            // flat with the locked yaw instead, so it doesn't spin around Y.
+            dragTargetRot = tableViewLockYaw ? FlatTableRotationFixedYaw(dragging)
+                                             : dragging.Face(-cam.transform.forward, cam.transform.up);
         }
 
         // Ease toward the target every frame (frame-rate independent, OutQuad-like glide).
@@ -356,12 +364,15 @@ public class CardDragController : MonoBehaviour
         if (hasTablePoint)
         {
             // Valid placement on the table.
+            bool tableViewLockYaw = TableViewYawLocked();
+
             if (dragOriginState == Card.CardState.InHand && PlayerManager.Instance)
                 PlayerManager.Instance.RemoveCardFromHand(card);
 
             card.SetState(Card.CardState.OnTable);
             card.SetFaceUp(placeFaceUpOnTable);
-            card.AnimateTo(lastTablePoint + lastTableNormal * liftingOverTable, FlatTableRotation(card));
+            card.AnimateTo(lastTablePoint + lastTableNormal * liftingOverTable,
+                           tableViewLockYaw ? FlatTableRotationFixedYaw(card) : FlatTableRotation(card));
         }
         else if (dragOriginState == Card.CardState.OnTable)
         {
@@ -491,4 +502,22 @@ public class CardDragController : MonoBehaviour
         if (camForwardFlat.sqrMagnitude < 0.0001f) camForwardFlat = Vector3.forward;
         return card.Face(Vector3.up, camForwardFlat);
     }
+
+    /// <summary>
+    /// Flat on the table (front up) but using the yaw captured at pickup (<see cref="dragFlatUpHint"/>)
+    /// instead of the camera heading. In Table view the top-down camera makes the camera-derived yaw
+    /// unstable, so this magnetizes the card onto the surface without rotating it around Y.
+    /// </summary>
+    private Quaternion FlatTableRotationFixedYaw(Card card) => card.Face(Vector3.up, dragFlatUpHint);
+
+    /// <summary>
+    /// True when a card dragged from the hand should keep its yaw locked: the feature is enabled
+    /// (<see cref="disableTableCardRotatoin"/>) and the camera is currently in Table view. Table cards
+    /// (dragged from the table) keep their normal behaviour.
+    /// </summary>
+    private bool TableViewYawLocked() =>
+        disableTableCardRotatoin
+        && dragOriginState == Card.CardState.InHand
+        && TableTopCameraController.Instance
+        && TableTopCameraController.Instance.CurrentState == TableTopCameraController.State.TableView;
 }

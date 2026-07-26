@@ -138,6 +138,9 @@ public class TableTopCameraController : MonoBehaviour
     [Tooltip("Player local rotation, in euler degrees, restored while the Window view is held (only its " +
              "Y/yaw is applied). Overwritten from the scene pose on Start when handViewIsInitView is on.")]
     [SerializeField] private Vector3 windowViewPlayerLocalEuler;
+    [Tooltip("When entering the Window view, force the turn to sweep over the LEFT shoulder " +
+             "(counterclockwise) instead of taking the shortest path.")]
+    [SerializeField] private bool windowTurnOverLeftShoulder = true;
 
     // Active move/rotate tweens, stopped before a new transition starts.
     private Tween posTween;
@@ -489,8 +492,20 @@ public class TableTopCameraController : MonoBehaviour
         if (mouseLook) mouseLook.canLook = false;
         SetCursorVisible(true);
         SetCardsFollow(false);
-        MoveToLocal(windowViewLocalPosition, Quaternion.Euler(windowViewLocalEuler), instant);
-        RestorePlayerYaw(windowViewPlayerLocalEuler, instant);
+
+        if (windowTurnOverLeftShoulder)
+        {
+            // Force the turn to the window to go over the LEFT shoulder (counterclockwise) instead of
+            // the shortest path. Whichever transform actually carries the yaw (the camera's local pose
+            // or the player) sweeps left; the other has a ~0 yaw change and is left untouched.
+            MoveToLocalTurningLeft(windowViewLocalPosition, windowViewLocalEuler, instant);
+            RestorePlayerYawTurningLeft(windowViewPlayerLocalEuler, instant);
+        }
+        else
+        {
+            MoveToLocal(windowViewLocalPosition, Quaternion.Euler(windowViewLocalEuler), instant);
+            RestorePlayerYaw(windowViewPlayerLocalEuler, instant);
+        }
     }
 
     // ---- helpers ------------------------------------------------------------
@@ -542,6 +557,43 @@ public class TableTopCameraController : MonoBehaviour
     }
 
     /// <summary>
+    /// Like <see cref="MoveToLocal"/>, but the local Y (yaw) is forced to sweep over the LEFT shoulder
+    /// (counterclockwise) rather than taking the shortest path — used when turning to the window.
+    /// Tweens the euler angles component-wise so the yaw can travel more than 180 degrees.
+    /// </summary>
+    private void MoveToLocalTurningLeft(Vector3 localPos, Vector3 localEuler, bool instant)
+    {
+        if (!camTransform) camTransform = transform;
+        StopTweens();
+
+        if (instant || transitionDuration <= 0f)
+        {
+            camTransform.localPosition = localPos;
+            camTransform.localEulerAngles = localEuler;
+            return;
+        }
+
+        Vector3 startEuler = camTransform.localEulerAngles;
+        posTween = Tween.LocalPosition(camTransform, localPos, transitionDuration, transitionEase);
+        rotTween = Tween.LocalEulerAngles(camTransform, startEuler, LeftShoulderEuler(startEuler, localEuler),
+                                          transitionDuration, transitionEase);
+    }
+
+    /// <summary>
+    /// Builds a target euler equal to <paramref name="targetEuler"/> but whose Y is expressed so that
+    /// tweening from <paramref name="startEuler"/> sweeps over the LEFT shoulder (yaw decreasing). If
+    /// the shortest turn is already leftward or negligible it is kept as-is, so an axis that doesn't
+    /// actually turn never spins a full circle.
+    /// </summary>
+    private static Vector3 LeftShoulderEuler(Vector3 startEuler, Vector3 targetEuler)
+    {
+        // Unity: increasing Y yaws right (clockwise from above), so a LEFT turn is a decreasing yaw.
+        float yawDelta = Mathf.DeltaAngle(startEuler.y, targetEuler.y); // shortest signed turn [-180,180]
+        if (yawDelta > 0.5f) yawDelta -= 360f;                          // redirect a right turn the long way
+        return new Vector3(targetEuler.x, startEuler.y + yawDelta, targetEuler.z);
+    }
+
+    /// <summary>
     /// Restores ONLY the Y rotation (yaw) of the player root (the MouseLook object) to
     /// <paramref name="playerEuler"/>'s yaw, keeping its current X/Z. Each fixed view
     /// (hand/table/free/window/taxometer) passes its own per-state player euler so that after free look
@@ -554,6 +606,29 @@ public class TableTopCameraController : MonoBehaviour
         Vector3 cur = playerTransform.localEulerAngles;
         Quaternion target = Quaternion.Euler(cur.x, playerEuler.y, cur.z);
         RotatePlayerLocal(target, instant);
+    }
+
+    /// <summary>
+    /// Like <see cref="RestorePlayerYaw"/>, but forces the player's yaw to sweep over the LEFT shoulder
+    /// (counterclockwise) instead of the shortest path. Used when turning to the window so the turn
+    /// direction is consistent whether the yaw is carried by the player or the camera.
+    /// </summary>
+    private void RestorePlayerYawTurningLeft(Vector3 playerEuler, bool instant)
+    {
+        if (!playerTransform) return;
+        if (playerRotTween.isAlive) playerRotTween.Stop();
+
+        Vector3 cur = playerTransform.localEulerAngles;
+        Vector3 target = new Vector3(cur.x, playerEuler.y, cur.z);
+
+        if (instant || transitionDuration <= 0f)
+        {
+            playerTransform.localRotation = Quaternion.Euler(target);
+            return;
+        }
+
+        playerRotTween = Tween.LocalEulerAngles(playerTransform, cur, LeftShoulderEuler(cur, target),
+                                                transitionDuration, transitionEase);
     }
 
     /// <summary>Rotates the player root to <paramref name="localRot"/> (used by the hand view).</summary>

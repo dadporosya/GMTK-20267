@@ -92,7 +92,11 @@ public class PlacingArea : MonoBehaviour
         Vector3 camForwardFlat = cam
             ? Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up).normalized
             : Vector3.forward;
-        if (camForwardFlat.sqrMagnitude < 0.0001f) camForwardFlat = Vector3.forward;
+        // Top-down (table view): the camera forward projects to ~zero on the table plane, so the
+        // heading is undefined. Keep the card's current yaw instead of snapping it to world-forward,
+        // so a card magnetized without Y rotation stays put when it's placed.
+        if (camForwardFlat.sqrMagnitude < 0.0001f)
+            camForwardFlat = Quaternion.Euler(0f, card.transform.eulerAngles.y, 0f) * Vector3.forward;
         return card.Face(Vector3.up, camForwardFlat);
     }
 }
