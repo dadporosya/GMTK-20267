@@ -91,6 +91,9 @@ public class CardManager : MonoBehaviour
     [Tooltip("Duration (seconds) of the slide a chosen card makes toward the spawn point before it " +
              "is destroyed at once (no burn). 0 = snap instantly.")]
     [SerializeField] private float draftPickMoveDuration = 0.25f;
+    [Tooltip("Dialogue played right before the player is offered cards to choose in " +
+             "ExtendPileAccordingToSins. The cards are only shown once this dialogue finishes.")]
+    [SerializeField] private DialogueContainer Pick5Container;
 
     
     private void Awake()
