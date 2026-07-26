@@ -7,6 +7,7 @@ TagManager:
   - Table
   - Eye
   - SpawnPoint
+  - Wheel
   layers:
   - Default
   - TransparentFX

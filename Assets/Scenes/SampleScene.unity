@@ -891,6 +891,70 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SFXManager
   defaultAudioSource: {fileID: 0}
   defaultDialogueVoiceList: []
+--- !u!1 &519850926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 519850928}
+  - component: {fileID: 519850927}
+  m_Layer: 0
+  m_Name: AngelParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &519850927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519850926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d96af79463325459fac65a8bc39121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SquishAnimation
+  disable: 0
+  type: 1
+  loop: 1
+  playOnStart: 1
+  returningEasing: 0
+  returningTime: 0.3
+  customInitialState: 0
+  returnToTheInittialState: 0
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  squishes:
+  - {x: -0.01, y: 0.01, z: 0}
+  - {x: 0.01, y: -0.01, z: 0}
+  durations: []
+  defaultDuration: 4
+  ease: 4
+  initialState: {x: 1, y: 1, z: 1}
+--- !u!4 &519850928
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519850926}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -8.39, y: 0, z: 0}
+  m_LocalScale: {x: 0.40000013, y: 0.4, z: 0.40000013}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1643283418}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &523500369
 GameObject:
   m_ObjectHideFlags: 0
@@ -2826,6 +2890,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1589162319}
   m_Mesh: {fileID: 2212009239438826721, guid: 8adc031a61e10274bafebac9aef4acbe, type: 3}
+--- !u!4 &1643283418 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+  m_PrefabInstance: {fileID: 6509074527799820759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1649324924
 GameObject:
   m_ObjectHideFlags: 0
@@ -6039,7 +6108,7 @@ GameObject:
   - component: {fileID: 2320798170417334269}
   m_Layer: 0
   m_Name: Cylinder.004
-  m_TagString: Untagged
+  m_TagString: Wheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6194,6 +6263,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543450652353529955}
+  - component: {fileID: 919132148362695386}
   m_Layer: 0
   m_Name: carexterior
   m_TagString: Untagged
@@ -6201,6 +6271,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &919132148362695386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148362695385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cecd17da5b2a4f929c5909a21997b8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShakeAnimation
+  disable: 0
+  type: 0
+  loop: 1
+  playOnStart: 1
+  returningEasing: 0
+  returningTime: 0.3
+  customInitialState: 0
+  returnToTheInittialState: 0
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  targetAxes: 0200000000000000
+  duration: 0.5
+  deceleration: 0
+  sharpening: 20
+  strength: 0.008
+  frequency: 25
+  initialState: {x: 0, y: 0, z: 0}
 --- !u!4 &928045505417496099
 Transform:
   m_ObjectHideFlags: 0
@@ -10382,7 +10483,7 @@ GameObject:
   - component: {fileID: 7783642030644999027}
   m_Layer: 0
   m_Name: Cylinder.002
-  m_TagString: Untagged
+  m_TagString: Wheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20555,7 +20656,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 519850928}
     m_Modifications:
     - target: {fileID: 4117370452658914838, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_Name
@@ -20563,19 +20664,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.39
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalPosition.y
@@ -20587,19 +20688,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.7071068
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -26218,7 +26319,7 @@ GameObject:
   - component: {fileID: 7071182762294839090}
   m_Layer: 0
   m_Name: Cylinder.001
-  m_TagString: Untagged
+  m_TagString: Wheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26686,7 +26787,7 @@ GameObject:
   - component: {fileID: 1129496809376236593}
   m_Layer: 0
   m_Name: Cylinder.003
-  m_TagString: Untagged
+  m_TagString: Wheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28109,4 +28210,4 @@ SceneRoots:
   - {fileID: 7576025636398618267}
   - {fileID: 543450652353529955}
   - {fileID: 1342113054}
-  - {fileID: 6509074527799820759}
+  - {fileID: 519850928}
