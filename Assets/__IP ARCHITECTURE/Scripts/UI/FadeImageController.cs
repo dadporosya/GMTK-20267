@@ -2,10 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using PrimeTween;
 
-/// <summary>
-/// Fades a UI <see cref="Image"/>'s alpha in/out using PrimeTween.
-/// </summary>
-[RequireComponent(typeof(Image))]
 public class FadeImageController : MonoBehaviour
 {
     public Image image;
@@ -26,13 +22,24 @@ public class FadeImageController : MonoBehaviour
 
         if (enableStartFadeOut)
         {
-            FadeIn(0);
+            // Instantly snap to full alpha, then smoothly fade out to 0.
+            SetAlpha(1f);
             Fadeout(startFadeDurationOut);
         }
     }
 
+    /// <summary>Instantly sets the image's alpha.</summary>
+    public void SetAlpha(float alpha)
+    {
+        if (!image) image = GetComponent<Image>();
+        _fadeTween.Stop();
+        Color c = image.color;
+        c.a = alpha;
+        image.color = c;
+    }
+
     /// <summary>Modulates the image's alpha to fully opaque (1).</summary>
-    public Tween FadeIn(float duration, Ease easing = Ease.Default)
+    public Tween FadeIn(float duration, Ease easing = Ease.Linear)
     {
         if (!image) image = GetComponent<Image>();
         _fadeTween.Stop();
@@ -41,7 +48,7 @@ public class FadeImageController : MonoBehaviour
     }
 
     /// <summary>Modulates the image's alpha to fully transparent (0).</summary>
-    public Tween Fadeout(float duration, Ease easing = Ease.Default)
+    public Tween Fadeout(float duration, Ease easing = Ease.Linear)
     {
         if (!image) image = GetComponent<Image>();
         _fadeTween.Stop();

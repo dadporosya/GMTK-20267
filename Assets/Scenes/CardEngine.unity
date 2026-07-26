@@ -353,10 +353,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 119254001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c67a99043efe53740844f8b68ba7937d, type: 3}
+  m_Script: {fileID: 11500000, guid: e3f57867a7800ff4daa5ad1480a67cc3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Assembly-CSharp::FadeImageController
   image: {fileID: 761899334}
+  enableStartFadeOut: 1
+  startFadeDurationOut: 100
 --- !u!1 &205821365
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,55 +797,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!1 &330620471
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 330620473}
-  - component: {fileID: 330620472}
-  m_Layer: 0
-  m_Name: EndingCutScene
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &330620472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330620471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38671a28e7f14c4e8ddc6207f3bdf534, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EngingCutscene
-  runOnStart: 0
-  customDestroy: 0
-  dialogue: {fileID: 0}
-  fadeDurationInSeconds: 60
-  fadeEase: 1
---- !u!4 &330620473
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330620471}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 757.62103, y: 1069.1301, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &361714038
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1636,7 +1589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: ff3b339894441324ea1d35d98e66c1cc, type: 2}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -3588,7 +3541,7 @@ GameObject:
   - component: {fileID: 905355456614352281}
   - component: {fileID: 973785016489881967}
   m_Layer: 0
-  m_Name: CutSceneManager
+  m_Name: CUT SCENE MANAGER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3606,7 +3559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7c40a3748db2f46b589fd0280379bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CutSceneManager
-  currentCutScene: {fileID: 2395032513394667707, guid: 007b032013b6f9f41904e830eb85e133, type: 3}
+  currentCutScene: {fileID: 7333800463253256475, guid: 0aa7dbb0414d10e4fbaa167e71070382, type: 3}
   currentCutScenePath: 
   defaultLabel: Cutscenes/
   runOnStart: 1
@@ -4257,8 +4210,8 @@ Transform:
   - {fileID: 3570303577819389374}
   - {fileID: 7615037640775810000}
   - {fileID: 3142580461284440608}
-  - {fileID: 905355456614352281}
   - {fileID: 119254002}
+  - {fileID: 905355456614352281}
   m_Father: {fileID: 1479293829371882046}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2650084726329635446
@@ -4491,7 +4444,7 @@ Canvas:
   m_GameObject: {fileID: 2959876964102876339}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 6115056781952060414}
   m_PlaneDistance: 0.067
   m_PixelPerfect: 0
@@ -7266,4 +7219,3 @@ SceneRoots:
   - {fileID: 565984620796606761}
   - {fileID: 543450653267040991}
   - {fileID: 942947766}
-  - {fileID: 330620473}
