@@ -209,7 +209,7 @@ public class DialogueManager : MonoBehaviour
 
         typingState = TypingState.notStarted;
 
-        SetNodeText("");
+        ClearAllTextBoxes();
 
         if (onDialogueStartEvents) onDialogueStart?.Invoke();
 
@@ -263,6 +263,21 @@ public class DialogueManager : MonoBehaviour
     private void SetNodeText(string text)
     {
         SetText(dialogueScalingText, dialogueText, text);
+    }
+
+    /// <summary>
+    /// Empties every text box in dialogueTexts (routing through its ScalingText when present).
+    /// Called at the very start and the very end of a dialogue so no stale text lingers.
+    /// </summary>
+    private void ClearAllTextBoxes()
+    {
+        if (dialogueTexts == null) return;
+        foreach (TMP_Text textBox in dialogueTexts)
+        {
+            if (!textBox) continue;
+            ScalingText scaling = textBox.GetComponent<ScalingText>();
+            SetText(scaling, textBox, "");
+        }
     }
 
     /// <summary>
@@ -544,6 +559,8 @@ public class DialogueManager : MonoBehaviour
 
         dialogue = null;
         currentParagraphs.Clear();
+
+        ClearAllTextBoxes();
 
         onDialogueEnd?.Invoke();
         initiatingTalkable?.OnDialogueEnd();

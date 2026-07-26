@@ -2201,6 +2201,7 @@ GameObject:
   - component: {fileID: 1458407701}
   - component: {fileID: 1458407703}
   - component: {fileID: 1458407702}
+  - component: {fileID: 1458407704}
   m_Layer: 0
   m_Name: DialogueTextUI
   m_TagString: Untagged
@@ -2247,7 +2248,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 376bdb72c649f874e8f8da4a634013e7, type: 2}
   m_sharedMaterial: {fileID: -9054310753409103145, guid: 376bdb72c649f874e8f8da4a634013e7, type: 2}
@@ -2274,14 +2275,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
+  m_fontSize: 90
   m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 90
   m_fontSizeMax: 113
   m_fontStyle: 0
-  m_HorizontalAlignment: 16
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -2327,6 +2328,34 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1458407700}
   m_CullTransparentMesh: 1
+--- !u!114 &1458407704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458407700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba17233c34e02024e9e4c50f01335076, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TextAnimation
+  animationTarget: 3
+  animations: 01000000
+  cleaned: 0
+  shakeStrength: 0.009
+  shakeSpeed: 22.5
+  waveAmplitude: 0.15
+  waveFrequency: 0.4
+  waveSpread: 0.8
+  bounceHeight: 8
+  bounceFrequency: 2
+  bounceSpread: 0.2
+  fadeMinAlpha: 0
+  fadeMaxAlpha: 1
+  fadeSpeed: 1.5
+  _tmp: {fileID: 0}
+  _isDirty: 1
 --- !u!4 &1475067104 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9213884528204490809, guid: 16702d612d01ca145926f34404f99ec3, type: 3}
@@ -4012,6 +4041,8 @@ MonoBehaviour:
   dialogueScalingText: {fileID: 0}
   defaultTypeSpeed: 6.7
   typeSpeed: 0
+  pauseAfterComma: 0
+  pauseAfterDot: 0
   skipIcon: {fileID: 0}
   defaultMaterial: {fileID: 0}
   onDialogueEnd:
@@ -4054,6 +4085,7 @@ MonoBehaviour:
   windowAnimations: {fileID: 0}
   delayBeforeDialogueStart: 2
   skipByMouse: 1
+  onDialogueStartEvents: 1
 --- !u!114 &2702239989372945549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4200,7 +4232,7 @@ Canvas:
   m_GameObject: {fileID: 2959876964102876339}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
