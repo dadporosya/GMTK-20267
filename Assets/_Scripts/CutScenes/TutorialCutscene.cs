@@ -88,21 +88,43 @@ public class TutorialCutscene : CutSceneBase
         {
             DialogueManager.Instance.onDialogueStartEvents = true;
             DialogueManager.Instance.dialogueTextId=0;
-            GameObject additionalWindow = GameObject.FindGameObjectWithTag("AdditionalDialogueWindow");
-            if (additionalWindow) additionalWindow.SetActive(false); // TASK instead of set active false and true, disolve it, changing dissolve amount in material to 1 if false, and to 0.333 if true
+            SetAdditionalWindowDissolve(false);
             DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
         }
         DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
         
         DialogueManager.Instance.onDialogueStartEvents = false;
 
-        // Reveal the extra dialogue window used for the tutorial's second text box.
-        GameObject additionalWindow = GameObject.FindGameObjectWithTag("AdditionalDialogueWindow");
-        if (additionalWindow) additionalWindow.SetActive(true);
-        else h.Out("AdditionalDialogueWindow not found");
+        // Reveal the extra dialogue window used for the tutorial's second text box (dissolve in).
+        SetAdditionalWindowDissolve(true);
 
         DialogueManager.Instance.StartDialogue(tutorialDialogue);
         DestroyCutscene();
     }
-    
+
+    /// <summary>
+    /// Shows/hides the AdditionalDialogueWindow through its MasterMaterialController dissolve
+    /// amount instead of toggling the GameObject active state: 1 = fully dissolved (hidden),
+    /// 0.333 = visible.
+    /// </summary>
+    private void SetAdditionalWindowDissolve(bool visible)
+    {
+        GameObject additionalWindow = GameObject.FindGameObjectWithTag("AdditionalDialogueWindow");
+        if (!additionalWindow)
+        {
+            h.Out("AdditionalDialogueWindow not found");
+            return;
+        }
+
+        MasterMaterialController matController =
+            additionalWindow.GetComponentInChildren<MasterMaterialController>(true);
+        if (!matController)
+        {
+            h.Out("AdditionalDialogueWindow has no MasterMaterialController");
+            return;
+        }
+
+        matController.SetDissolveAmount(visible ? 0.333f : 1f);
+    }
+
 }
