@@ -5212,7 +5212,7 @@ MonoBehaviour:
   label: KM
   decimalPlaces: 2
   kmValue: 0
-  timeInMinutes: 16.7
+  timeInMinutes: 0.5
   timeBeforeEndToCallEndingDialogue: 0
 --- !u!4 &3570303577819389374
 Transform:
@@ -6852,6 +6852,7 @@ MonoBehaviour:
   cardDrafting: 1
   draftCardCount: 5
   draftPickMoveDuration: 0.25
+  Pick5Container: {fileID: 0}
 --- !u!4 &6674368213915398119
 Transform:
   m_ObjectHideFlags: 0

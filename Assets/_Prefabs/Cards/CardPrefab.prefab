@@ -376,7 +376,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
+  - {fileID: -9054310753409103145, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -422,8 +422,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
-  m_sharedMaterial: {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
+  m_sharedMaterial: {fileID: -9054310753409103145, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -589,7 +589,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
+  - {fileID: -9054310753409103145, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -635,8 +635,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: <sprite name=Gluttony1>GLUTTONY
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
-  m_sharedMaterial: {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
+  m_sharedMaterial: {fileID: -9054310753409103145, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -838,7 +838,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
+  - {fileID: -9054310753409103145, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -886,8 +886,8 @@ MonoBehaviour:
 
     s'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
-  m_sharedMaterial: {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
+  m_sharedMaterial: {fileID: -9054310753409103145, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1089,7 +1089,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
+  - {fileID: -9054310753409103145, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1135,8 +1135,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Description sample for the card \u0435\u0443\u0447\u0435 lorum ispum===="
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
-  m_sharedMaterial: {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
+  m_sharedMaterial: {fileID: -9054310753409103145, guid: ed3aa7eca4a7faf44943c3779dba8a69, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

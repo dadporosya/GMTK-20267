@@ -251,6 +251,20 @@ public static class R
 
                     public static object[] All => _all.Value;
                 }
+                public static class wDrums
+                {
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
 
                 private static readonly System.Lazy<object[]> _all = new(() =>
                 {
@@ -262,6 +276,7 @@ public static class R
                     list.AddRange(drum.All);
                     list.AddRange(m4a.All);
                     list.AddRange(sins.All);
+                    list.AddRange(wDrums.All);
 
                     return list.ToArray();
                 });
@@ -376,11 +391,13 @@ public static class R
 
                     public static object[] All => _all.Value;
                 }
+                public static AudioClip eClock => Resources.Load<AudioClip>("PROJECT/Audio/Clock/eClock");
 
                 private static readonly System.Lazy<object[]> _all = new(() =>
                 {
                     var list = new System.Collections.Generic.List<object>
                     {
+                        eClock,
                     };
 
                     list.AddRange(Tick.All);
@@ -443,6 +460,36 @@ public static class R
 
                 public static object[] All => _all.Value;
             }
+            public static class Gameplay
+            {
+                public static class Loss
+                {
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                    };
+
+                    list.AddRange(Loss.All);
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
             public static class Sins
             {
                 public static SinCutsceneBase A_PrideCutscene => Resources.Load<SinCutsceneBase>("PROJECT/Cutscenes/Sins/A_PrideCutscene");
@@ -495,6 +542,7 @@ public static class R
                 };
 
                 list.AddRange(Ending.All);
+                list.AddRange(Gameplay.All);
                 list.AddRange(Sins.All);
                 list.AddRange(Tutorial.All);
 

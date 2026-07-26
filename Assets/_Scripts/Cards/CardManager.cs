@@ -737,6 +737,23 @@ public class CardManager : MonoBehaviour
         CP.Suit? secondary = ranked.Count > 1 ? ranked[1].Key : (CP.Suit?)null;
         CP.Suit? third     = ranked.Count > 2 ? ranked[2].Key : (CP.Suit?)null;
 
+        // Play the pick-cards dialogue first and wait for it to close before offering any cards
+        // (same StartDialogue / onDialogueEnd wait pattern as OnLoss).
+        if (Pick5Container != null && DialogueManager.Instance)
+        {
+            bool dialogueDone = false;
+            void OnDialogueEnd()
+            {
+                dialogueDone = true;
+                DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
+            }
+
+            DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
+            DialogueManager.Instance.StartDialogue(Pick5Container);
+
+            while (!dialogueDone) yield return null;
+        }
+
         if (cardDrafting)
         {
             // Drafting: gather the cards the suits would have contributed and let the player pick

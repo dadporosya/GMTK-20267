@@ -84,12 +84,13 @@ public class EngingCutscene : CutSceneBase
     {
         yield return null;
         BGMManager.Instance.FadeOutMusic(1f);
-        if (TableTopCameraController.Instance != null)
-            TableTopCameraController.Instance.ChangeMainState(TableTopCameraController.State.TaxometerView);
+        TableTopCameraController.Instance.ChangeMainState(TableTopCameraController.State.TaxometerView);
+        SFXManager.Instance.PlayClip(R.PROJECT.Audio.Clock.eClock);
         yield return new WaitForSeconds(3.33f);
         // if (!ost) ost = 
         BGMManager.Instance.PlayMusic(ost, 1f);
         
+        TableTopCameraController.Instance.ChangeMainState(TableTopCameraController.State.Free);
         if (runDialogue) DialogueManager.Instance.StartDialogue(dialogue);
 
         // Fade the global volume's VHS noise density and the Invert effect weight to their configured
@@ -124,6 +125,7 @@ public class EngingCutscene : CutSceneBase
         yield return new WaitForSeconds(delayBeforeBlackScreen);
         if (FadeImageController.Instance != null)
             FadeImageController.Instance.FadeIn(0f);
+        BGMManager.Instance.FadeOutMusic(0f);
 
         // Hold the black screen, then load the credits scene.
         yield return new WaitForSeconds(blackScreenDuration);
