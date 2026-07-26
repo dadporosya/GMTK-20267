@@ -238,7 +238,12 @@ public class TableTopCameraController : MonoBehaviour
     {
         if (!isHoldingView)
         {
-            if (holdToTable && Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.S) && mainState == State.Free)
+            {
+                // When Free is the home state, S sends the home back to Hand view.
+                BeginHoldView(KeyCode.S, State.HandView);
+            }
+            else if (holdToTable && Input.GetKeyDown(KeyCode.W))
             {
                 // From the main state, hold W to peek the Table view (release returns to main).
                 // From any other (latched) state, W steps back to the main state.
