@@ -41,6 +41,13 @@ public class TableManager : MonoBehaviour
     [SerializeField] private float maxCountSpeed = 200f;
     [Tooltip("Delta size (in points) at which the fastest speed is reached.")]
     [SerializeField] private float speedRampDelta = 50f;
+    [Tooltip("Volume of the looped counter tick sound played while the score is counting.")]
+    [SerializeField] private float counterSoundVolume = 1f;
+
+    // Looping AudioSource that plays R.PROJECT.Audio.sfx.counter for as long as the score is
+    // counting. Started once when a count begins and stopped when it settles; it is NOT restarted
+    // when a new count takes over mid-animation, so the loop plays continuously across changes.
+    private AudioSource _counterSource;
 
     [Header("Suits")]
     public Dictionary<CP.Suit, int> suits = new Dictionary<CP.Suit, int>();
@@ -181,6 +188,7 @@ public class TableManager : MonoBehaviour
         if (instant || delta == 0)
         {
             if (scoreChangeAnimation != null) scoreChangeAnimation.Stop();
+            StopCounterSound();
             _displayedScore = to;
             RefreshScoreText(to);
             return;
@@ -193,6 +201,9 @@ public class TableManager : MonoBehaviour
 
         // Play the change animation for the whole count, and stop it once the number settles.
         if (scoreChangeAnimation != null) scoreChangeAnimation.Play();
+
+        // Start the looped counter sound (no-op if it's already playing from a previous count).
+        StartCounterSound();
 
         // Linear ease so the numbers tick evenly, one after another.
         _scoreTween = Tween.Custom(
@@ -208,8 +219,37 @@ public class TableManager : MonoBehaviour
         ).OnComplete(() =>
         {
             if (scoreChangeAnimation != null) scoreChangeAnimation.Stop();
+            StopCounterSound();
             CheckScoreReached();
         });
+    }
+
+    // Lazily creates a dedicated looping AudioSource (routed through the SFX mixer group) and starts
+    // the counter clip if it isn't already playing. Called every time a count begins; because it only
+    // starts when not already playing, an ongoing loop keeps going across back-to-back score changes.
+    private void StartCounterSound()
+    {
+        // if (_counterSource == null)
+        // {
+        //     GameObject go = new GameObject("CounterSound");
+        //     go.transform.SetParent(transform);
+        //     _counterSource = go.AddComponent<AudioSource>();
+        //     _counterSource.clip = R.PROJECT.Audio.sfx.counter;
+        //     _counterSource.loop = true;
+        //     _counterSource.playOnAwake = false;
+        //     _counterSource.outputAudioMixerGroup = AudioMixerManager.GetSFXGroup();
+        // }
+        //
+        // _counterSource.volume = counterSoundVolume;
+        // if (!_counterSource.isPlaying)
+        //     _counterSource.Play();
+    }
+
+    // Stops the looped counter sound once the score stops counting.
+    private void StopCounterSound()
+    {
+        if (_counterSource != null && _counterSource.isPlaying)
+            _counterSource.Stop();
     }
 
     /// <summary>

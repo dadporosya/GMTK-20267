@@ -283,7 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 43287016}
   m_Layer: 0
-  m_Name: '---CAR MODEL---'
+  m_Name: ---CAR MODEL---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -369,7 +369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 145228351}
   m_Layer: 0
-  m_Name: '----VOLUMES----'
+  m_Name: ----VOLUMES----
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2390,7 +2390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1279035261}
   m_Layer: 0
-  m_Name: '----ENVIRONMENT----'
+  m_Name: ----ENVIRONMENT----
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2658,7 +2658,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  m_text: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 376bdb72c649f874e8f8da4a634013e7, type: 2}
   m_sharedMaterial: {fileID: -9054310753409103145, guid: 376bdb72c649f874e8f8da4a634013e7, type: 2}
@@ -2685,11 +2685,11 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70
+  m_fontSize: 55
   m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 70
+  m_fontSizeMin: 55
   m_fontSizeMax: 113
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -3949,7 +3949,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7768859113581062412}
   m_Layer: 0
-  m_Name: '---CARDS PARENT IDK---'
+  m_Name: ---CARDS PARENT IDK---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4145,7 +4145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7772757869219072550}
   m_Layer: 0
-  m_Name: '---CAMERA---'
+  m_Name: ---CAMERA---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4343,7 +4343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1746199154207000446}
   m_Layer: 0
-  m_Name: '----UI-------'
+  m_Name: ----UI-------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4616,7 +4616,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8743247304526171847}
   m_Layer: 0
-  m_Name: '----CARDS------'
+  m_Name: ----CARDS------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5027,7 +5027,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8157782405624309702}
   m_Layer: 0
-  m_Name: '------GAME------'
+  m_Name: ------GAME------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5167,6 +5167,7 @@ MonoBehaviour:
   minCountSpeed: 15
   maxCountSpeed: 2000
   speedRampDelta: 200
+  counterSoundVolume: 1
   startSuits: 
   startSuitCount: 
   rawSuitTrackers:
@@ -5538,7 +5539,8 @@ MonoBehaviour:
 
     <sprite name=love> 1
 
-    <sprite name=love> 1
+    <sprite name=love>
+    1
 
     <sprite name=love> 1
 
@@ -5699,7 +5701,7 @@ GameObject:
   - component: {fileID: 1063377253968930102}
   - component: {fileID: 3217571680227713077}
   m_Layer: 0
-  m_Name: '---PLAYER---'
+  m_Name: ---PLAYER---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5826,7 +5828,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5932735521687483770}
   m_Layer: 0
-  m_Name: '-----AUDIO------'
+  m_Name: -----AUDIO------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6803,7 +6805,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2290024210082597162}
   m_Layer: 0
-  m_Name: '-----GAME PLAY------'
+  m_Name: -----GAME PLAY------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7259,7 +7261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1479293829371882046}
   m_Layer: 0
-  m_Name: '----MANAGERS----'
+  m_Name: ----MANAGERS----
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7399,7 +7401,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2650034401415303331}
   m_Layer: 0
-  m_Name: '---PLAYER EXPERIENCE---'
+  m_Name: ---PLAYER EXPERIENCE---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

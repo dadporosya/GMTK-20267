@@ -20,7 +20,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: <anim:wave>Tick. Tock. Tick. Tock.<anim:none>
+    text: and you're still so naively hoping they'll let you in...
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -42,7 +42,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: You're on the countdown now. Take a look at the taximeter.
+    text: are you serious? you don't even know where we're going?
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -64,7 +64,8 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: This ride is your last chance to remember what you've done with your life.
+    text: i don't know if they're waiting for you there. maybe they are, maybe they'll
+      let you in.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -86,7 +87,9 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Only... I need to remember it myself before I can tell you.
+    text: or maybe they'll tear out every hair from your head and burn you along
+      with them, turning the smoke left behind from you into clouds, which will become
+      nothing more than adornments for the heavenly gates
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -108,7 +111,53 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Once we reach Heaven, there'll be no turning back.
+    text: i am not a judge, merely a keeper. but i know the precise coordinates of
+      every scar on your body, every wrinkle and callus.
+    initFromScriptableObject: 0
+    speaker: {fileID: 0}
+    speakerGameObject: {fileID: 0}
+    speakerName: 
+    speakerPortrait: {fileID: 0}
+    useSpriteAtlas: 0
+    spriteAtlas: []
+    spriteId: 0
+    _speakerVoiceClips: []
+    material: {fileID: 0}
+    onNodeStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onNodeEnd:
+      m_PersistentCalls:
+        m_Calls: []
+  - nodeId: 5
+    speakerId: 
+    initialized: 0
+    speakerIsThis: 0
+    overWriteValues: 0
+    text: i remember every movement your hands ever made in search of warmth from
+      friction against the air, only to tear apart the gentle waves of the wind.
+    initFromScriptableObject: 0
+    speaker: {fileID: 0}
+    speakerGameObject: {fileID: 0}
+    speakerName: 
+    speakerPortrait: {fileID: 0}
+    useSpriteAtlas: 0
+    spriteAtlas: []
+    spriteId: 0
+    _speakerVoiceClips: []
+    material: {fileID: 0}
+    onNodeStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onNodeEnd:
+      m_PersistentCalls:
+        m_Calls: []
+  - nodeId: 6
+    speakerId: 
+    initialized: 0
+    speakerIsThis: 0
+    overWriteValues: 0
+    text: i know seven reasons. seven reasons why they won't let you into the heavens.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -128,6 +177,18 @@ MonoBehaviour:
   objects:
   - {fileID: 0}
   nodeSettings:
+  - speakerObjectIndex: 0
+    objectSettings:
+    - enableObject: 1
+      modelId: 0
+      enableEyes: 0
+      talk: 1
+  - speakerObjectIndex: 0
+    objectSettings:
+    - enableObject: 1
+      modelId: 0
+      enableEyes: 0
+      talk: 1
   - speakerObjectIndex: 0
     objectSettings:
     - enableObject: 1

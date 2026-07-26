@@ -20,8 +20,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: 'Placing the card on the table, it will fill the car''s interior with the
-      scent of its sin, slowly dispersing my memories of your deeds. '
+    text: look at the cards. they're all before you.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -43,8 +42,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: 'To make things easier for you, I''ll display the density of the fog in
-      my mind on the counter. '
+    text: 'in order: wrath, pride, greed, lust, gluttony, envy, sloth'
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -66,7 +64,9 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: If you manage to bring it down to zero, maybe I'll remember something...
+    text: we don't have much time, for the holy engine beneath the hood of the angelic
+      taxi stirs the air faster than i search through my winding archives for reports
+      of your foul little deeds.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -88,8 +88,9 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: 'All of your memories are connected, and the more vivid some of them become,
-      the more effective the others are. '
+    text: the ash of cigarettes and my advanced age hinder me from digging through
+      your past, from finding, among millions of events spanning several decades,
+      the very thing for which your earthly flesh might be rejected.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -111,8 +112,79 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Some memories also have a countdown. They will linger in your mind only
-      for a short while before being burned away, just like all the rest.
+    text: every sin has its own scent and taste, imperceptible to you mortals.
+    initFromScriptableObject: 0
+    speaker: {fileID: 0}
+    speakerGameObject: {fileID: 0}
+    speakerName: 
+    speakerPortrait: {fileID: 0}
+    useSpriteAtlas: 0
+    spriteAtlas: []
+    spriteId: 0
+    _speakerVoiceClips: []
+    material: {fileID: 0}
+    onNodeStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onNodeEnd:
+      m_PersistentCalls:
+        m_Calls: []
+  - nodeId: 5
+    speakerId: 
+    initialized: 0
+    speakerIsThis: 0
+    overWriteValues: 0
+    text: but i sense it just as you once sensed, every single day, the smell of
+      cigarette smoke that soaked into your pillow.
+    initFromScriptableObject: 0
+    speaker: {fileID: 0}
+    speakerGameObject: {fileID: 0}
+    speakerName: 
+    speakerPortrait: {fileID: 0}
+    useSpriteAtlas: 0
+    spriteAtlas: []
+    spriteId: 0
+    _speakerVoiceClips: []
+    material: {fileID: 0}
+    onNodeStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onNodeEnd:
+      m_PersistentCalls:
+        m_Calls: []
+  - nodeId: 6
+    speakerId: 
+    initialized: 0
+    speakerIsThis: 0
+    overWriteValues: 0
+    text: each of these cards is steeped in the scent of its own sin, which, like
+      smoke, dissolves into the air when stirred by the wafts of other scents unknown
+      to man nearby.
+    initFromScriptableObject: 0
+    speaker: {fileID: 0}
+    speakerGameObject: {fileID: 0}
+    speakerName: 
+    speakerPortrait: {fileID: 0}
+    useSpriteAtlas: 0
+    spriteAtlas: []
+    spriteId: 0
+    _speakerVoiceClips: []
+    material: {fileID: 0}
+    onNodeStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onNodeEnd:
+      m_PersistentCalls:
+        m_Calls: []
+  - nodeId: 7
+    speakerId: 
+    initialized: 0
+    speakerIsThis: 0
+    overWriteValues: 0
+    text: 'it flies into my nostrils and clears the path, among the cigarette butts
+      of your days, to the darkest of them.
+
+'
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -132,6 +204,24 @@ MonoBehaviour:
   objects:
   - {fileID: 0}
   nodeSettings:
+  - speakerObjectIndex: 0
+    objectSettings:
+    - enableObject: 1
+      modelId: 0
+      enableEyes: 0
+      talk: 1
+  - speakerObjectIndex: 0
+    objectSettings:
+    - enableObject: 1
+      modelId: 0
+      enableEyes: 0
+      talk: 1
+  - speakerObjectIndex: 0
+    objectSettings:
+    - enableObject: 1
+      modelId: 0
+      enableEyes: 0
+      talk: 1
   - speakerObjectIndex: 0
     objectSettings:
     - enableObject: 1

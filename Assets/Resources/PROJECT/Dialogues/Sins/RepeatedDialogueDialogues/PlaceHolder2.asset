@@ -21,7 +21,8 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Even if I told you, you wouldn't take anything away from it.
+    text: 'you''re already familiar with this part of your memory, and i don''t think
+      you''ll forget what i''ve told you now. '
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -43,7 +44,8 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: It is too late...
+    text: "and if you do forget, then the story i tell a second time will still become
+      forgotten \u2014 only twice over."
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
