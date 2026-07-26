@@ -1387,7 +1387,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &518695134
 Transform:
   m_ObjectHideFlags: 0
@@ -3920,8 +3920,8 @@ MonoBehaviour:
       m_Calls: []
   animationSpeed: 1
   squishes:
-  - {x: 0, y: 0.01, z: 0}
-  - {x: 0, y: -0.01, z: 0}
+  - {x: 0, y: 0.0167, z: 0}
+  - {x: 0, y: -0.0167, z: 0}
   durations: []
   defaultDuration: 5
   ease: 4
@@ -6917,7 +6917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b126e769c84a678ad097c814659871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteChangeAnimation
-  disable: 1
+  disable: 0
   type: 1
   loop: 1
   playOnStart: 1
@@ -6931,9 +6931,9 @@ MonoBehaviour:
   animationSpeed: 1
   frames:
   - {fileID: -2094360743, guid: 22f6ccd503d879f4685a0bbec34c1eae, type: 3}
-  - {fileID: 673166362, guid: 22f6ccd503d879f4685a0bbec34c1eae, type: 3}
+  - {fileID: 2069768943, guid: 22f6ccd503d879f4685a0bbec34c1eae, type: 3}
   gapsBetweenFrames: []
-  defaultGapsBetweenFrames: 0.6
+  defaultGapsBetweenFrames: 16.7
   shuffleOrder: 0
   initialSprite: {fileID: 0}
 --- !u!1 &8907834193704992522
