@@ -1133,7 +1133,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Description sample for the card \u0435\u0443\u0447\u0435 lorum ispum"
+  m_text: "Description sample for the card \u0435\u0443\u0447\u0435 lorum ispum===="
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
   m_sharedMaterial: {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
@@ -1160,12 +1160,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 3
+  m_fontSize: 3.15
   m_fontSizeBase: 3
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 2
-  m_fontSizeMax: 3
+  m_fontSizeMax: 6.7
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512

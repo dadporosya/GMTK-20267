@@ -74,7 +74,6 @@ public class CardDataBase : ScriptableObject
         
         TableManager.Instance.RemoveSuits(suitsToDestroy); // TODO more polish, so this part would be noticable
 
-        h.Out("VP:", vp);
         return vp;
     }
     
@@ -172,8 +171,14 @@ public class CardDataBase : ScriptableObject
         for (int id = 1; id <= CP.SuitFrameCount; id++)
         {
             string frame = "";
+            int i = h.Range(0,1);
             foreach (CP.Suit suit in suits)
-                frame += CP.SuitTag(suit, id);
+            {
+                frame += CP.SuitTag(suit, 1 + (id + i)%2);
+                i++;
+            }
+
+            
             famousFrames.Add(frame);
         }
 
@@ -243,7 +248,7 @@ public class CardDataBase : ScriptableObject
             result += "\nDESTROYS " + BuildSuitTags(suitsToDestroy, id);
         }
 
-        if (condition != CP.Condition.FixedVp) result += " = " + vpPerSet.ToString();
+        if (condition != CP.Condition.FixedVp) result += $"{CP.EqualTag(id)}" + vpPerSet.ToString();
         
         return result;
     }

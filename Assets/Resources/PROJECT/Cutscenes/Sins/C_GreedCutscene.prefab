@@ -47,7 +47,10 @@ MonoBehaviour:
   runOnStart: 0
   customDestroy: 0
   sin: 1
-  placeholderDialogue: {fileID: 11400000, guid: 0b6556f3e56a4734ca35e2b2a2697c05, type: 2}
+  placeholderDialogues:
+  - {fileID: 11400000, guid: 0b6556f3e56a4734ca35e2b2a2697c05, type: 2}
+  - {fileID: 11400000, guid: 529e7c2cd41754344a3744dbb7be74eb, type: 2}
+  - {fileID: 11400000, guid: bd2246fe56228e548af904ce2261d952, type: 2}
   delayAfterWin: 1.67
   burnCardStagger: 0.08
   waitForBurnsToFinish: 0

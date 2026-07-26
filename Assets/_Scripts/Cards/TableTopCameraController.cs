@@ -252,6 +252,11 @@ public class TableTopCameraController : MonoBehaviour
         }
     }
 
+    public void SetIsHoldingView(bool isHoldingViewIn)
+    {
+        isHoldingView = isHoldingViewIn;
+    }
+
     
 
     private void BeginHoldView(KeyCode key, State view, State restoreState)

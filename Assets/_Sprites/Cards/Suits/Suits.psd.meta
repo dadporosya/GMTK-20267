@@ -558,7 +558,7 @@ TextureImporter:
         width: 112
         height: 72
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -580,7 +580,7 @@ TextureImporter:
         width: 112
         height: 72
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -589,6 +589,50 @@ TextureImporter:
       bones: []
       spriteID: eb619729a74e9474fbf6f33f49273ea3
       internalID: 777203317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_22
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 324
+        width: 80
+        height: 60
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b25f88a4f86792c498739862b093cf6a
+      internalID: 1438464414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Suits_23
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 324
+        width: 78
+        height: 60
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0df51926bd0807140915012288c124c9
+      internalID: 2020311387
       vertices: []
       indices: 
       edges: []
@@ -624,6 +668,8 @@ TextureImporter:
       Suits_2: -102163122
       Suits_20: -1569283296
       Suits_21: 777203317
+      Suits_22: 1438464414
+      Suits_23: 2020311387
       Suits_3: -682787072
       Suits_4: 2092796997
       Suits_5: 1711479626

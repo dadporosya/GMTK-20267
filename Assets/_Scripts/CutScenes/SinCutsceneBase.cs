@@ -39,6 +39,9 @@ public class SinCutsceneBase : CutSceneBase
              "matching the cutscene's 'environment turns the sin's color' description.")]
     [SerializeField] private bool useSinColor = true;
 
+    [SerializeField] private bool changeLights = true;
+    [SerializeField] private bool changeSkyBox = true;
+
     [Header("Dialogue")]
     [SerializeField] private DialogueContainer sinDialogue;
     public override void Init()
@@ -175,9 +178,18 @@ public class SinCutsceneBase : CutSceneBase
         }
 
         // Tween the light's color to lightColor over colorFadeDuration (PrimeTween, per project convention).
-        Tween fade = Tween.Custom(target, target.color, lightColor, colorFadeDuration,
-            (Light l, Color c) => l.color = c);
-        yield return fade.ToYieldInstruction();
+        if (changeLights)
+        {
+            Tween fade = Tween.Custom(target, target.color, lightColor, colorFadeDuration,
+                (Light l, Color c) => l.color = c);
+            
+            // yield return fade.ToYieldInstruction();
+        }
+
+        if (changeSkyBox)
+        {
+            /// TASK change camera.environment.backgroundtypetpy esolid colorm color to lightColor
+        }
 
         yield return new WaitForSeconds(delayAfterColorChange);
     }

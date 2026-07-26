@@ -159,6 +159,7 @@ public class CardManager : MonoBehaviour
     public void RoundStart()
     {
         h.Out("Deal cards");
+        TableManager.Instance.ResetSuits();
         pile = fullPile ? Instantiate(fullPile) : null;
         if (!gameStarted)
         {
@@ -399,6 +400,7 @@ public class CardManager : MonoBehaviour
     public void ResetRound()
     {
         h.Out("Deal cards (reset round after loss)");
+        TableManager.Instance.ResetSuits();
         pile = fullPile ? Instantiate(fullPile) : null;
         lost = false;
         if (!gameStarted)

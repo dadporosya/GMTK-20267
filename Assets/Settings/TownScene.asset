@@ -1,5 +1,60 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8090073018259587296
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb2952b95454955ba507c3d96778a76, type: 3}
+  m_Name: VhsVol
+  m_EditorClassIdentifier: VolFx::VolFx.VhsVol
+  active: 1
+  _weight:
+    m_OverrideState: 1
+    m_Value: 0.2111
+  _tape:
+    m_OverrideState: 0
+    m_Value: 0
+  _shades:
+    m_OverrideState: 0
+    m_Value: 0
+  _rocking:
+    m_OverrideState: 0
+    m_Value: 0
+  _squeeze:
+    m_OverrideState: 0
+    m_Value: 0
+  _density:
+    m_OverrideState: 0
+    m_Value: 0
+  _intensity:
+    m_OverrideState: 0
+    m_Value: 0
+  _scale:
+    m_OverrideState: 0
+    m_Value: 1
+  _flickering:
+    m_OverrideState: 0
+    m_Value: 0
+  _lines:
+    m_OverrideState: 0
+    m_Value: 1
+  _color:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 1, b: 0.8962717, a: 1}
+  _bleed:
+    m_OverrideState: 1
+    m_Value: 0.298
+  _flow:
+    m_OverrideState: 1
+    m_Value: 0.62
+  _pulsation:
+    m_OverrideState: 1
+    m_Value: 0.35
 --- !u!114 &-8041028567988500009
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -61,13 +116,13 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 0.7
+    m_Value: 1
   intensity:
     m_OverrideState: 1
     m_Value: 33
   scatter:
     m_OverrideState: 1
-    m_Value: 0.777
+    m_Value: 0
   clamp:
     m_OverrideState: 0
     m_Value: 65472
@@ -451,6 +506,7 @@ MonoBehaviour:
   - {fileID: -334578560697761751}
   - {fileID: 8344882642734326745}
   - {fileID: -4933637563017535051}
+  - {fileID: -8090073018259587296}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3

@@ -86,5 +86,13 @@ public static class CP
         
         return result;
     }
+
+    public static string EqualTag(int id = 1)
+    {
+        string idText = id == -1 ? "" :  id.ToString();
+        string result = $"<sprite name=equal{idText}>";
+        
+        return result;
+    }
     
 }
