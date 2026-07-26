@@ -5067,7 +5067,7 @@ MonoBehaviour:
   label: KM
   decimalPlaces: 2
   kmValue: 0
-  timeInMinutes: 0.25
+  timeInMinutes: 0.1
   timeBeforeEndToCallEndingDialogue: 1
 --- !u!4 &3570303577819389374
 Transform:

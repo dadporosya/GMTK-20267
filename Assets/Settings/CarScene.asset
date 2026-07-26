@@ -144,19 +144,19 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 0.77
+    m_Value: 1
   intensity:
     m_OverrideState: 1
     m_Value: 33
   scatter:
     m_OverrideState: 1
-    m_Value: 0.333
+    m_Value: 0
   clamp:
     m_OverrideState: 0
     m_Value: 65472
   tint:
     m_OverrideState: 0
-    m_Value: {r: 1, g: 0.89767873, b: 0, a: 1}
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   highQualityFiltering:
     m_OverrideState: 0
     m_Value: 0
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 221518ef91623a7438a71fef23660601, type: 3}
   m_Name: WhiteBalance
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.WhiteBalance
-  active: 0
+  active: 1
   temperature:
     m_OverrideState: 1
     m_Value: -14
@@ -514,7 +514,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: TownScene
+  m_Name: CarScene
   m_EditorClassIdentifier: 
   components:
   - {fileID: 849379129802519247}
@@ -676,19 +676,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f87d2427ed3459e8c4345aacc689427, type: 3}
   m_Name: BlurVol
   m_EditorClassIdentifier: VolFx::VolFx.BlurVol
-  active: 1
+  active: 0
   m_Radius:
     m_OverrideState: 1
-    m_Value: 0.078
+    m_Value: 0.116
   m_Radial:
     m_OverrideState: 1
-    m_Value: 0.065
+    m_Value: 0.382
   m_Samples:
     m_OverrideState: 1
     m_Value: 4
   m_Aspect:
     m_OverrideState: 1
-    m_Value: -0.477
+    m_Value: -0.444
   m_Angle:
     m_OverrideState: 1
     m_Value: 114

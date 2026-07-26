@@ -947,14 +947,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519850926}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -8.39, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.9998806, z: -0, w: -0.015455951}
+  m_LocalPosition: {x: -2.0253348, y: 0.54, z: -8.142988}
   m_LocalScale: {x: 0.40000013, y: 0.4, z: 0.40000013}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1643283418}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -181.771, z: 0}
 --- !u!1 &523500369
 GameObject:
   m_ObjectHideFlags: 0
@@ -1510,14 +1510,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758091522}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0077585047, y: -0.7295187, z: -0.008276428, w: 0.6838668}
-  m_LocalPosition: {x: -1.42, y: 2.44, z: -3.333}
+  m_LocalRotation: {x: 0, y: 0.9999357, z: 0.011344323, w: 0}
+  m_LocalPosition: {x: -1.42, y: 3.6, z: -3.333}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 330585546}
   m_Father: {fileID: 9043470}
-  m_LocalEulerAnglesHint: {x: -1.3, y: -93.7, z: 0}
+  m_LocalEulerAnglesHint: {x: -1.3, y: 180, z: 0}
 --- !u!1 &825342096
 GameObject:
   m_ObjectHideFlags: 0
@@ -1727,11 +1727,14 @@ MonoBehaviour:
   dialogueWindow: {fileID: 0}
   portraitImage: {fileID: 0}
   portraitTitle: {fileID: 0}
-  dialogueText: {fileID: 0}
+  dialogueTexts: []
+  dialogueTextId: 0
   portraitScalingTitle: {fileID: 0}
   dialogueScalingText: {fileID: 0}
   defaultTypeSpeed: 10
   typeSpeed: 0
+  pauseAfterComma: 0
+  pauseAfterDot: 0
   skipIcon: {fileID: 0}
   defaultMaterial: {fileID: 0}
   onDialogueEnd:
@@ -1749,6 +1752,8 @@ MonoBehaviour:
   disableWindowOnStart: 1
   windowAnimations: {fileID: 0}
   delayBeforeDialogueStart: 0
+  skipByMouse: 1
+  onDialogueStartEvents: 1
 --- !u!1 &1191751512
 GameObject:
   m_ObjectHideFlags: 0
@@ -3961,7 +3966,7 @@ Transform:
   m_GameObject: {fileID: 2127022979}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.01, y: -0.04, z: -72.2}
+  m_LocalPosition: {x: -9.01, y: -0.04, z: -662}
   m_LocalScale: {x: 3.8373, y: 3.8373, z: 3.8373}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5443,7 +5448,7 @@ Transform:
   m_GameObject: {fileID: 919132148362695385}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.01, y: -0.04, z: -72.2}
+  m_LocalPosition: {x: -9.01, y: -0.04, z: -61.03}
   m_LocalScale: {x: 3.8373, y: 3.8373, z: 3.8373}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -6169,7 +6174,7 @@ GameObject:
   - component: {fileID: 3127129692859969291}
   - component: {fileID: 2320798170417334269}
   m_Layer: 0
-  m_Name: Cylinder.004
+  m_Name: wheel2
   m_TagString: Wheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6374,15 +6379,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132148362695385}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77d0ab0ca1bce944f87288f9e6211e83, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c64aeb3e9e7d0943aa62cc6e6056088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Car
   animEndPoint: {fileID: 1375279501}
   carStartPoint: {fileID: 2127022980}
-  initSpeed: 67
+  initSpeed: 10
   movementEase: 9
   wheelRadius: 0.5
-  wheels: []
+  wheels:
+  - {fileID: 8700725328727247006}
+  - {fileID: 843214210749418482}
+  - {fileID: 2490194676938082462}
+  - {fileID: 8513859189100875451}
 --- !u!4 &928045505417496099
 Transform:
   m_ObjectHideFlags: 0
@@ -10563,7 +10572,7 @@ GameObject:
   - component: {fileID: 9203870078685172595}
   - component: {fileID: 7783642030644999027}
   m_Layer: 0
-  m_Name: Cylinder.002
+  m_Name: wheel3
   m_TagString: Wheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20757,7 +20766,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.75
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalPosition.y
@@ -20765,7 +20774,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_LocalRotation.w
@@ -20798,6 +20807,30 @@ PrefabInstance:
     - target: {fileID: 6504174813820262894, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: disable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: returningTime
+      value: 0.067
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: defaultDuration
+      value: 0.067
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: returningEasing
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26399,7 +26432,7 @@ GameObject:
   - component: {fileID: 4109396431541682073}
   - component: {fileID: 7071182762294839090}
   m_Layer: 0
-  m_Name: Cylinder.001
+  m_Name: wheel4
   m_TagString: Wheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26867,7 +26900,7 @@ GameObject:
   - component: {fileID: 4812060308039162645}
   - component: {fileID: 1129496809376236593}
   m_Layer: 0
-  m_Name: Cylinder.003
+  m_Name: wheel1
   m_TagString: Wheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
