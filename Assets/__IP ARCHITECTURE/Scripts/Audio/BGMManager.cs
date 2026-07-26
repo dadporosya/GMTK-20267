@@ -42,6 +42,33 @@ public class BGMManager : AudioManagerBase
         StopAllCoroutines();
         StartCoroutine(CrossFade(newClip, fadeTime));
     }
+
+    /// <summary>
+    /// Fades the currently playing music down to silence over <paramref name="fadeTime"/> seconds,
+    /// then stops the source and restores its volume so a later <see cref="PlayMusic"/> starts clean.
+    /// </summary>
+    public void FadeOutMusic(float fadeTime = 1.5f)
+    {
+        StopAllCoroutines();
+        StartCoroutine(FadeOut(fadeTime));
+    }
+
+    private IEnumerator FadeOut(float fadeTime)
+    {
+        float startVolume = current.volume;
+        float t = 0f;
+
+        while (t < fadeTime)
+        {
+            t += Time.deltaTime;
+            current.volume = Mathf.Lerp(startVolume, 0f, t / fadeTime);
+            yield return null;
+        }
+
+        current.Stop();
+        current.clip = null;
+        current.volume = 1f;
+    }
     
     private IEnumerator CrossFade(AudioClip newClip, float fadeTime, bool changeSource=true)
     {

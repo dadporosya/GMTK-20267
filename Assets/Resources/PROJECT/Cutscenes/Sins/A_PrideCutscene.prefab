@@ -61,4 +61,5 @@ MonoBehaviour:
   useSinColor: 1
   changeLights: 1
   changeSkyBox: 0
+  soundtrack: {fileID: 8300000, guid: 2392d9ad2faace242a957e32bb238502, type: 3}
   sinDialogue: {fileID: 11400000, guid: 9cd94644396d2844a96182a4b788490e, type: 2}

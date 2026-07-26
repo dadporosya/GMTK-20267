@@ -42,6 +42,7 @@ public static class R
             public static Material DefaultOutlineMaterial => Resources.Load<Material>("ARCHITECTURE/Materials/DefaultOutlineMaterial");
             public static Material MasterMat => Resources.Load<Material>("ARCHITECTURE/Materials/MasterMat");
             public static Material MasterMatUI => Resources.Load<Material>("ARCHITECTURE/Materials/MasterMatUI");
+            public static Material MasterMatUIForFGImage => Resources.Load<Material>("ARCHITECTURE/Materials/MasterMatUIForFGImage");
 
             private static readonly System.Lazy<object[]> _all = new(() =>
             {
@@ -50,6 +51,7 @@ public static class R
                     DefaultOutlineMaterial,
                     MasterMat,
                     MasterMatUI,
+                    MasterMatUIForFGImage,
                 };
 
                 return list.ToArray();
@@ -107,6 +109,66 @@ public static class R
     {
         public static class Audio
         {
+            public static class AndreOst
+            {
+                public static class gamePlayIdk
+                {
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
+                public static class sins
+                {
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
+                public static class wDrums
+                {
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                    };
+
+                    list.AddRange(gamePlayIdk.All);
+                    list.AddRange(sins.All);
+                    list.AddRange(wDrums.All);
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
             public static class Cards
             {
                 public static class Activate
@@ -254,6 +316,7 @@ public static class R
                 {
                 };
 
+                list.AddRange(AndreOst.All);
                 list.AddRange(Cards.All);
                 list.AddRange(Clock.All);
                 list.AddRange(Fire.All);
@@ -265,15 +328,59 @@ public static class R
         }
         public static class Cutscenes
         {
+            public static class Ending
+            {
+                public static EngingCutscene EndingCutScene => Resources.Load<EngingCutscene>("PROJECT/Cutscenes/Ending/EndingCutScene");
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                        EndingCutScene,
+                    };
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
             public static class Sins
             {
                 public static SinCutsceneBase A_PrideCutscene => Resources.Load<SinCutsceneBase>("PROJECT/Cutscenes/Sins/A_PrideCutscene");
+                public static SinCutsceneBase B_WrathCutscene => Resources.Load<SinCutsceneBase>("PROJECT/Cutscenes/Sins/B_WrathCutscene");
+                public static SinCutsceneBase C_GreedCutscene => Resources.Load<SinCutsceneBase>("PROJECT/Cutscenes/Sins/C_GreedCutscene");
+                public static SinCutsceneBase D_GluttonyCutscene => Resources.Load<SinCutsceneBase>("PROJECT/Cutscenes/Sins/D_GluttonyCutscene");
+                public static SinCutsceneBase E_SlothCutscene => Resources.Load<SinCutsceneBase>("PROJECT/Cutscenes/Sins/E_SlothCutscene");
+                public static SinCutsceneBase F_LustCutscene => Resources.Load<SinCutsceneBase>("PROJECT/Cutscenes/Sins/F_LustCutscene");
+                public static SinCutsceneBase G_EnvyCutscene => Resources.Load<SinCutsceneBase>("PROJECT/Cutscenes/Sins/G_EnvyCutscene");
 
                 private static readonly System.Lazy<object[]> _all = new(() =>
                 {
                     var list = new System.Collections.Generic.List<object>
                     {
                         A_PrideCutscene,
+                        B_WrathCutscene,
+                        C_GreedCutscene,
+                        D_GluttonyCutscene,
+                        E_SlothCutscene,
+                        F_LustCutscene,
+                        G_EnvyCutscene,
+                    };
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
+            public static class Tutorial
+            {
+                public static TutorialCutscene TutorialCutscene => Resources.Load<TutorialCutscene>("PROJECT/Cutscenes/Tutorial/TutorialCutscene");
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                        TutorialCutscene,
                     };
 
                     return list.ToArray();
@@ -288,7 +395,9 @@ public static class R
                 {
                 };
 
+                list.AddRange(Ending.All);
                 list.AddRange(Sins.All);
+                list.AddRange(Tutorial.All);
 
                 return list.ToArray();
             });
@@ -297,7 +406,51 @@ public static class R
         }
         public static class Dialogues
         {
+            public static class Ending
+            {
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                    };
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
             public static class Sins
+            {
+                public static class RepeatedDialogueDialogues
+                {
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                    };
+
+                    list.AddRange(RepeatedDialogueDialogues.All);
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
+            public static class Tutorial
             {
 
                 private static readonly System.Lazy<object[]> _all = new(() =>
@@ -318,7 +471,9 @@ public static class R
                 {
                 };
 
+                list.AddRange(Ending.All);
                 list.AddRange(Sins.All);
+                list.AddRange(Tutorial.All);
 
                 return list.ToArray();
             });

@@ -42,6 +42,8 @@ public class SinCutsceneBase : CutSceneBase
     [SerializeField] private bool changeLights = true;
     [SerializeField] private bool changeSkyBox = true;
 
+    [SerializeField] private AudioClip soundtrack;
+
     [Header("Dialogue")]
     [SerializeField] private DialogueContainer sinDialogue;
     public override void Init()
@@ -98,7 +100,11 @@ public class SinCutsceneBase : CutSceneBase
         if (CardDragController.Instance) CardDragController.Instance.SetDraggingEnabled(false);
 
         yield return BurnAllCards();
-        // TODO: some onWin effects like sfx and stuff
+
+        // Fade the current background music out to silence so the win lands in quiet before the
+        // sin's soundtrack comes in during DialogueStart.
+        if (BGMManager.Instance) BGMManager.Instance.FadeOutMusic();
+
         yield return new WaitForSeconds(delayAfterWin);
         yield return null;
     }
@@ -220,6 +226,9 @@ public class SinCutsceneBase : CutSceneBase
 
     public virtual IEnumerator DialogueStart()
     {
+        // Bring in this sin's soundtrack (crossfades up from the silence left by OnWin's fade-out).
+        if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusic(soundtrack);
+
         DialogueContainer desiredDialogue;
         if (TableManager.Instance.playedCutScenes.Contains(sin))
         {
