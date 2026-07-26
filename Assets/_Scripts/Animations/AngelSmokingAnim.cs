@@ -15,12 +15,25 @@ public class AngelSmokingAnim : MonoBehaviour
    [SerializeField] private float gapBetweenFrames=1f;
    [SerializeField] private GameObject smokeParticles;
    [SerializeField] private ParticleSystem continuousSmoking;
-   
-   
+
+   [SerializeField] private bool smoking=true;
+   [SerializeField] private float gapBetweenAnimations;
+   private float gapBetweenAnimationsDistribution = 0.333f;
    
    private void Start()
    {
       ChangeModel(ModelState.Default);
+      if (smoking) StartCoroutine(SmokingCoroutine());
+   }
+
+   private IEnumerator SmokingCoroutine()
+   {
+      yield return null;
+      while (true)
+      {
+         yield return new WaitForSeconds(gapBetweenAnimations * h.RandMult(gapBetweenAnimationsDistribution));
+         yield return SmokingAnimationCoroutine();
+      }
    }
 
    private void ChangeModel(ModelState state)
@@ -41,16 +54,11 @@ public class AngelSmokingAnim : MonoBehaviour
    {
       if (Input.GetKeyDown(KeyCode.E))
       {
-         SmokeAnimation();
+         StartCoroutine(SmokingAnimationCoroutine());
       }
    }
 
-   public void SmokeAnimation()
-   {
-      StartCoroutine(SmokeAnimationCoroutine());
-   }
-
-   public IEnumerator SmokeAnimationCoroutine()
+   public IEnumerator SmokingAnimationCoroutine()
    {
       yield return null;
       if (continuousSmoking != null)
