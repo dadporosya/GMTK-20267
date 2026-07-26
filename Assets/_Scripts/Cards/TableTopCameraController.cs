@@ -97,6 +97,9 @@ public class TableTopCameraController : MonoBehaviour
              "look can turn the player and the hand view still faces the right way). " +
              "Overwritten from the scene pose on Start when handViewIsInitView is on.")]
     [SerializeField] private Vector3 handViewPlayerLocalEuler;
+    [Tooltip("When returning to Hand view from Free / Window / Taxometer view, wait this many seconds " +
+             "before the hand starts following the camera again. 0 = follow immediately.")]
+    [SerializeField] private float handFollowDelayAfterFreeViews = 1f;
 
     [Header("Free view / mouse look")]
     [Tooltip("If true, Free view is full mouse-look 'free aspect' (levels the pitch and hands control " +
@@ -140,6 +143,14 @@ public class TableTopCameraController : MonoBehaviour
     private Tween posTween;
     private Tween rotTween;
     private Tween playerRotTween;
+
+    // Pending delayed "hand follows camera" enable when returning to Hand view from a free/peek view.
+    // Stopped as soon as the state changes again so a superseded return never re-enables follow.
+    private Tween handFollowDelayTween;
+
+    // The state the camera was in before the current one (set in SwitchState). Used to decide whether
+    // returning to Hand view should delay re-enabling hand-follow.
+    private State previousState;
 
     // Hold-to-view (W = Table, D = Taxometer, A = Window): remember the state to restore on release.
     private bool isHoldingView;
@@ -292,7 +303,11 @@ public class TableTopCameraController : MonoBehaviour
     /// </summary>
     public void SwitchState(State newState, bool instant = false)
     {
+        previousState = state;
         state = newState;
+
+        // Any pending delayed hand-follow enable is no longer valid once the state changes again.
+        if (handFollowDelayTween.isAlive) handFollowDelayTween.Stop();
 
         switch (newState)
         {
@@ -393,7 +408,23 @@ public class TableTopCameraController : MonoBehaviour
     {
         if (mouseLook) mouseLook.canLook = false;
         SetCursorVisible(true);
-        SetCardsFollow(true);
+
+        // Returning from Free / Window / Taxometer view: wait a beat before the hand starts following
+        // the camera again, so the hand doesn't snap to the camera the instant the view returns. Any
+        // other origin (or an instant/Start apply, or a zero delay) enables follow immediately.
+        bool cameFromFreeViews = previousState == State.Free
+                              || previousState == State.WindowView
+                              || previousState == State.TaxometerView;
+        if (cameFromFreeViews && !instant && handFollowDelayAfterFreeViews > 0f)
+        {
+            SetCardsFollow(false);
+            handFollowDelayTween = Tween.Delay(handFollowDelayAfterFreeViews, () => SetCardsFollow(true));
+        }
+        else
+        {
+            SetCardsFollow(true);
+        }
+
         MoveToLocal(handViewLocalPosition, Quaternion.Euler(handViewLocalEuler), instant);
         // Free look yaws the player, so restore the hand view's remembered yaw too, otherwise the
         // hand view would come back facing wherever mouse look left the player.

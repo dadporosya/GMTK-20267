@@ -57,6 +57,10 @@ public class CardDragController : MonoBehaviour
     [SerializeField] private float dragFollowSmoothing = 0.08f;
     [Tooltip("Cards land face up on the table when true.")]
     [SerializeField] private bool placeFaceUpOnTable = true;
+    [Tooltip("While the camera is in Table view, don't rotate a card that's being dragged from the " +
+             "hand — it keeps the orientation it had when picked up. Fixes the card spinning/flipping " +
+             "erratically because the top-down camera makes the flat-table rotation unstable.")]
+    [SerializeField] private bool disableTableCardRotatoin = true;
     [SerializeField] private float maxRayDistance = 1000f;
 
     [Header("Hover focus (make the selected hand card readable)")]
@@ -267,6 +271,14 @@ public class CardDragController : MonoBehaviour
         RaycastHit hit = default;
         hasTablePoint = hoverHandCard == null && TryGetDropSurface(ray, out hit);
 
+        // In Table view the top-down camera makes the flat-table / face-camera rotations unstable
+        // (the camera-forward projects to ~zero on the table plane), which spins a hand card as it's
+        // dragged. When enabled, hold the card at the rotation it was picked up with instead.
+        bool lockRotation = disableTableCardRotatoin
+                         && dragOriginState == Card.CardState.InHand
+                         && TableTopCameraController.Instance
+                         && TableTopCameraController.Instance.CurrentState == TableTopCameraController.State.TableView;
+
         if (hasTablePoint)
         {
             lastTablePoint = hit.point;
@@ -276,7 +288,7 @@ public class CardDragController : MonoBehaviour
             // Magnetize: lie the card flat (face up, parallel to the surface) and float it
             // above the plane by dragLift so it hovers over the area instead of clipping into it.
             dragTargetPos = hit.point + hit.normal * dragLift;
-            dragTargetRot = FlatTableRotation(dragging);
+            if (!lockRotation) dragTargetRot = FlatTableRotation(dragging);
         }
         else
         {
@@ -288,7 +300,7 @@ public class CardDragController : MonoBehaviour
             dragTargetPos = ray.origin + ray.direction.normalized * activeDragDistance;
             // Front faces straight back at the camera; camera-up is the roll hint so the
             // orientation stays stable instead of snapping as the cursor moves.
-            dragTargetRot = dragging.Face(-cam.transform.forward, cam.transform.up);
+            if (!lockRotation) dragTargetRot = dragging.Face(-cam.transform.forward, cam.transform.up);
         }
 
         // Ease toward the target every frame (frame-rate independent, OutQuad-like glide).
