@@ -11,13 +11,13 @@ public class TutorialCutscene : CutSceneBase
     [SerializeField] private DialogueContainer introDialogue;
     [SerializeField] private DialogueContainer tutorialDialogue;
 
-    [Header("Additional dialogue window dissolve")]
-    [SerializeField] private float dissolveAnimDuration = 0.4f;
-    [SerializeField] private Ease dissolveAnimEase = Ease.Default;
+    [Header("Additional dialogue window scale")]
+    [SerializeField] private float scaleAnimDuration = 0.4f;
+    [SerializeField] private Ease scaleAnimEase = Ease.Default;
 
-    // Cached once resolved (while the window is still active/findable) so the dissolve-out path
-    // can still reach it after we deactivate the object.
-    private MasterMaterialController additionalWindowMat;
+    // Cached once resolved so the scale-out path can still reach the window after we
+    // deactivate the object.
+    private Transform additionalWindow;
     public override void Init()
     {
         base.Init();
@@ -96,75 +96,80 @@ public class TutorialCutscene : CutSceneBase
         {
             DialogueManager.Instance.onDialogueStartEvents = true;
             DialogueManager.Instance.dialogueTextId=0;
-            SetAdditionalWindowDissolve(false);
+            SetAdditionalWindowVisible(false);
             DialogueManager.Instance.skipByMouse = true;
             DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
+            DestroyCutscene();
         }
         DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
         
         DialogueManager.Instance.onDialogueStartEvents = false;
-        DialogueManager.Instance.skipByMouse = false;
+        // DialogueManager.Instance.skipByMouse = false;
 
-        // Reveal the extra dialogue window used for the tutorial's second text box (dissolve in).
-        SetAdditionalWindowDissolve(true);
+        // Reveal the extra dialogue window used for the tutorial's second text box (scale in).
+        SetAdditionalWindowVisible(true);
 
         DialogueManager.Instance.StartDialogue(tutorialDialogue);
-        DestroyCutscene();
+        
     }
 
     /// <summary>
-    /// Shows/hides the AdditionalDialogueWindow by animating its MasterMaterialController dissolve
-    /// amount (1 = fully dissolved/hidden, 0.333 = visible) instead of snapping the GameObject
-    /// active state. When showing, the object is enabled before the dissolve-in; when hiding, it
-    /// is disabled once the dissolve-out finishes.
+    /// Shows/hides the AdditionalDialogueWindow by animating its scale: 0 -> 1 when showing,
+    /// 1 -> 0 when hiding. The object is enabled before scaling in, and disabled once it has
+    /// finished scaling out.
     /// </summary>
-    private void SetAdditionalWindowDissolve(bool visible)
+    private void SetAdditionalWindowVisible(bool visible)
     {
-        MasterMaterialController matController = ResolveAdditionalWindowMat();
-        if (!matController) return;
-
-        GameObject go = matController.gameObject;
-        float from = matController.GetDissolveAmount();
-        float target = visible ? 0.333f : 1f;
+        if (!ResolveAdditionalWindow()) return;
 
         if (visible)
         {
-            // Enable the window and turn the dissolve effect on, then dissolve in.
-            go.SetActive(true);
-            matController.SetDissolve(true);
-            Tween.Custom(from, target, dissolveAnimDuration,
-                val => matController.SetDissolveAmount(val), dissolveAnimEase);
+            // Enable the window, start from zero, then scale in.
+            additionalWindow.localScale = Vector3.zero;
+            additionalWindow.gameObject.SetActive(true);
+            Tween.Scale(additionalWindow, Vector3.one, scaleAnimDuration, scaleAnimEase);
         }
         else
         {
-            // Dissolve out, then disable the window once it is fully dissolved.
-            Tween.Custom(from, target, dissolveAnimDuration,
-                    val => matController.SetDissolveAmount(val), dissolveAnimEase)
-                .OnComplete(() => go.SetActive(false));
+            // Scale out, then disable the window once it reaches zero.
+            Tween.Scale(additionalWindow, Vector3.zero, scaleAnimDuration, scaleAnimEase)
+                .OnComplete(() => additionalWindow.gameObject.SetActive(false));
         }
     }
 
     /// <summary>
-    /// Resolves (and caches) the MasterMaterialController on the AdditionalDialogueWindow. The
-    /// lookup relies on GameObject.FindGameObjectWithTag, which only sees active objects, so it is
-    /// cached the first time the window is found while still active.
+    /// Resolves (and caches) the AdditionalDialogueWindow transform. Finds it even when it is
+    /// disabled (GameObject.FindGameObjectWithTag only sees active objects).
     /// </summary>
-    private MasterMaterialController ResolveAdditionalWindowMat()
+    private bool ResolveAdditionalWindow()
     {
-        if (additionalWindowMat) return additionalWindowMat;
+        if (additionalWindow) return true;
 
-        GameObject additionalWindow = GameObject.FindGameObjectWithTag("AdditionalDialogueWindow");
-        if (!additionalWindow)
+        GameObject go = FindSceneObjectByTag("AdditionalDialogueWindow");
+        if (!go)
         {
             h.Out("AdditionalDialogueWindow not found");
-            return null;
+            return false;
         }
 
-        additionalWindowMat = additionalWindow.GetComponentInChildren<MasterMaterialController>(true);
-        if (!additionalWindowMat)
-            h.Out("AdditionalDialogueWindow has no MasterMaterialController");
+        additionalWindow = go.transform;
+        return true;
+    }
 
-        return additionalWindowMat;
+    /// <summary>
+    /// Finds a scene GameObject by tag, including inactive/disabled ones (unlike
+    /// GameObject.FindGameObjectWithTag). Prefab/asset objects that aren't part of a loaded scene
+    /// are skipped.
+    /// </summary>
+    private GameObject FindSceneObjectByTag(string tag)
+    {
+        foreach (Transform t in Resources.FindObjectsOfTypeAll<Transform>())
+        {
+            if (!t.CompareTag(tag)) continue;
+            if (!t.gameObject.scene.IsValid()) continue; // skip prefab/asset objects
+            return t.gameObject;
+        }
+        return null;
     }
 
 }
