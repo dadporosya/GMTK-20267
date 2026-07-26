@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/CardEngine.unity
+    guid: 900e864e3c4dd384da35ab798f0f08ea
+  - enabled: 1
+    path: Assets/Scenes/CreditsScene.unity
+    guid: 96b5fdf21c5e10b448f6766570269658
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

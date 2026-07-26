@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using PrimeTween;
@@ -40,6 +41,13 @@ public class EngingCutscene : CutSceneBase
     [SerializeField] private float bloomThresholdTarget = 0f;
 
     [SerializeField] private float delayBeforeBlackScreen=2f;
+
+    [Header("Black screen / credits")]
+    [Tooltip("How long the fully black screen is held after FadeIn before the credits scene loads.")]
+    [SerializeField] private float blackScreenDuration = 3f;
+    [Tooltip("Name of the credits scene to load once the cutscene ends. Must be added to Build Settings.")]
+    [SerializeField] private string creditsSceneName = "CreditsScene";
+
     public override void Init()
     {
         base.Init();
@@ -102,8 +110,17 @@ public class EngingCutscene : CutSceneBase
                                               bloomThresholdTarget, fadeDurationInSeconds, fadeEase);
         }
 
+        // Wait for every volume tween above to reach its desired value.
+        yield return new WaitForSeconds(fadeDurationInSeconds);
 
-        yield return null;
+        // Short beat, then snap the screen fully black (FadeIn to alpha 1 with a 0s duration).
+        yield return new WaitForSeconds(delayBeforeBlackScreen);
+        if (FadeImageController.Instance != null)
+            FadeImageController.Instance.FadeIn(0f);
+
+        // Hold the black screen, then load the credits scene.
+        yield return new WaitForSeconds(blackScreenDuration);
+        SceneManager.LoadScene(creditsSceneName);
     }
 
 
