@@ -35,7 +35,7 @@ public class ProgressionManager : MonoBehaviour
 
     private void Start()
     {
-        SetScore(level);
+        // SetScore(level);
     }
     
     /// <summary>

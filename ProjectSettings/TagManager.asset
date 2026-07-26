@@ -8,6 +8,7 @@ TagManager:
   - Eye
   - SpawnPoint
   - Wheel
+  - AdditionalDialogueWindow
   layers:
   - Default
   - TransparentFX

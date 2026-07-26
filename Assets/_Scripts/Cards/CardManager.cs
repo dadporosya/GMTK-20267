@@ -90,6 +90,8 @@ public class CardManager : MonoBehaviour
              "is destroyed at once (no burn). 0 = snap instantly.")]
     [SerializeField] private float draftPickMoveDuration = 0.25f;
 
+    public bool startRoundOnStart = false;
+    
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
@@ -139,7 +141,7 @@ public class CardManager : MonoBehaviour
             alert:false
             );
         
-        RoundStart();
+        if (startRoundOnStart) RoundStart();
     }
 
     private void Update()

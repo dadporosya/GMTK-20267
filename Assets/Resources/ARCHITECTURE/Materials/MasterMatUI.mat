@@ -60,13 +60,13 @@ Material:
     - _Contrast: 0
     - _Contrast_Amount: 0
     - _Disslove: 1
-    - _DissloveOutlinesthickness: 0.05
-    - _DissloveScale: 118
-    - _DissloveTwirl: 0
-    - _DissloveTwirlStrength: 20
-    - _DissolvePixelation: 23.6
+    - _DissloveOutlinesthickness: 0
+    - _DissloveScale: 500
+    - _DissloveTwirl: 1
+    - _DissloveTwirlStrength: 9.8
+    - _DissolvePixelation: 1000
     - _DissolvePixelationShape: 1
-    - _Dissolve_amount: 0
+    - _Dissolve_amount: 0.394
     - _Distortion: 0
     - _DistortionScale: 10
     - _DistortionStrength: 1
@@ -81,7 +81,7 @@ Material:
     - _HueShiftAnimationSpeed: 1
     - _Negative: 0
     - _Negative_Amount: 0
-    - _OffsetTilling: 0
+    - _OffsetTilling: 1
     - _Outline: 0
     - _Outline_Thickness: 0
     - _Pixel_Resolution: -0.59
@@ -100,7 +100,7 @@ Material:
     - _TwirlStrength: 5
     - _UIMaskSoftnessX: 1
     - _UIMaskSoftnessY: 1
-    - _XDir: 2
+    - _XDir: 10.13
     - _YDir: 0
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}

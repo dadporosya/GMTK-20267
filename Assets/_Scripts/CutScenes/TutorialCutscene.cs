@@ -88,12 +88,21 @@ public class TutorialCutscene : CutSceneBase
         {
             DialogueManager.Instance.onDialogueStartEvents = true;
             DialogueManager.Instance.dialogueTextId=0;
+            GameObject additionalWindow = GameObject.FindGameObjectWithTag("AdditionalDialogueWindow");
+            if (additionalWindow) additionalWindow.SetActive(false); // TASK instead of set active false and true, disolve it, changing dissolve amount in material to 1 if false, and to 0.333 if true
             DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
         }
         DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
         
         DialogueManager.Instance.onDialogueStartEvents = false;
+
+        // Reveal the extra dialogue window used for the tutorial's second text box.
+        GameObject additionalWindow = GameObject.FindGameObjectWithTag("AdditionalDialogueWindow");
+        if (additionalWindow) additionalWindow.SetActive(true);
+        else h.Out("AdditionalDialogueWindow not found");
+
         DialogueManager.Instance.StartDialogue(tutorialDialogue);
         DestroyCutscene();
     }
+    
 }

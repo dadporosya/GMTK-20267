@@ -466,7 +466,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100000
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 70718ca6a2f773840859a60208cbcea0, type: 2}
   m_sharedMaterial: {fileID: -3462350358890353944, guid: 70718ca6a2f773840859a60208cbcea0, type: 2}
@@ -2014,10 +2014,99 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0d23056a670de479873b8eec61eb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionManager
-  initialScore: 10000
-  constPerLevel: 100
-  constBoostPerLevel: 100
+  initialScore: 2000
+  constPerLevel: 1000
+  constBoostPerLevel: 500
   level: 1
+--- !u!1 &1266318198
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1266318199}
+  - component: {fileID: 1266318201}
+  - component: {fileID: 1266318200}
+  - component: {fileID: 1266318202}
+  m_Layer: 0
+  m_Name: BG
+  m_TagString: AdditionalDialogueWindow
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1266318199
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266318198}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1458407701}
+  m_Father: {fileID: 8991061667189940214}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -44}
+  m_SizeDelta: {x: -246.3508, y: 226.9886}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &1266318200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266318198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 2100000, guid: 5ec92a3cbfe668c48b1bd21718cd57fa, type: 2}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.92156863}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -1209338609, guid: 4636dcaa0575db7459f910d25afcb064, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1266318201
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266318198}
+  m_CullTransparentMesh: 1
+--- !u!114 &1266318202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266318198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf52497f589e7b443af621b1bec6fde5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetActiveFalseOnEnable
 --- !u!1 &1279035260
 GameObject:
   m_ObjectHideFlags: 0
@@ -2216,18 +2305,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1458407700}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8991061667189940214}
+  m_Father: {fileID: 1266318199}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -57}
-  m_SizeDelta: {x: -220.6355, y: 176.0769}
-  m_Pivot: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -75.8005, y: -47.4931}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1458407702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2275,15 +2364,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
+  m_fontSize: 70
   m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 90
+  m_fontSizeMin: 70
   m_fontSizeMax: 113
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -2343,9 +2432,9 @@ MonoBehaviour:
   animationTarget: 3
   animations: 01000000
   cleaned: 0
-  shakeStrength: 0.009
+  shakeStrength: 1
   shakeSpeed: 22.5
-  waveAmplitude: 0.15
+  waveAmplitude: 1
   waveFrequency: 0.4
   waveSpread: 0.8
   bounceHeight: 8
@@ -4515,7 +4604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a4361043ea4644d93f061712793178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TableManager
-  targetScore: 6767
+  targetScore: 0
   currentScore: 0
   overrideScore: 0
   decreasingScore: 1
@@ -6195,8 +6284,7 @@ MonoBehaviour:
   dealDelay: 0.03
   pfbTest: {fileID: 6556123085242673732, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
   currentPlacedCard: {fileID: 0}
-  startCards:
-  - {fileID: 11400000, guid: 8b4472385b454e44ab9f591db601910e, type: 2}
+  startCards: []
   cardTextures:
   - {fileID: 2800000, guid: 88c7aaf912ccaf542a05c78d0cb4af3a, type: 3}
   - {fileID: 2800000, guid: 73982d5a0694dce4db395e89ee6f730a, type: 3}
@@ -6211,6 +6299,7 @@ MonoBehaviour:
   cardDrafting: 1
   draftCardCount: 5
   draftPickMoveDuration: 0.25
+  startRoundOnStart: 0
 --- !u!4 &6674368213915398119
 Transform:
   m_ObjectHideFlags: 0
@@ -6889,7 +6978,7 @@ RectTransform:
   m_Children:
   - {fileID: 112464376522723194}
   - {fileID: 4120840090714004449}
-  - {fileID: 1458407701}
+  - {fileID: 1266318199}
   m_Father: {fileID: 1746199154207000446}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
