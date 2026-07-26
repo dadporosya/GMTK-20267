@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5461861924098035315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 685625508197964510}
+  - component: {fileID: 5260520136636283828}
+  m_Layer: 0
+  m_Name: D_GluttonyCutscene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &685625508197964510
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5461861924098035315}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.95028, y: 23.04827, z: 20.88104}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5260520136636283828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5461861924098035315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfe8156fa61646d99b31032b63233602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SinCutsceneBase
+  runOnStart: 0
+  customDestroy: 0
+  sin: 4
+  placeholderDialogue: {fileID: 11400000, guid: 0b6556f3e56a4734ca35e2b2a2697c05, type: 2}
+  delayAfterWin: 1.67
+  burnCardStagger: 0.08
+  waitForBurnsToFinish: 0
+  environmentLight: {fileID: 0}
+  lightColor: {r: 0.9056604, g: 0.75536186, b: 0.11534355, a: 1}
+  colorFadeDuration: 3
+  delayAfterColorChange: 1
+  useSinColor: 1
+  sinDialogue: {fileID: 11400000, guid: 619faff4ea5912447bfd395370ba2abd, type: 2}

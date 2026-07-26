@@ -327,6 +327,16 @@ public class TableManager : MonoBehaviour
     }
 
     // Sets every suit's count back to 0 and refreshes each tracker to match.
+    public void ResetSuits()
+    {
+        foreach (CP.Suit suit in System.Enum.GetValues(typeof(CP.Suit)))
+        {
+            suits[suit] = 0;
+            UpdateSuitTracker(suit);
+        }
+    }
+
+    // Sets every suit's count back to 0 and refreshes each tracker to match.
     public void RefreshSuits()
     {
         foreach (CP.Suit suit in System.Enum.GetValues(typeof(CP.Suit)))

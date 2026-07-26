@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c641f0240fccdbf4e8d5617e34811eb8, type: 3}
-  m_Name: B_WrathDialogue
+  m_Name: C_GreedDialogue
   m_EditorClassIdentifier: Assembly-CSharp::DialogueContainerWithModels
   speakerIds: []
   speakerPrefabs: []
@@ -20,7 +20,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: This wrath dialogue
+    text: This greed dialogue
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}

@@ -18,7 +18,7 @@ public class SinCutsceneBase : CutSceneBase
 {
     public CP.Suit sin;
     [Header("Place Holder Settings")]
-    [SerializeField] private DialogueContainer placeholderDialogue;
+    [SerializeField] private List<DialogueContainer> placeholderDialogues;
     
     [Header("After Win")]
     [SerializeField] private float delayAfterWin = 2f;
@@ -196,7 +196,7 @@ public class SinCutsceneBase : CutSceneBase
         DialogueContainer desiredDialogue;
         if (TableManager.Instance.playedCutScenes.Contains(sin))
         {
-            desiredDialogue = placeholderDialogue;
+            desiredDialogue = h.RandChoice(placeholderDialogues);
         }
         else
         {
