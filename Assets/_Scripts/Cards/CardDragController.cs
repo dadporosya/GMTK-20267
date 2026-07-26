@@ -404,7 +404,12 @@ public class CardDragController : MonoBehaviour
         {
             // Dropped off the table from the hand: return to the hand layout.
             card.SetState(Card.CardState.InHand);
-            if (HandManager.Instance) HandManager.Instance.Arrange();
+            // Only re-anchor the hand to the camera if the hand is actually following it
+            // (i.e. the camera is in Hand view). Releasing a card while the camera is in another
+            // view must NOT yank the whole frozen hand up to the current camera — the hand
+            // re-arranges on its own when Hand view returns (SetFollowCamera(true) -> Arrange).
+            if (HandManager.Instance && HandManager.Instance.FollowCamera)
+                HandManager.Instance.Arrange();
         }
     }
 
@@ -430,7 +435,9 @@ public class CardDragController : MonoBehaviour
         else
         {
             card.SetState(Card.CardState.InHand);
-            if (HandManager.Instance) HandManager.Instance.Arrange();
+            // As in EndDrag: don't pull the frozen hand to the camera when it isn't following it.
+            if (HandManager.Instance && HandManager.Instance.FollowCamera)
+                HandManager.Instance.Arrange();
         }
     }
 

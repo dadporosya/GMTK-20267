@@ -83,6 +83,16 @@ public class TutorialCutscene : CutSceneBase
         CardManager.Instance.RoundStart();
         yield return new WaitForSeconds(2f);
         DialogueManager.Instance.dialogueTextId=1;
+        
+        void OnDialogueEnd()
+        {
+            DialogueManager.Instance.onDialogueStartEvents = true;
+            DialogueManager.Instance.dialogueTextId=0;
+            DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
+        }
+        DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
+        
+        DialogueManager.Instance.onDialogueStartEvents = false;
         DialogueManager.Instance.StartDialogue(tutorialDialogue);
         DestroyCutscene();
     }

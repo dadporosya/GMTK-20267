@@ -27,6 +27,10 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private float defaultTypeSpeed = 10f;
     [HideInInspector] public float typeSpeed;
+
+    // Extra pause (seconds) applied after typing a comma / a period.
+    [SerializeField] private float pauseAfterComma = 0f;
+    [SerializeField] private float pauseAfterDot = 0f;
     
     private enum TypingState { notStarted, active, finished }
     private TypingState typingState = TypingState.notStarted;
@@ -63,6 +67,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private float delayBeforeDialogueStart = 0f;
 
     public bool skipByMouse = true;
+    public bool onDialogueStartEvents = true;
     
     private void Awake()
     {
@@ -206,7 +211,7 @@ public class DialogueManager : MonoBehaviour
 
         SetNodeText("");
 
-        onDialogueStart?.Invoke();
+        if (onDialogueStartEvents) onDialogueStart?.Invoke();
 
         // Play the open animation first; don't show the first paragraph until it finishes.
         StartCoroutine(StartDialogueRoutine());
@@ -421,8 +426,14 @@ public class DialogueManager : MonoBehaviour
                 AddSplit();
             }
 
-            // _textAnimationComponent.cleaned = true;    
+            // _textAnimationComponent.cleaned = true;
             yield return new WaitForSeconds(MAX_TYPE_SPEED / typeSpeed);
+
+            // Punctuation pauses: hold a little longer after a comma or a period.
+            if (c == ',' && pauseAfterComma > 0f)
+                yield return new WaitForSeconds(pauseAfterComma);
+            else if (c == '.' && pauseAfterDot > 0f)
+                yield return new WaitForSeconds(pauseAfterDot);
         }
         StopTyping();
     }
