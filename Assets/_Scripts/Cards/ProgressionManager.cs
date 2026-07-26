@@ -66,4 +66,6 @@ public class ProgressionManager : MonoBehaviour
     /// Advances to the next level and applies its target score.
     /// </summary>
     public int NextLevel() => SetScore(level + 1);
+
+    public int CurrentLevel() => SetScore(level);
 }

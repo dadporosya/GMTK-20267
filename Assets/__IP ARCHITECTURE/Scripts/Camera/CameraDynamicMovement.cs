@@ -3,19 +3,26 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Cursor parallax for the camera: the further the mouse is from the screen
-/// centre, the more the camera tilts (and optionally shifts) toward it,
-/// giving a subtle "look around" / parallax feel.
+/// centre, the more the camera tilts (and optionally shifts) toward it, giving a
+/// subtle "look around" / parallax feel.
 ///
-/// Recommended setup: put this on a dedicated empty pivot that is a PARENT of
-/// the actual Camera (and of anything that writes the camera's transform
-/// directly, like <see cref="BalatroScreenShake"/>). That way the parallax
-/// tilt composes cleanly with screen shake and <see cref="CameraFlowTargeting"/>
-/// follow instead of fighting them. It also works directly on the camera if
-/// nothing else drives its local rotation.
+/// COMPOSES with other camera drivers instead of fighting them. This project's
+/// <see cref="TableTopCameraController"/> tweens the camera's own local pose, and
+/// <see cref="BalatroScreenShake"/> / MouseLook also write the camera transform.
+/// If this component simply overwrote the transform every frame it would override
+/// those (which is the bug this version fixes). Instead, each LateUpdate it:
+///   1. reads the transform's current local pose,
+///   2. decides whether an external system wrote it since we last wrote (by
+///      comparing against the exact pose we left behind),
+///   3. treats that external pose as the neutral "base" and layers ONLY the small
+///      parallax offset on top.
+/// So the tilt rides along with whatever the table-top controller / shake is doing,
+/// and cleanly returns to zero when the cursor is centred — no drift, no stomping.
 ///
-/// The component captures its starting LOCAL position/rotation as the neutral
-/// pose, so it only ever adds an offset on top of whatever the parent does.
+/// Drop it straight onto the Camera object (alongside the table-top controller).
+/// Runs late so it sees the other systems' pose for the frame before adding tilt.
 /// </summary>
+[DefaultExecutionOrder(10000)]
 public class CameraDynamicMovement : MonoBehaviour
 {
     [Header("Rotation (tilt)")]
@@ -26,11 +33,11 @@ public class CameraDynamicMovement : MonoBehaviour
     [SerializeField] private bool invertTilt = false;
 
     [Header("Position (optional shift)")]
-    [Tooltip("Max local position offset at the screen edges. Leave at 0 for tilt-only parallax.")]
+    [Tooltip("Max LOCAL position offset at the screen edges. Leave at 0 for tilt-only parallax.")]
     [SerializeField] private Vector2 maxPositionOffset = Vector2.zero;
 
     [Header("Feel")]
-    [Tooltip("How quickly the camera eases toward the target pose. Higher = snappier.")]
+    [Tooltip("How quickly the tilt eases toward the target. Higher = snappier.")]
     [SerializeField] private float smoothSpeed = 6f;
 
     [Tooltip("Dead zone (0..1) around the screen centre where no movement is applied.")]
@@ -41,51 +48,79 @@ public class CameraDynamicMovement : MonoBehaviour
     [SerializeField] private bool smoothFalloff = true;
 
     [Header("Runtime")]
-    [Tooltip("When off, the camera eases back to the neutral pose.")]
+    [Tooltip("When off, the tilt eases back to zero and the camera is left entirely to the other drivers.")]
     [SerializeField] private bool active = true;
-
-    private Vector3 baseLocalPosition;
-    private Quaternion baseLocalRotation;
 
     // Current smoothed cursor offset in [-1, 1] on each axis.
     private Vector2 currentOffset;
 
-    private void Start()
-    {
-        baseLocalPosition = transform.localPosition;
-        baseLocalRotation = transform.localRotation;
-    }
+    // The exact local pose we wrote last frame, and the offset we baked into it, so
+    // next frame we can tell our own contribution apart from an external write and
+    // strip it back off before re-applying.
+    private bool hasWritten;
+    private Vector3 lastWrittenLocalPos;
+    private Quaternion lastWrittenLocalRot;
+    private Vector3 appliedPosOffset;
+    private Quaternion appliedRotOffset = Quaternion.identity;
 
     private void LateUpdate()
     {
         Vector2 target = active ? ReadCursorOffset() : Vector2.zero;
 
-        // Frame-rate independent smoothing toward the target offset.
-        float t = 1f - Mathf.Exp(-smoothSpeed * Time.deltaTime);
+        float t = 1f - Mathf.Exp(-smoothSpeed * Time.deltaTime); // frame-rate independent
         currentOffset = Vector2.Lerp(currentOffset, target, t);
 
-        // Tilt: horizontal cursor -> yaw (Y), vertical cursor -> pitch (X, inverted so
-        // moving the mouse up tilts the view up).
+        // --- work out the neutral base pose for this frame -------------------
+        Vector3 curPos = transform.localPosition;
+        Quaternion curRot = transform.localRotation;
+
+        Vector3 basePos;
+        Quaternion baseRot;
+        if (hasWritten
+            && Vector3.SqrMagnitude(curPos - lastWrittenLocalPos) < 1e-8f
+            && Quaternion.Angle(curRot, lastWrittenLocalRot) < 0.01f)
+        {
+            // Nobody else touched the transform since we wrote it: peel our own
+            // offset back off to recover the true base.
+            basePos = curPos - appliedPosOffset;
+            baseRot = curRot * Quaternion.Inverse(appliedRotOffset);
+        }
+        else
+        {
+            // A camera driver (table-top controller / shake / mouse look) wrote the
+            // transform this frame: adopt whatever it set as the base and ride on top.
+            basePos = curPos;
+            baseRot = curRot;
+        }
+
+        // --- build this frame's parallax offset ------------------------------
         float sign = invertTilt ? -1f : 1f;
         float pitch = -currentOffset.y * maxTiltAngles.x * sign;
         float yaw = currentOffset.x * maxTiltAngles.y * sign;
+        Quaternion rotOffset = Quaternion.Euler(pitch, yaw, 0f);
 
-        transform.localRotation = baseLocalRotation * Quaternion.Euler(pitch, yaw, 0f);
+        Vector3 posOffset = maxPositionOffset == Vector2.zero
+            ? Vector3.zero
+            : new Vector3(currentOffset.x * maxPositionOffset.x * sign,
+                          currentOffset.y * maxPositionOffset.y * sign, 0f);
 
-        // Optional positional parallax on the local XY plane (screen-aligned).
-        if (maxPositionOffset != Vector2.zero)
-        {
-            Vector3 offset = new Vector3(
-                currentOffset.x * maxPositionOffset.x * sign,
-                currentOffset.y * maxPositionOffset.y * sign,
-                0f);
-            transform.localPosition = baseLocalPosition + offset;
-        }
+        // --- apply & remember ------------------------------------------------
+        Quaternion newRot = baseRot * rotOffset;
+        Vector3 newPos = basePos + posOffset;
+
+        transform.localRotation = newRot;
+        transform.localPosition = newPos;
+
+        lastWrittenLocalRot = newRot;
+        lastWrittenLocalPos = newPos;
+        appliedRotOffset = rotOffset;
+        appliedPosOffset = posOffset;
+        hasWritten = true;
     }
 
     /// <summary>
-    /// Returns the cursor position relative to the screen centre, normalized to
-    /// roughly [-1, 1] per axis, with dead zone and optional smoothstep applied.
+    /// Cursor position relative to the screen centre, normalized to ~[-1, 1] per
+    /// axis, with dead zone and optional smoothstep applied.
     /// </summary>
     private Vector2 ReadCursorOffset()
     {
@@ -96,7 +131,6 @@ public class CameraDynamicMovement : MonoBehaviour
         Vector2 half = new Vector2(Screen.width, Screen.height) * 0.5f;
         if (half.x <= 0f || half.y <= 0f) return Vector2.zero;
 
-        // -1..1 from centre, clamped (cursor can sit slightly outside the game view).
         Vector2 n = new Vector2(
             Mathf.Clamp((pos.x - half.x) / half.x, -1f, 1f),
             Mathf.Clamp((pos.y - half.y) / half.y, -1f, 1f));
@@ -118,7 +152,6 @@ public class CameraDynamicMovement : MonoBehaviour
         if (deadZone <= 0f) return v;
         float a = Mathf.Abs(v);
         if (a <= deadZone) return 0f;
-        // Rescale so movement resumes from 0 just past the dead zone.
         return Mathf.Sign(v) * (a - deadZone) / (1f - deadZone);
     }
 
@@ -130,11 +163,4 @@ public class CameraDynamicMovement : MonoBehaviour
 
     /// <summary>Enable/disable the parallax; it eases back to neutral when disabled.</summary>
     public void SetActive(bool value) => active = value;
-
-    /// <summary>Re-capture the current local pose as the neutral pose (call after repositioning the pivot).</summary>
-    public void RecaptureBasePose()
-    {
-        baseLocalPosition = transform.localPosition;
-        baseLocalRotation = transform.localRotation;
-    }
 }

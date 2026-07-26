@@ -5060,6 +5060,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7086802348122070546}
   - component: {fileID: 9195323450752546840}
+  - component: {fileID: 9195323450752546841}
   m_Layer: 0
   m_Name: CameraParent
   m_TagString: Untagged
@@ -6777,6 +6778,25 @@ MonoBehaviour:
   windowViewLocalEuler: {x: -11.11, y: 179, z: -4.44}
   windowViewPlayerLocalEuler: {x: 0, y: 0, z: 0}
   windowTurnOverLeftShoulder: 0
+--- !u!114 &9195323450752546841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5049434838343382158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a368c39673abc14b940f49fb7ae46d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraDynamicMovement
+  maxTiltAngles: {x: 3, y: 2}
+  invertTilt: 0
+  maxPositionOffset: {x: 0, y: 0}
+  smoothSpeed: 6
+  deadZone: 0.05
+  smoothFalloff: 1
+  active: 1
 --- !u!4 &9210310398523262191
 Transform:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 /// Modes (see <see cref="State"/>):
 ///   - <see cref="State.TableView"/>: looks straight down on <see cref="currentTable"/> so the
 ///     player can read the whole table. Zoom is the camera's height above the surface
-///     (<see cref="tableViewZoom"/>). The hand does NOT follow the camera here.
+///     (<see cref="tableViewZoom"/>). The hand follows the camera here (same as hand view).
 ///   - <see cref="State.HandView"/>: the default "playing" pose. The camera returns to a saved
 ///     local pose (by default whatever pose it starts the scene in — see
 ///     <see cref="handViewIsInitView"/>) and the hand follows the camera.
@@ -365,13 +365,13 @@ public class TableTopCameraController : MonoBehaviour
 
     // ---- per-mode application -----------------------------------------------
 
-    /// <summary>Top-down over the table; hand stops following the camera.</summary>
+    /// <summary>Top-down over the table; hand keeps following the camera.</summary>
     private void ApplyTableView(bool instant)
     {
         if (mouseLook) mouseLook.canLook = false;
         SetCursorVisible(true);
 
-        SetCardsFollow(false);
+        SetCardsFollow(true);
 
         if (!currentTable) currentTable = FindTable();
         if (!currentTable)
@@ -412,9 +412,10 @@ public class TableTopCameraController : MonoBehaviour
         if (mouseLook) mouseLook.canLook = false;
         SetCursorVisible(true);
 
-        // Returning from Free / Window / Taxometer view: wait a beat before the hand starts following
-        // the camera again, so the hand doesn't snap to the camera the instant the view returns. Any
-        // other origin (or an instant/Start apply, or a zero delay) enables follow immediately.
+        // Returning from Free / Window / Taxometer view: wait a beat before the hand starts
+        // following the camera again, so the hand doesn't snap to the camera the instant the view
+        // returns. Table view already follows the camera, so returning from it needs no delay. Any
+        // other origin (or an instant/Start apply, or a zero delay) follows immediately.
         bool cameFromFreeViews = previousState == State.Free
                               || previousState == State.WindowView
                               || previousState == State.TaxometerView;
