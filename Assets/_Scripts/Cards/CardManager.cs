@@ -43,6 +43,11 @@ public class CardManager : MonoBehaviour
     [SerializeField] private int secondarySuitCardAdd = 3;
     [Tooltip("How many cards the third-most-present / third suit adds.")]
     [SerializeField] private int thirdSuitCardAdd = 1;
+    [Tooltip("When ON, ExtendPileAccordingToSins ignores which suits were won and simply offers " +
+             "randomExtendCardCount random cards pulled from random additional piles.")]
+    [SerializeField] private bool randomExtendSuits = true;
+    [Tooltip("How many random cards ExtendPileAccordingToSins offers when randomExtendSuits is ON.")]
+    [SerializeField] private int randomExtendCardCount = 8;
 
     [Header("Turn effects")]
     [Tooltip("Tables whose placed cards receive turn effects and count down each time a card is played.")]
@@ -128,6 +133,22 @@ public class CardManager : MonoBehaviour
             {
                 if (!additionalPile || additionalPile.scriptableObjects == null) continue;
                 fullPile.scriptableObjects.AddRange(additionalPile.scriptableObjects);
+            }
+        }
+
+        // Seed the full pile with one random card taken from each additional pile so every suit is
+        // represented in the starting draw pool. The card is removed from its additional pile so it
+        // is only ever added once (same "each extra card added once" rule the drafting flow follows).
+        if (fullPile)
+        {
+            foreach (var additionalPile in additionalPiles.Values)
+            {
+                if (!additionalPile || additionalPile.scriptableObjects == null
+                    || additionalPile.scriptableObjects.Count == 0) continue;
+
+                ScriptableObject card = h.RandChoice(additionalPile.scriptableObjects);
+                additionalPile.scriptableObjects.Remove(card);
+                fullPile.scriptableObjects.Add(card);
             }
         }
 
@@ -750,23 +771,29 @@ public class CardManager : MonoBehaviour
     {
         if (!TableManager.Instance) yield break;
 
-        // Only rank suits that are actually present.
-        var ranked = new List<KeyValuePair<CP.Suit, int>>();
-        foreach (var kv in TableManager.Instance.suits)
-            if (kv.Value > 0) ranked.Add(kv);
-
-        // Shuffle first so equal counts end up in a random relative order, then sort by count
-        // descending — that way ties are resolved randomly.
-        for (int i = ranked.Count - 1; i > 0; i--)
+        // Rank suits by how present they are on the table, unless randomExtendSuits is ON — in which
+        // case which suits were won is ignored entirely (see the random branch below).
+        CP.Suit? primary = null, secondary = null, third = null;
+        if (!randomExtendSuits)
         {
-            int j = Random.Range(0, i + 1);
-            (ranked[i], ranked[j]) = (ranked[j], ranked[i]);
-        }
-        ranked.Sort((a, b) => b.Value.CompareTo(a.Value));
+            // Only rank suits that are actually present.
+            var ranked = new List<KeyValuePair<CP.Suit, int>>();
+            foreach (var kv in TableManager.Instance.suits)
+                if (kv.Value > 0) ranked.Add(kv);
 
-        CP.Suit? primary   = ranked.Count > 0 ? ranked[0].Key : (CP.Suit?)null;
-        CP.Suit? secondary = ranked.Count > 1 ? ranked[1].Key : (CP.Suit?)null;
-        CP.Suit? third     = ranked.Count > 2 ? ranked[2].Key : (CP.Suit?)null;
+            // Shuffle first so equal counts end up in a random relative order, then sort by count
+            // descending — that way ties are resolved randomly.
+            for (int i = ranked.Count - 1; i > 0; i--)
+            {
+                int j = Random.Range(0, i + 1);
+                (ranked[i], ranked[j]) = (ranked[j], ranked[i]);
+            }
+            ranked.Sort((a, b) => b.Value.CompareTo(a.Value));
+
+            primary   = ranked.Count > 0 ? ranked[0].Key : (CP.Suit?)null;
+            secondary = ranked.Count > 1 ? ranked[1].Key : (CP.Suit?)null;
+            third     = ranked.Count > 2 ? ranked[2].Key : (CP.Suit?)null;
+        }
 
         // Play the pick-cards dialogue first and wait for it to close before offering any cards
         // (same StartDialogue / onDialogueEnd wait pattern as OnLoss).
@@ -785,7 +812,18 @@ public class CardManager : MonoBehaviour
             while (!dialogueDone) yield return null;
         }
 
-        if (cardDrafting)
+        if (randomExtendSuits)
+        {
+            // Random extend: ignore the won suits and pull randomExtendCardCount random cards from
+            // random additional piles. They flow through the same draft / preview paths as usual.
+            List<CardDataBase> candidates = CollectRandomCards(randomExtendCardCount);
+
+            if (cardDrafting)
+                yield return DraftCardsCoroutine(candidates);
+            else
+                yield return AddCollectedCards(candidates, alert);
+        }
+        else if (cardDrafting)
         {
             // Drafting: gather the cards the suits would have contributed and let the player pick
             // draftCardCount of them by clicking. Only the chosen cards are folded into the piles;
@@ -803,6 +841,62 @@ public class CardManager : MonoBehaviour
             // Old behaviour: fold every card straight into the piles and preview them.
             yield return AddNewCards(primary, secondary, third, alert);
         }
+    }
+
+    /// <summary>
+    /// Pulls <paramref name="amount"/> random cards from random non-empty additional piles,
+    /// regardless of suit. Each pulled card is removed from its additional pile so it is only ever
+    /// offered once. Stops early when every additional pile is empty.
+    /// </summary>
+    private List<CardDataBase> CollectRandomCards(int amount)
+    {
+        var collected = new List<CardDataBase>();
+        for (int i = 0; i < amount; i++)
+        {
+            ScriptableObjectContainer source = PickRandomNonEmptyPile();
+            if (source == null) break;   // every additional pile is empty — nothing left to offer
+
+            ScriptableObject card = h.RandChoice(source.scriptableObjects);
+            source.scriptableObjects.Remove(card);
+
+            if (card is CardDataBase cardData) collected.Add(cardData);
+        }
+        return collected;
+    }
+
+    /// <summary>
+    /// Returns a random additional pile that still has cards, or null when every additional pile is
+    /// empty. Unlike <see cref="PickSourcePile"/> this ignores suit entirely.
+    /// </summary>
+    private ScriptableObjectContainer PickRandomNonEmptyPile()
+    {
+        var nonEmpty = new List<ScriptableObjectContainer>();
+        foreach (var p in additionalPiles.Values)
+            if (p && p.scriptableObjects.Count > 0) nonEmpty.Add(p);
+
+        if (nonEmpty.Count == 0) return null;
+        return h.RandChoice(nonEmpty);
+    }
+
+    /// <summary>
+    /// Folds an already-collected list of cards into both <see cref="fullPile"/> and the current
+    /// <see cref="pile"/>, then (when <paramref name="alert"/> is on) shows the added-cards preview.
+    /// Mirrors the non-draft path of <see cref="AddNewCards(Dictionary{CP.Suit,int},bool)"/> for
+    /// cards that were pulled from the additional piles ahead of time.
+    /// </summary>
+    private IEnumerator AddCollectedCards(List<CardDataBase> cards, bool alert)
+    {
+        if (cards == null) yield break;
+
+        foreach (var card in cards)
+        {
+            if (!card) continue;
+            if (fullPile) fullPile.scriptableObjects.Add(card);
+            if (pile) pile.scriptableObjects.Add(card);
+        }
+
+        if (alert && cards.Count > 0)
+            yield return ShowAddedCardsAlert(cards);
     }
 
     /// <summary>

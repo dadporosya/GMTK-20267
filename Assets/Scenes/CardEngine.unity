@@ -1554,7 +1554,7 @@ GameObject:
   - component: {fileID: 518695135}
   m_Layer: 0
   m_Name: Angel Fill
-  m_TagString: Untagged
+  m_TagString: AngelFeel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4390,7 +4390,7 @@ MonoBehaviour:
   m_fontSizeBase: 7
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 4
+  m_fontSizeMin: 2
   m_fontSizeMax: 6.7
   m_fontStyle: 0
   m_HorizontalAlignment: 1
@@ -5212,7 +5212,7 @@ MonoBehaviour:
   label: KM
   decimalPlaces: 2
   kmValue: 0
-  timeInMinutes: 0.5
+  timeInMinutes: 10
   timeBeforeEndToCallEndingDialogue: 0
 --- !u!4 &3570303577819389374
 Transform:
@@ -6821,7 +6821,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6c3dc35e8094640498a57ea697f4d7b5, type: 2}
   - {fileID: 11400000, guid: 951c976b88d25784982d5dd8cfcc3086, type: 2}
   - {fileID: 11400000, guid: 4a2039ac57a8e6445b396c9b91c0dcea, type: 2}
-  pileSuits: 00000000050000000100000004000000060000000200000003000000
+  pileSuits: 06000000000000000100000002000000030000000400000005000000
   shuffleAllPiles: 0
   canLoose: 1
   lossDialogues:
@@ -6832,6 +6832,8 @@ MonoBehaviour:
   primarySuitCardAdd: 4
   secondarySuitCardAdd: 3
   thirdSuitCardAdd: 1
+  randomExtendSuits: 1
+  randomExtendCardCount: 8
   targetTables: []
   countdownTickDelay: 0.1
   dealDelay: 0.03

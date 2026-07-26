@@ -79,6 +79,25 @@ public class BGMManager : AudioManagerBase
     }
 
     /// <summary>
+    /// Plays <paramref name="clip"/> once (no loop) and, when it finishes, crossfades into a random
+    /// track from <see cref="bgTracks"/> and keeps looping that playlist. Used by cutscenes that swap
+    /// in a one-off soundtrack and want the normal background music to resume afterwards.
+    /// </summary>
+    public void PlayMusicThenRandomBgTracks(AudioClip clip, float fadeTime = 1.5f)
+    {
+        if (!clip)
+        {
+            // Nothing to play up front — just go straight to the random playlist.
+            PlayRandomBgTrack(fadeTime);
+            return;
+        }
+
+        StopAllCoroutines();
+        // PlaylistRoutine plays the clip once, waits for it to end, then chains PlayRandomBgTrack.
+        StartCoroutine(PlaylistRoutine(clip, fadeTime));
+    }
+
+    /// <summary>
     /// Fades the currently playing music down to silence over <paramref name="fadeTime"/> seconds,
     /// then stops the source and restores its volume so a later <see cref="PlayMusic"/> starts clean.
     /// </summary>

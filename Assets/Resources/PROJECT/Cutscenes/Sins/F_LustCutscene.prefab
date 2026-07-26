@@ -61,5 +61,8 @@ MonoBehaviour:
   useSinColor: 1
   changeLights: 1
   changeSkyBox: 0
+  angelFill: 1
+  angelFillAlpha: 0.99
   soundtrack: {fileID: 8300000, guid: 5b9d9109d6dcf40498ab3c16ea484136, type: 3}
+  ostFadeIn: 2.67
   sinDialogue: {fileID: 11400000, guid: 0e64c724e34c89c47ab95be3cfd806f5, type: 2}

@@ -9,6 +9,7 @@ TagManager:
   - SpawnPoint
   - Wheel
   - AdditionalDialogueWindow
+  - AngelFeel
   layers:
   - Default
   - TransparentFX

@@ -42,6 +42,17 @@ public class SinCutsceneBase : CutSceneBase
     [SerializeField] private bool changeLights = true;
     [SerializeField] private bool changeSkyBox = true;
 
+    [Tooltip("If on, the object tagged 'AngelFeel' has its SpriteRenderer tinted to the sin's color " +
+             "(at angelFillAlpha) during the cutscene, then restored to how it was on cutscene end.")]
+    [SerializeField] private bool angelFill = true;
+    [Tooltip("Alpha applied to the AngelFeel object's SpriteRenderer color when angelFill is on.")]
+    [SerializeField] private float angelFillAlpha = 1f;
+
+    // Remembers the AngelFeel object's original renderer color so CutsceneEnd can restore it.
+    private SpriteRenderer angelFeelRenderer;
+    private Color angelFeelOriginalColor;
+    private bool angelFeelColorCaptured = false;
+
     [SerializeField] private AudioClip soundtrack;
     [SerializeField] private float ostFadeIn = 2.67f;
 
@@ -213,6 +224,30 @@ public class SinCutsceneBase : CutSceneBase
             }
         }
 
+        if (angelFill)
+        {
+            // Tint the AngelFeel object to the sin's color at angelFillAlpha, remembering its original
+            // color so CutsceneEnd can put it back exactly as it was.
+            GameObject angelFeel = GameObject.FindWithTag("AngelFeel");
+            if (angelFeel && angelFeel.TryGetComponent(out SpriteRenderer sr))
+            {
+                angelFeelRenderer = sr;
+                angelFeelOriginalColor = sr.color;
+                angelFeelColorCaptured = true;
+
+                Color fill = CP.SuitColor(sin);
+                fill.a = angelFillAlpha;
+                // Fade the angel's tint in over the same duration as the light and skybox instead of
+                // snapping, so the whole environment recolor reads as one smooth transition.
+                Tween.Custom(sr, sr.color, fill, colorFadeDuration,
+                    (SpriteRenderer r, Color c) => r.color = c);
+            }
+            else
+            {
+                h.Out("SinCutsceneBase: no object tagged 'AngelFeel' with a SpriteRenderer found — angel fill skipped.");
+            }
+        }
+
         yield return new WaitForSeconds(delayAfterColorChange);
     }
 
@@ -228,7 +263,8 @@ public class SinCutsceneBase : CutSceneBase
     public virtual IEnumerator DialogueStart()
     {
         // Bring in this sin's soundtrack (crossfades up from the silence left by OnWin's fade-out).
-        if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusic(soundtrack, fadeTime:ostFadeIn);
+        // Play it once; when it finishes, a random track from bgTracks takes over and loops.
+        if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusicThenRandomBgTracks(soundtrack, fadeTime:ostFadeIn);
 
         DialogueContainer desiredDialogue;
         if (TableManager.Instance.playedCutScenes.Contains(sin))
@@ -257,7 +293,14 @@ public class SinCutsceneBase : CutSceneBase
     public virtual IEnumerator CutsceneEnd()
     {
         TableTopCameraController.Instance.SwitchToFree();
-        
+
+        // Put the AngelFeel object's color back to how it was before ChangeEnvironment tinted it.
+        if (angelFill && angelFeelColorCaptured && angelFeelRenderer)
+        {
+            angelFeelRenderer.color = angelFeelOriginalColor;
+            angelFeelColorCaptured = false;
+        }
+
         TableManager.Instance.AddPlayedCutscene(sin);
 
         // Fold the sin-based extra cards into the pile and show them full-screen; this waits for the
