@@ -84,7 +84,8 @@ public class EngingCutscene : CutSceneBase
     {
         yield return null;
         BGMManager.Instance.FadeOutMusic(1f);
-        // TableTopCameraController.Instance. // TASK set taximeter view
+        if (TableTopCameraController.Instance != null)
+            TableTopCameraController.Instance.ChangeMainState(TableTopCameraController.State.TaxometerView);
         yield return new WaitForSeconds(3.33f);
         // if (!ost) ost = 
         BGMManager.Instance.PlayMusic(ost, 1f);

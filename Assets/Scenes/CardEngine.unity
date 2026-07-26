@@ -6825,7 +6825,9 @@ MonoBehaviour:
   shuffleAllPiles: 0
   canLoose: 1
   lossDialogues:
-  - {fileID: 11400000, guid: 6dda48b225f44ae46a852cd2e4ef40ba, type: 2}
+  - {fileID: 11400000, guid: c610f606f4dff9d4eba9fc0fdb9f0d19, type: 2}
+  - {fileID: 11400000, guid: a414f2c998fd7a04d9a2753f733c0270, type: 2}
+  - {fileID: 11400000, guid: 4b3e8a451ab087240adf5b7385a0ee82, type: 2}
   lossDelay: 1
   primarySuitCardAdd: 4
   secondarySuitCardAdd: 3
