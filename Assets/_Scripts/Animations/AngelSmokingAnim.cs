@@ -49,14 +49,6 @@ public class AngelSmokingAnim : MonoBehaviour
          case ModelState.Smoked: currentModel = smokedModel; break;
       }
    }
-   
-   public void Update()
-   {
-      if (Input.GetKeyDown(KeyCode.E))
-      {
-         StartCoroutine(SmokingAnimationCoroutine());
-      }
-   }
 
    public IEnumerator SmokingAnimationCoroutine()
    {

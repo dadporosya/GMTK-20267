@@ -12,6 +12,7 @@ public class Car : MonoBehaviour
 {
     [Tooltip("Where the car should come to rest.")]
     public Transform animEndPoint;
+    [SerializeField] private Transform carStartPoint;
 
     [Tooltip("Speed (units/second) at the very start of the move.")]
     public float initSpeed = 10f;
@@ -25,7 +26,7 @@ public class Car : MonoBehaviour
     [Tooltip("Auto-filled in Start() with every child tagged 'wheel'.")]
     public List<GameObject> wheels = new List<GameObject>();
 
-    [SerializeField] private Transform carStartPoint;
+
     
     void Start()
     {
