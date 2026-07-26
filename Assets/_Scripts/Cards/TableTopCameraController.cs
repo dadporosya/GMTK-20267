@@ -136,6 +136,13 @@ public class TableTopCameraController : MonoBehaviour
     [Tooltip("Player local rotation, in euler degrees, restored while the Taxometer view is held (only its " +
              "Y/yaw is applied). Overwritten from the scene pose on Start when handViewIsInitView is on.")]
     [SerializeField] private Vector3 taxometerViewPlayerLocalEuler;
+    [Tooltip("Looped SFX (R.PROJECT.Audio.sfx.taxometersound) played through the SFX mixer group while the " +
+             "Taxometer view is active. Fades in on enter and out on leave.")]
+    [SerializeField] private bool playTaxometerSound = true;
+    [Tooltip("Target volume of the looped taxometer sound once faded in.")]
+    [SerializeField, Range(0f, 1f)] private float taxometerSoundVolume = 1f;
+    [Tooltip("Fade in / fade out time in seconds for the looped taxometer sound.")]
+    [SerializeField] private float taxometerSoundFade = 0.67f;
 
     [Header("Window view")]
     [Tooltip("Camera LOCAL position (relative to its parent) used while the Window view is held (A).")]
@@ -153,6 +160,11 @@ public class TableTopCameraController : MonoBehaviour
     private Tween posTween;
     private Tween rotTween;
     private Tween playerRotTween;
+
+    // Looping AudioSource for the taxometer view sound. Created lazily and routed through the SFX mixer
+    // group so it plays as an "SFX manager" sound; volume is tweened for the fade in/out.
+    private AudioSource taxometerLoopSource;
+    private Tween taxometerVolumeTween;
 
     // Pending delayed "hand follows camera" enable when returning to Hand view from a free/peek view.
     // Stopped as soon as the state changes again so a superseded return never re-enables follow.
@@ -356,6 +368,10 @@ public class TableTopCameraController : MonoBehaviour
         // Any pending delayed hand-follow enable is no longer valid once the state changes again.
         if (handFollowDelayTween.isAlive) handFollowDelayTween.Stop();
 
+        // Looped taxometer SFX: fade in when entering the taxometer view, fade out when leaving it.
+        if (newState == State.TaxometerView) StartTaxometerSound();
+        else if (previousState == State.TaxometerView) StopTaxometerSound();
+
         switch (newState)
         {
             case State.TableView:
@@ -529,6 +545,70 @@ public class TableTopCameraController : MonoBehaviour
         SetCardsFollow(false);
         MoveToLocal(taxometerViewLocalPosition, Quaternion.Euler(taxometerViewLocalEuler), instant);
         RestorePlayerYaw(taxometerViewPlayerLocalEuler, instant);
+    }
+
+    // ---- taxometer sound ----------------------------------------------------
+
+    /// <summary>
+    /// Lazily creates the looping AudioSource for the taxometer sound, routed through the SFX mixer
+    /// group (so it behaves like an SFX-manager sound) and loaded with R.PROJECT.Audio.sfx.taxometersound.
+    /// </summary>
+    private void EnsureTaxometerSource()
+    {
+        if (taxometerLoopSource) return;
+
+        AudioClip clip = R.PROJECT.Audio.sfx.taxometersound;
+        if (!clip)
+        {
+            h.Out("TableTopCameraController: taxometersound clip not found (taxometer SFX skipped).");
+            return;
+        }
+
+        GameObject go = new GameObject("TaxometerLoopSource");
+        go.transform.SetParent(transform);
+        taxometerLoopSource = go.AddComponent<AudioSource>();
+        taxometerLoopSource.clip = clip;
+        taxometerLoopSource.loop = true;
+        taxometerLoopSource.playOnAwake = false;
+        taxometerLoopSource.volume = 0f;
+        taxometerLoopSource.outputAudioMixerGroup = AudioMixerManager.GetSFXGroup();
+    }
+
+    /// <summary>Starts (if needed) the looped taxometer sound and fades it in over taxometerSoundFade.</summary>
+    private void StartTaxometerSound()
+    {
+        if (!playTaxometerSound) return;
+        EnsureTaxometerSource();
+        if (!taxometerLoopSource) return;
+
+        if (taxometerVolumeTween.isAlive) taxometerVolumeTween.Stop();
+
+        if (!taxometerLoopSource.isPlaying)
+        {
+            taxometerLoopSource.volume = 0f;
+            taxometerLoopSource.Play();
+        }
+
+        taxometerVolumeTween = Tween.AudioVolume(taxometerLoopSource, taxometerSoundVolume, taxometerSoundFade);
+    }
+
+    /// <summary>Fades the looped taxometer sound out over taxometerSoundFade, then stops the source.</summary>
+    private void StopTaxometerSound()
+    {
+        if (!taxometerLoopSource || !taxometerLoopSource.isPlaying) return;
+
+        if (taxometerVolumeTween.isAlive) taxometerVolumeTween.Stop();
+
+        taxometerVolumeTween = Tween.AudioVolume(taxometerLoopSource, 0f, taxometerSoundFade)
+            .OnComplete(this, cam =>
+            {
+                if (cam.taxometerLoopSource) cam.taxometerLoopSource.Stop();
+            });
+    }
+
+    private void OnDestroy()
+    {
+        if (taxometerVolumeTween.isAlive) taxometerVolumeTween.Stop();
     }
 
     /// <summary>Peek pose held while A is down; hand stops following the camera. Restored on release.</summary>

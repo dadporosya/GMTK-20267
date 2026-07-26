@@ -431,12 +431,17 @@ public class DialogueManager : MonoBehaviour
             // SetText(scalingTextBox, defaultTextBox, displayedText);
             
             // Sound FX of typing
-            if (playVoice && !SFXManager.Instance.defaultAudioSource.isPlaying)
-            {
-                AudioClip clip = h.RandChoice(audioClips);
-                SFXManager.Instance.PlayClip(clip, volumeIn:1);
-            }
-
+            // if (playVoice && !SFXManager.Instance.defaultAudioSource.isPlaying)
+            // {
+            //     AudioClip clip = h.RandChoice(audioClips);
+            //     SFXManager.Instance.PlayClip(clip, volumeIn:1);
+            // }
+            
+            if (i%2==1)SFXManager.Instance.PlayClipIndependently(
+                R.PROJECT.Audio.Voices.voiceLPF5000,
+                volumeIn:0.67f,
+                randomPitchRange:new Vector2(0.8f, 1.2f));
+            
             if (alphaIndex == filteredText.Length)
             {
                 AddSplit();

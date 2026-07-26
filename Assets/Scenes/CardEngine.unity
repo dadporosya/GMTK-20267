@@ -2189,6 +2189,9 @@ MonoBehaviour:
   taxometerViewLocalPosition: {x: -0.18, y: 0.04, z: 0.61}
   taxometerViewLocalEuler: {x: 3.33, y: -90, z: -6.3}
   taxometerViewPlayerLocalEuler: {x: 0, y: 0, z: 0}
+  playTaxometerSound: 1
+  taxometerSoundVolume: 1
+  taxometerSoundFade: 0.67
   windowViewLocalPosition: {x: 0, y: 0.61, z: 0}
   windowViewLocalEuler: {x: 0, y: 180, z: 0}
   windowViewPlayerLocalEuler: {x: 0, y: 0, z: 0}
@@ -2543,6 +2546,9 @@ MonoBehaviour:
   taxometerViewLocalPosition: {x: -0.18, y: 0.04, z: 0.61}
   taxometerViewLocalEuler: {x: 3.33, y: -90, z: -6.3}
   taxometerViewPlayerLocalEuler: {x: 0, y: 0, z: 0}
+  playTaxometerSound: 1
+  taxometerSoundVolume: 1
+  taxometerSoundFade: 0.67
   windowViewLocalPosition: {x: 0, y: 0.61, z: 0}
   windowViewLocalEuler: {x: 0, y: 180, z: 0}
   windowViewPlayerLocalEuler: {x: 0, y: 0, z: 0}
@@ -7597,6 +7603,9 @@ MonoBehaviour:
   taxometerViewLocalPosition: {x: -0.18, y: 0.04, z: 0.61}
   taxometerViewLocalEuler: {x: 3.33, y: -90, z: -6.3}
   taxometerViewPlayerLocalEuler: {x: 0, y: 0, z: 0}
+  playTaxometerSound: 1
+  taxometerSoundVolume: 1
+  taxometerSoundFade: 0.67
   windowViewLocalPosition: {x: 0.14, y: 0.38, z: 0.7821496}
   windowViewLocalEuler: {x: -11.11, y: 179, z: -4.44}
   windowViewPlayerLocalEuler: {x: 0, y: 0, z: 0}

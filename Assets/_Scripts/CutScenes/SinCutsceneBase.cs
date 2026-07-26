@@ -55,6 +55,9 @@ public class SinCutsceneBase : CutSceneBase
 
     [SerializeField] private AudioClip soundtrack;
     [SerializeField] private float ostFadeIn = 2.67f;
+    [Tooltip("If off, when the cutscene ends the sin's soundtrack is replaced by a random track from " +
+             "BGMManager.bgTracks. If on, the soundtrack is left playing as-is after the cutscene.")]
+    [SerializeField] private bool continuePlayingOst = false;
 
     [Header("Dialogue")]
     [SerializeField] private DialogueContainer sinDialogue;
@@ -262,9 +265,10 @@ public class SinCutsceneBase : CutSceneBase
 
     public virtual IEnumerator DialogueStart()
     {
-        // Bring in this sin's soundtrack (crossfades up from the silence left by OnWin's fade-out).
-        // Play it once; when it finishes, a random track from bgTracks takes over and loops.
-        if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusicThenRandomBgTracks(soundtrack, fadeTime:ostFadeIn);
+        // Bring in this sin's soundtrack (crossfades up from the silence left by OnWin's fade-out) and
+        // loop it through the cutscene. What happens when the cutscene ends is decided in CutsceneEnd
+        // based on continuePlayingOst.
+        if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusic(soundtrack, fadeTime:ostFadeIn);
 
         DialogueContainer desiredDialogue;
         if (TableManager.Instance.playedCutScenes.Contains(sin))
@@ -313,6 +317,10 @@ public class SinCutsceneBase : CutSceneBase
 
         // Hand card interaction back to the player now the cutscene is over.
         if (CardDragController.Instance) CardDragController.Instance.SetDraggingEnabled(true);
+
+        // Unless the sin's soundtrack is meant to keep playing, hand the music back to a random
+        // background track from BGMManager now the cutscene has ended.
+        if (!continuePlayingOst && BGMManager.Instance) BGMManager.Instance.PlayRandomBgTrack();
 
         yield return null;
 

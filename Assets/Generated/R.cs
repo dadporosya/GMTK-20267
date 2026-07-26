@@ -441,6 +441,24 @@ public static class R
 
                 public static object[] All => _all.Value;
             }
+            public static class Voices
+            {
+                public static AudioClip voiceLPF5000 => Resources.Load<AudioClip>("PROJECT/Audio/Voices/voiceLPF5000");
+                public static AudioClip voiceTestCrush => Resources.Load<AudioClip>("PROJECT/Audio/Voices/voiceTestCrush");
+
+                private static readonly System.Lazy<object[]> _all = new(() =>
+                {
+                    var list = new System.Collections.Generic.List<object>
+                    {
+                        voiceLPF5000,
+                        voiceTestCrush,
+                    };
+
+                    return list.ToArray();
+                });
+
+                public static object[] All => _all.Value;
+            }
             public static AudioClip exhalesound => Resources.Load<AudioClip>("PROJECT/Audio/exhalesound");
             public static AudioClip smokesound => Resources.Load<AudioClip>("PROJECT/Audio/smokesound");
 
@@ -457,6 +475,7 @@ public static class R
                 list.AddRange(Clock.All);
                 list.AddRange(Fire.All);
                 list.AddRange(sfx.All);
+                list.AddRange(Voices.All);
 
                 return list.ToArray();
             });
