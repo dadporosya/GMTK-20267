@@ -2095,7 +2095,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TableTopCameraController
   camTransform: {fileID: 0}
   currentTable: {fileID: 0}
-  state: 1
+  mainState: 1
   transitionDuration: 0.5
   transitionEase: 9
   instantOnStart: 1
@@ -2449,7 +2449,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TableTopCameraController
   camTransform: {fileID: 0}
   currentTable: {fileID: 0}
-  state: 1
+  mainState: 1
   transitionDuration: 0.5
   transitionEase: 9
   instantOnStart: 1
@@ -3019,6 +3019,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1783350454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1783350455}
+  - component: {fileID: 1783350456}
+  m_Layer: 0
+  m_Name: EndingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1783350455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1783350454}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2650034401415303331}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1783350456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1783350454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fbf535abf95426ab0bad5d3113b534e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndingManager
+  endingCutscene: {fileID: 7333800463253256475, guid: 0aa7dbb0414d10e4fbaa167e71070382, type: 3}
+  endingDialogue: {fileID: 11400000, guid: 8bd2bbe266cfb3f4eabf2904bc402118, type: 2}
 --- !u!4 &1847043516 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9213884528204490809, guid: 16702d612d01ca145926f34404f99ec3, type: 3}
@@ -4290,6 +4336,7 @@ Transform:
   - {fileID: 3142580461284440608}
   - {fileID: 119254002}
   - {fileID: 905355456614352281}
+  - {fileID: 1783350455}
   m_Father: {fileID: 1479293829371882046}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2650084726329635446
@@ -4340,7 +4387,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9195323450752546840}
         m_TargetAssemblyTypeName: TableTopCameraController, Assembly-CSharp
-        m_MethodName: SwitchToHandView
+        m_MethodName: ChangeMainStateToHand
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4355,7 +4402,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9195323450752546840}
         m_TargetAssemblyTypeName: TableTopCameraController, Assembly-CSharp
-        m_MethodName: SwitchToFree
+        m_MethodName: ChangeMainStateToFree
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4870,7 +4917,8 @@ MonoBehaviour:
   label: KM
   decimalPlaces: 2
   kmValue: 0
-  timeInMinutes: 16.7
+  timeInMinutes: 2
+  timeBeforeEndToCallEndingDialogue: 1
 --- !u!4 &3570303577819389374
 Transform:
   m_ObjectHideFlags: 0
@@ -7223,7 +7271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TableTopCameraController
   camTransform: {fileID: 0}
   currentTable: {fileID: 0}
-  state: 1
+  mainState: 1
   transitionDuration: 0.5
   transitionEase: 9
   instantOnStart: 1

@@ -47,5 +47,6 @@ MonoBehaviour:
   runOnStart: 0
   customDestroy: 1
   dialogue: {fileID: 11400000, guid: 8bd2bbe266cfb3f4eabf2904bc402118, type: 2}
-  fadeDurationInSeconds: 120
+  runDialogue: 0
+  fadeDurationInSeconds: 60
   fadeEase: 1

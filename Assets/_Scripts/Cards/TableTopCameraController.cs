@@ -45,11 +45,18 @@ public class TableTopCameraController : MonoBehaviour
     public PlacingArea currentTable;
 
     [Header("State")]
-    [Tooltip("Which mode the camera starts in (applied on Start).")]
-    [SerializeField] private State state = State.HandView;
+    [Tooltip("The home/main mode the camera rests in. Applied on Start, and returned to whenever a " +
+             "peek/hold key (W/S/D/A) is released. Change at runtime with ChangeMainState.")]
+    [SerializeField] private State mainState = State.HandView;
+
+    // The mode the camera is currently in (set by SwitchState). Starts at the main state.
+    private State state = State.HandView;
 
     /// <summary>The mode the camera is currently in.</summary>
     public State CurrentState => state;
+
+    /// <summary>The home/main mode the camera returns to when a peek/hold key is released.</summary>
+    public State MainState => mainState;
 
     [Header("Transition")]
     [Tooltip("Seconds to ease from one mode's pose to the next. 0 = snap instantly.")]
@@ -155,10 +162,10 @@ public class TableTopCameraController : MonoBehaviour
     // returning to Hand view should delay re-enabling hand-follow.
     private State previousState;
 
-    // Hold-to-view (W = Table, D = Taxometer, A = Window): remember the state to restore on release.
+    // Hold-to-view (W = Table, S = Free, D = Taxometer, A = Window). On release the camera always
+    // returns to mainState, so no per-hold restore state is remembered.
     private bool isHoldingView;
     private KeyCode holdViewKey;
-    private State holdRestoreState;
 
     private void Awake()
     {
@@ -197,7 +204,7 @@ public class TableTopCameraController : MonoBehaviour
 
         if (!currentTable) currentTable = FindTable();
 
-        SwitchState(state, instant: instantOnStart);
+        SwitchState(mainState, instant: instantOnStart);
     }
 
     private void Update()
@@ -220,13 +227,12 @@ public class TableTopCameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// Hold D to peek at the Taxometer view and A to peek at the Window view (both restore whatever
-    /// state was active before the peek). When <see cref="holdToTable"/> is on, W climbs the ladder:
-    /// from Free view a press switches to Hand view (a normal, latched switch), and from Hand view
-    /// holding W peeks the Table view and releasing W returns to Hand view. When
-    /// <see cref="holdToFreeAspect"/> is on, holding S from Hand view peeks the Free view and releasing
-    /// S returns to Hand view. Only the key that started the peek ends it, so pressing another hold key
-    /// mid-hold is ignored.
+    /// Peek keys are hold-to-view: hold W for Table, S for Free (when <see cref="holdToFreeAspect"/> is
+    /// on), D for Taxometer, A for Window. Releasing the held key always returns to
+    /// <see cref="mainState"/> — the current home state — regardless of where the peek started. A peek
+    /// only begins from the main state; from any other (latched) state pressing W steps back to the main
+    /// state instead. Only the key that started the peek ends it, so pressing another hold key mid-hold
+    /// is ignored.
     /// </summary>
     private void HandleHoldViews()
     {
@@ -234,17 +240,24 @@ public class TableTopCameraController : MonoBehaviour
         {
             if (holdToTable && Input.GetKeyDown(KeyCode.W))
             {
-                // Free --W--> Hand (latched), Hand --W(hold)--> Table (release returns to Hand).
-                if (state == State.Free) SwitchToHandView();
-                else if (state == State.HandView) BeginHoldView(KeyCode.W, State.TableView, State.HandView);
+                // From the main state, hold W to peek the Table view (release returns to main).
+                // From any other (latched) state, W steps back to the main state.
+                if (state == mainState)
+                {
+                    if (mainState != State.TableView) BeginHoldView(KeyCode.W, State.TableView);
+                }
+                else SwitchState(mainState);
             }
-            else if (holdToFreeAspect && Input.GetKeyDown(KeyCode.S) && state == State.HandView)
+            else if (holdToFreeAspect && Input.GetKeyDown(KeyCode.S) && state == mainState
+                     && mainState != State.Free)
             {
-                // Hand --S(hold)--> Free (release returns to Hand).
-                BeginHoldView(KeyCode.S, State.Free, State.HandView);
+                // From the main state, hold S to peek the Free view (release returns to main).
+                BeginHoldView(KeyCode.S, State.Free);
             }
-            else if (Input.GetKeyDown(KeyCode.D)) BeginHoldView(KeyCode.D, State.TaxometerView, state);
-            else if (Input.GetKeyDown(KeyCode.A)) BeginHoldView(KeyCode.A, State.WindowView, state);
+            else if (Input.GetKeyDown(KeyCode.D) && mainState != State.TaxometerView)
+                BeginHoldView(KeyCode.D, State.TaxometerView);
+            else if (Input.GetKeyDown(KeyCode.A) && mainState != State.WindowView)
+                BeginHoldView(KeyCode.A, State.WindowView);
         }
         else if (Input.GetKeyUp(holdViewKey))
         {
@@ -259,18 +272,39 @@ public class TableTopCameraController : MonoBehaviour
 
     
 
-    private void BeginHoldView(KeyCode key, State view, State restoreState)
+    private void BeginHoldView(KeyCode key, State view)
     {
         isHoldingView = true;
         holdViewKey = key;
-        holdRestoreState = restoreState;   // where release returns to
         SwitchState(view);
     }
 
     private void EndHoldView()
     {
         isHoldingView = false;
-        SwitchState(holdRestoreState);   // restore on release
+        SwitchState(mainState);   // release always returns to the main state
+    }
+
+    /// <summary>
+    /// Sets the home/main state the camera rests in and returns to when a peek/hold key (W/S/D/A) is
+    /// released. Also moves the camera there right away, unless a peek is currently being held (in which
+    /// case releasing the key brings it to the new home). Example: after ChangeMainState(State.Free),
+    /// every peek release turns the camera to Free view.
+    /// </summary>
+    public void ChangeMainState(State newMainState)
+    {
+        mainState = newMainState;
+        if (!isHoldingView) SwitchState(mainState);
+    }
+
+    public void ChangeMainStateToHand()
+    {
+        ChangeMainState(State.HandView);
+    }
+
+    public void ChangeMainStateToFree()
+    {
+        ChangeMainState(State.Free);
     }
 
     public void ChangeStateUp()
