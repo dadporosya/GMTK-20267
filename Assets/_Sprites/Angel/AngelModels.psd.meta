@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 1
     textureFormat: -1
     textureCompression: 0
@@ -223,12 +223,12 @@ TextureImporter:
       name: AngelModels_5
       rect:
         serializedVersion: 2
-        x: 3291
-        y: 1078
-        width: 670
-        height: 749
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 3192
+        y: 1725
+        width: 37
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -237,6 +237,72 @@ TextureImporter:
       bones: []
       spriteID: 4da4d18b1acacfb4b91c0aa18ec91370
       internalID: 673166362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelModels_6
+      rect:
+        serializedVersion: 2
+        x: 3241
+        y: 1727
+        width: 37
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 763859962bf25314b8814a2068ae884a
+      internalID: -762896416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelModels_7
+      rect:
+        serializedVersion: 2
+        x: 3292
+        y: 1727
+        width: 37
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b96934e0ac20b1843b3f06123cd99544
+      internalID: -713836807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelModels_8
+      rect:
+        serializedVersion: 2
+        x: 3342
+        y: 1726
+        width: 37
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a186ddc9ea0fa84b8c9e52a16203d42
+      internalID: 1103391846
       vertices: []
       indices: 
       edges: []
@@ -261,6 +327,9 @@ TextureImporter:
       AngelModels_3: 2137303657
       AngelModels_4: 1673380847
       AngelModels_5: 673166362
+      AngelModels_6: -762896416
+      AngelModels_7: -713836807
+      AngelModels_8: 1103391846
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

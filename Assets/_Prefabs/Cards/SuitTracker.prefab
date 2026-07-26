@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2540959795268833581}
   - component: {fileID: 5904289333661131898}
   - component: {fileID: 7380936279168936617}
-  - component: {fileID: 5172943252573001690}
   m_Layer: 0
   m_Name: Count
   m_TagString: Untagged
@@ -182,36 +181,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5904289333661131898}
   m_maskType: 0
---- !u!114 &5172943252573001690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1944796615282202825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78d96af79463325459fac65a8bc39121, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SquishAnimation
-  disable: 0
-  type: 0
-  loop: 0
-  playOnStart: 0
-  returningEasing: 30
-  returningTime: 0.15
-  customInitialState: 0
-  returnToTheInittialState: 1
-  onAnimationEnd:
-    m_PersistentCalls:
-      m_Calls: []
-  animationSpeed: 1
-  squishes:
-  - {x: -0.2, y: 0.2, z: 0}
-  durations: []
-  defaultDuration: 0.05
-  ease: 5
-  initialState: {x: 1, y: 1, z: 1}
 --- !u!1 &2186062845907844375
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,6 +769,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8042637533860296657, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4677475161407964816}
+    - targetCorrespondingSourceObject: {fileID: 8042637533860296657, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4746714585834494565}
   m_SourcePrefab: {fileID: 100100000, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
 --- !u!4 &1112854614535152726 stripped
 Transform:
@@ -826,7 +798,37 @@ MonoBehaviour:
   titleTmp: {fileID: 5142635137701709347}
   suitTmp: {fileID: 4225105635164759529}
   countTmp: {fileID: 7380936279168936617}
-  countChangeAnim: {fileID: 5172943252573001690}
+  countChangeAnim: {fileID: 4746714585834494565}
   suitAnim: {fileID: 5684657223830156337}
   targetSuit: 0
   currentCount: 0
+--- !u!114 &4746714585834494565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2348754148583352192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d96af79463325459fac65a8bc39121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SquishAnimation
+  disable: 0
+  type: 0
+  loop: 0
+  playOnStart: 0
+  returningEasing: 30
+  returningTime: 0.15
+  customInitialState: 0
+  returnToTheInittialState: 1
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  squishes:
+  - {x: -0.2, y: 0.2, z: 0}
+  durations: []
+  defaultDuration: 0.05
+  ease: 5
+  initialState: {x: 1, y: 1, z: 1}

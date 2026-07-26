@@ -1584,7 +1584,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: d53fdf3574b59644998f526b58021d10, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
 --- !u!4 &832575519
 Transform:
   m_ObjectHideFlags: 0
@@ -6378,11 +6378,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Car
   animEndPoint: {fileID: 1375279501}
+  carStartPoint: {fileID: 2127022980}
   initSpeed: 67
   movementEase: 9
   wheelRadius: 0.5
   wheels: []
-  carStartPoint: {fileID: 2127022980}
 --- !u!4 &928045505417496099
 Transform:
   m_ObjectHideFlags: 0
