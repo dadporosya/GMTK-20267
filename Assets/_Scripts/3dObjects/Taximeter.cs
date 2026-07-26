@@ -46,6 +46,10 @@ public class Taximeter : MonoBehaviour
     [SerializeField] private float timeBeforeEndToCallEndingDialogue; // seconds left in the trip at which the ending dialogue fires
     private bool endDialogueWasCalled = false;
 
+    [Header("\"Don't have much time\" dialogue")]
+    [SerializeField] private float speedForDontHaveMuchTimeDialogue = 50f; // speed at/above which the dialogue fires
+    private bool dontHaveMuchTimeDialogueWasCalled = false;
+
     private float totalKm;    // full distance for this trip, computed from speed + time
     private float elapsed;    // seconds
     private float duration;   // seconds
@@ -98,6 +102,13 @@ public class Taximeter : MonoBehaviour
         kmValue = Mathf.Max(0f, totalKm * (1f - travelledFraction));
 
         UpdateText();
+
+        // Fire the "don't have much time" dialogue once, when speed reaches its threshold.
+        if (!dontHaveMuchTimeDialogueWasCalled && currentSpeed >= speedForDontHaveMuchTimeDialogue)
+        {
+            dontHaveMuchTimeDialogueWasCalled = true;
+            EndingManager.Instance.StartDontHaveMuchTimeDialogue();
+        }
 
         // Fire the ending dialogue once, when the trip has this many seconds left.
         if (!endDialogueWasCalled && (duration - elapsed) <= timeBeforeEndToCallEndingDialogue)

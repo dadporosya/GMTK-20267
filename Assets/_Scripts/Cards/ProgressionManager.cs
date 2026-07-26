@@ -17,6 +17,9 @@ using UnityEngine;
 ///
 /// Each boost multiplier is clamped at 0 so level 1 stays exactly at initialScore,
 /// level 2 gets no boost yet, and constBoostPerLevel2 only kicks in from level 4 onward.
+///
+/// When <see cref="exponential"/> is true, the boost constants are ignored and the curve is:
+///   score = initialScore + constPerLevel * 2^(level - 1)
 /// </summary>
 public class ProgressionManager : MonoBehaviour
 {
@@ -30,6 +33,9 @@ public class ProgressionManager : MonoBehaviour
     public int constBoostPerLevel = 1250;
     [Tooltip("Further extra amount that accumulates on top from level 4 onward.")]
     public int constBoostPerLevel2 = 1000;
+    [Tooltip("When true, use an exponential curve (initialScore + constPerLevel * 2^(level-1)) " +
+             "and ignore the boost constants.")]
+    public bool exponential = false;
     [Tooltip("Current level (starts at 1).")]
     public int level = 1;
 
@@ -51,10 +57,20 @@ public class ProgressionManager : MonoBehaviour
     {
         this.level = levelIn;
 
-        int score = initialScore
+        int score;
+        if (exponential)
+        {
+            // Exponential curve: only initialScore + one constant, doubling each level.
+            score = initialScore
+                    + constPerLevel * (int)Mathf.Pow(2, levelIn - 1);
+        }
+        else
+        {
+            score = initialScore
                     + constPerLevel * (levelIn - 1)
                     + constBoostPerLevel * Mathf.Max(0, levelIn - 2)
                     + constBoostPerLevel2 * Mathf.Max(0, levelIn - 3);
+        }
 
         // overrideScore == true means the designer pins targetScore in the inspector, so the
         // progression only writes it when overrideScore is false.
