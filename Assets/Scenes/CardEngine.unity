@@ -1462,7 +1462,7 @@ GameObject:
   - component: {fileID: 518695136}
   - component: {fileID: 518695135}
   m_Layer: 0
-  m_Name: Model2
+  m_Name: Angel Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1571,7 +1571,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 6.7, y: 3}
+  m_Size: {x: 6.7, y: 7.49}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -5008,6 +5008,7 @@ MonoBehaviour:
   decreasingScore: 1
   scoreText: {fileID: 205821371}
   scoreChangeAnimation: {fileID: 205821368}
+  angelFill: {fileID: 518695137}
   minCountSpeed: 15
   maxCountSpeed: 1000
   speedRampDelta: 25
@@ -5055,20 +5056,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9bcd5f649effc0488177fb6e7b24bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Taximeter
-  minSpeed: 30
-  maxSpeed: 333
-  currentSpeed: 30
-  acceleration: 1
-  roadSpeedScale: 1.267
-  speedThreshHoldForCameraShake: 167
-  maxCameraShake: 0.67
-  cameraShakeRoughness: 10
-  text: {fileID: 503708338}
-  label: KM
-  decimalPlaces: 2
+  minSpeed: 0
+  maxSpeed: 60
+  currentSpeed: 0
+  acceleration: 0
+  roadSpeedScale: 1
+  speedThreshHoldForCameraShake: 40
+  maxCameraShake: 2
+  cameraShakeRoughness: 6
+  text: {fileID: 0}
+  label: ' km'
+  decimalPlaces: 1
   kmValue: 0
-  timeInMinutes: 0.1
-  timeBeforeEndToCallEndingDialogue: 1
+  timeInMinutes: 5
+  timeBeforeEndToCallEndingDialogue: 0
 --- !u!4 &3570303577819389374
 Transform:
   m_ObjectHideFlags: 0

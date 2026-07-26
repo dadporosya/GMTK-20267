@@ -24,6 +24,13 @@ public class TableManager : MonoBehaviour
     [Tooltip("Change animation played on the score while it is counting. Auto-found on scoreText if left empty.")]
     [SerializeField] private TextChangeAnimation scoreChangeAnimation;
 
+    [Header("Angel Fill")]
+    [Tooltip("Sprite renderer using Tiled draw mode. Its tile size height is scaled to reflect score progress " +
+             "toward the goal: full when the goal is reached, empty at the start of the round.")]
+    [SerializeField] private SpriteRenderer angelFill;
+    // Full tile-size height captured on Start; the shown height is this * progress (0..1).
+    private float _angelFillFullHeight;
+
     [Header("Score count animation")]
     [Tooltip("Slowest counting speed, in points per second (used for tiny deltas).")]
     [SerializeField] private float minCountSpeed = 15f;
@@ -76,6 +83,10 @@ public class TableManager : MonoBehaviour
 
         if (scoreChangeAnimation == null && scoreText != null)
             scoreChangeAnimation = scoreText.GetComponentInChildren<TextChangeAnimation>();
+
+        // Capture the full tile height before the first refresh so the fill can be scaled from it.
+        if (angelFill != null)
+            _angelFillFullHeight = angelFill.size.y;
 
         // currentScore starts from the inspector value; targetScore is owned by ProgressionManager
         // (unless overrideScore is true).
@@ -296,6 +307,34 @@ public class TableManager : MonoBehaviour
     {
         if (scoreText != null)
             scoreText.text = value.ToString();
+
+        UpdateAngelFill(value);
+    }
+
+    /// <summary>
+    /// 0..1 progress toward the goal, valid in both modes.
+    /// Decreasing mode: (targetScore - score) / targetScore  (== (maxScore - remainingScore) / maxScore).
+    /// Normal mode:     score / targetScore.
+    /// </summary>
+    private float GetScoreProgress(int score)
+    {
+        if (targetScore <= 0) return 0f;
+
+        float progress = decreasingScore
+            ? (float)(targetScore - score) / targetScore
+            : (float)score / targetScore;
+
+        return Mathf.Clamp01(progress);
+    }
+
+    // Scales the angelFill tile-size height to match score progress: 0 -> empty, 1 -> full.
+    private void UpdateAngelFill(int score)
+    {
+        if (angelFill == null) return;
+
+        Vector2 size = angelFill.size;
+        size.y = _angelFillFullHeight * GetScoreProgress(score);
+        angelFill.size = size;
     }
 
     public void AddSuits(List<CP.Suit> suitsToAdd)
