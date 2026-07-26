@@ -18,6 +18,7 @@ using VolFx;
 public class EngingCutscene : CutSceneBase
 {
     [SerializeField] private DialogueContainer dialogue;
+    [SerializeField] private bool runDialogue = false;
     [SerializeField] private float fadeDurationInSeconds = 60;
     [Tooltip("Easing used for the VHS density / Invert weight fade.")]
     [SerializeField] private Ease fadeEase = Ease.Default;
@@ -56,7 +57,7 @@ public class EngingCutscene : CutSceneBase
         yield return null;
 
         
-        DialogueManager.Instance.StartDialogue(dialogue);
+        if (runDialogue) DialogueManager.Instance.StartDialogue(dialogue);
 
         // Fade the global volume's VHS noise density and the Invert effect weight both to full over
         // fadeDurationInSeconds, using PrimeTween (fadeEase controls the easing). Both overrides live
