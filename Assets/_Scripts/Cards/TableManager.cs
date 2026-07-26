@@ -106,17 +106,7 @@ public class TableManager : MonoBehaviour
             }
         }
         // rawSuitTrackers = FindObjectsOfType<SuitTracker>().ToList();
-        
-        
         BuildSuitTrackers();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            OnScoreReached();
-        }
     }
     
     // Keys every SuitTracker by its own suit, then seeds each suit's starting count and

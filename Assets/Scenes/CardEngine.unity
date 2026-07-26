@@ -283,7 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 43287016}
   m_Layer: 0
-  m_Name: ---CAR MODEL---
+  m_Name: '---CAR MODEL---'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -369,7 +369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 145228351}
   m_Layer: 0
-  m_Name: ----VOLUMES----
+  m_Name: '----VOLUMES----'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2240,10 +2240,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0d23056a670de479873b8eec61eb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionManager
-  initialScore: 2750
+  initialScore: 3000
   constPerLevel: 1500
   constBoostPerLevel: 1500
   constBoostPerLevel2: 1500
+  exponential: 1
   level: 1
 --- !u!1 &1212299299
 GameObject:
@@ -2389,7 +2390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1279035261}
   m_Layer: 0
-  m_Name: ----ENVIRONMENT----
+  m_Name: '----ENVIRONMENT----'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3363,6 +3364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndingManager
   endingCutscene: {fileID: 7333800463253256475, guid: 0aa7dbb0414d10e4fbaa167e71070382, type: 3}
   endingDialogue: {fileID: 11400000, guid: 8bd2bbe266cfb3f4eabf2904bc402118, type: 2}
+  dontHaveMuchTimeDialogue: {fileID: 11400000, guid: c1ba9df5422cccf4587a7df0e2422ad0, type: 2}
 --- !u!4 &1847043516 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9213884528204490809, guid: 16702d612d01ca145926f34404f99ec3, type: 3}
@@ -3947,7 +3949,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7768859113581062412}
   m_Layer: 0
-  m_Name: ---CARDS PARENT IDK---
+  m_Name: '---CARDS PARENT IDK---'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4143,7 +4145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7772757869219072550}
   m_Layer: 0
-  m_Name: ---CAMERA---
+  m_Name: '---CAMERA---'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4341,7 +4343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1746199154207000446}
   m_Layer: 0
-  m_Name: ----UI-------
+  m_Name: '----UI-------'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4502,6 +4504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5839270627517505781}
   - component: {fileID: 4396239501743594387}
+  - component: {fileID: 5839270627517505782}
   m_Layer: 0
   m_Name: controlsHint
   m_TagString: Untagged
@@ -4613,7 +4616,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8743247304526171847}
   m_Layer: 0
-  m_Name: ----CARDS------
+  m_Name: '----CARDS------'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5024,7 +5027,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8157782405624309702}
   m_Layer: 0
-  m_Name: ------GAME------
+  m_Name: '------GAME------'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5214,14 +5217,15 @@ MonoBehaviour:
   acceleration: 1
   roadSpeedScale: 1.2
   speedThreshHoldForCameraShake: 150
-  maxCameraShake: 0.333
+  maxCameraShake: 0.2
   cameraShakeRoughness: 10
   text: {fileID: 503708338}
   label: KM
   decimalPlaces: 2
   kmValue: 0
-  timeInMinutes: 10
+  timeInMinutes: 7
   timeBeforeEndToCallEndingDialogue: 0
+  speedForDontHaveMuchTimeDialogue: 200
 --- !u!82 &3469287837115913596
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5534,8 +5538,7 @@ MonoBehaviour:
 
     <sprite name=love> 1
 
-    <sprite name=love>
-    1
+    <sprite name=love> 1
 
     <sprite name=love> 1
 
@@ -5696,7 +5699,7 @@ GameObject:
   - component: {fileID: 1063377253968930102}
   - component: {fileID: 3217571680227713077}
   m_Layer: 0
-  m_Name: ---PLAYER---
+  m_Name: '---PLAYER---'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5823,7 +5826,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5932735521687483770}
   m_Layer: 0
-  m_Name: -----AUDIO------
+  m_Name: '-----AUDIO------'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6440,6 +6443,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 565984620796606761}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &5839270627517505782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2252052533413734774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b126e769c84a678ad097c814659871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteChangeAnimation
+  disable: 0
+  type: 0
+  loop: 1
+  playOnStart: 1
+  returningEasing: 0
+  returningTime: 0.3
+  customInitialState: 0
+  returnToTheInittialState: 0
+  onAnimationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  animationSpeed: 1
+  frames:
+  - {fileID: 849385618, guid: 52ea7f13bde009a4d8595f74f58fbf72, type: 3}
+  - {fileID: 853752013, guid: 52ea7f13bde009a4d8595f74f58fbf72, type: 3}
+  gapsBetweenFrames: []
+  defaultGapsBetweenFrames: 0.6
+  shuffleOrder: 0
+  initialSprite: {fileID: 0}
 --- !u!114 &5917958541844453899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6769,7 +6803,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2290024210082597162}
   m_Layer: 0
-  m_Name: -----GAME PLAY------
+  m_Name: '-----GAME PLAY------'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7225,7 +7259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1479293829371882046}
   m_Layer: 0
-  m_Name: ----MANAGERS----
+  m_Name: '----MANAGERS----'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7365,7 +7399,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2650034401415303331}
   m_Layer: 0
-  m_Name: ---PLAYER EXPERIENCE---
+  m_Name: '---PLAYER EXPERIENCE---'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

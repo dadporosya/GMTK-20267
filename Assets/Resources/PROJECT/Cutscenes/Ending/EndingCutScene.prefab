@@ -48,7 +48,7 @@ MonoBehaviour:
   customDestroy: 1
   dialogue: {fileID: 11400000, guid: 8bd2bbe266cfb3f4eabf2904bc402118, type: 2}
   runDialogue: 0
-  fadeDurationInSeconds: 60
+  fadeDurationInSeconds: 40
   fadeEase: 1
   vhsDensityTarget: 0.2
   invertWeightTarget: 0.0067

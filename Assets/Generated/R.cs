@@ -427,12 +427,14 @@ public static class R
             }
             public static class sfx
             {
+                public static AudioClip counter => Resources.Load<AudioClip>("PROJECT/Audio/sfx/counter");
                 public static AudioClip taxometersound => Resources.Load<AudioClip>("PROJECT/Audio/sfx/taxometersound");
 
                 private static readonly System.Lazy<object[]> _all = new(() =>
                 {
                     var list = new System.Collections.Generic.List<object>
                     {
+                        counter,
                         taxometersound,
                     };
 
@@ -683,11 +685,15 @@ public static class R
 
         public static object[] All => _all.Value;
     }
+    public static TextAsset PerformanceTestRunInfo => Resources.Load<TextAsset>("PerformanceTestRunInfo");
+    public static TextAsset PerformanceTestRunSettings => Resources.Load<TextAsset>("PerformanceTestRunSettings");
 
     private static readonly System.Lazy<object[]> _all = new(() =>
     {
         var list = new System.Collections.Generic.List<object>
         {
+            PerformanceTestRunInfo,
+            PerformanceTestRunSettings,
         };
 
         list.AddRange(ARCHITECTURE.All);

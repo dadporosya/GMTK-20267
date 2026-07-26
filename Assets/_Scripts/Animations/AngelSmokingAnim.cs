@@ -20,6 +20,10 @@ public class AngelSmokingAnim : MonoBehaviour
    [SerializeField] private bool smoking=true;
    [SerializeField] private float gapBetweenAnimations;
    private float gapBetweenAnimationsDistribution = 0.333f;
+
+    [SerializeField] AudioSource smokeAS;
+    [SerializeField] AudioClip inhale;
+    [SerializeField] AudioClip exhale;
    
    private void Start()
    {
@@ -59,17 +63,13 @@ public class AngelSmokingAnim : MonoBehaviour
 
       StartCoroutine(modelChangeAnim.Play());
       ChangeModel(ModelState.SmokingPrep);
-      SFXManager.Instance.PlayRandomClip(new List<AudioClip>(
-         ){R.PROJECT.Audio.smokesound},
-         volumeIn:1f);
+      smokeAS.PlayOneShot(inhale);
       yield return new WaitForSeconds(3.7f);
 
       StartCoroutine(modelChangeAnim.Play());
       ChangeModel(ModelState.Smoked);
       SpawnSmokeParticles();
-      SFXManager.Instance.PlayRandomClip(new List<AudioClip>(
-      ){R.PROJECT.Audio.exhalesound},
-      volumeIn:1f);
+        smokeAS.PlayOneShot(exhale);
       yield return new WaitForSeconds(4f);
 
       StartCoroutine(modelChangeAnim.Play());

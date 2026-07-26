@@ -168,14 +168,7 @@ public class CardManager : MonoBehaviour
         
         if (startRoundOnStart) RoundStart();
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            DrawCard();
-        }
-    }
+    
 
     /// <summary>
     /// Resets the round: rebuilds <see cref="pile"/> as a fresh copy of <see cref="fullPile"/> so

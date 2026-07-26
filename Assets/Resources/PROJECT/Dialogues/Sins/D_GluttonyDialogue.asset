@@ -185,29 +185,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Looks like the fog of the past is starting to clear, doesn't it?
-    initFromScriptableObject: 0
-    speaker: {fileID: 0}
-    speakerGameObject: {fileID: 0}
-    speakerName: 
-    speakerPortrait: {fileID: 0}
-    useSpriteAtlas: 0
-    spriteAtlas: []
-    spriteId: 0
-    _speakerVoiceClips: []
-    material: {fileID: 0}
-    onNodeStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onNodeEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - nodeId: 8
-    speakerId: 
-    initialized: 0
-    speakerIsThis: 0
-    overWriteValues: 0
-    text: Five will remain. The others disappear. Choose wisely.
+    text: But when the dust settles, only three can remain. Which three?
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -227,12 +205,6 @@ MonoBehaviour:
   objects:
   - {fileID: 0}
   nodeSettings:
-  - speakerObjectIndex: 0
-    objectSettings:
-    - enableObject: 1
-      modelId: 0
-      enableEyes: 0
-      talk: 1
   - speakerObjectIndex: 0
     objectSettings:
     - enableObject: 1
