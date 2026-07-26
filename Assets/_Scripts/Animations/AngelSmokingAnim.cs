@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AngelSmokingAnim : MonoBehaviour
 {
+   public enum ModelState { Default, SmokingPrep, Smoked }
+
    private GameObject currentModel;
    [SerializeField] private GameObject defaultModel;
    [SerializeField] private GameObject smokingPrepModel;
@@ -12,13 +14,27 @@ public class AngelSmokingAnim : MonoBehaviour
 
    [SerializeField] private float gapBetweenFrames=1f;
    [SerializeField] private GameObject smokeParticles;
-
+   [SerializeField] private ParticleSystem continuousSmoking;
+   
+   
+   
    private void Start()
    {
-      currentModel = defaultModel;
-      defaultModel.SetActive(true);
-      smokingPrepModel.SetActive(false);
-      smokedModel.SetActive(false);
+      ChangeModel(ModelState.Default);
+   }
+
+   private void ChangeModel(ModelState state)
+   {
+      defaultModel.SetActive(state == ModelState.Default);
+      smokingPrepModel.SetActive(state == ModelState.SmokingPrep);
+      smokedModel.SetActive(state == ModelState.Smoked);
+
+      switch (state)
+      {
+         case ModelState.Default: currentModel = defaultModel; break;
+         case ModelState.SmokingPrep: currentModel = smokingPrepModel; break;
+         case ModelState.Smoked: currentModel = smokedModel; break;
+      }
    }
    
    public void Update()
@@ -37,27 +53,36 @@ public class AngelSmokingAnim : MonoBehaviour
    public IEnumerator SmokeAnimationCoroutine()
    {
       yield return null;
+      if (continuousSmoking != null)
+         continuousSmoking.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+
       StartCoroutine(modelChangeAnim.Play());
-      defaultModel.SetActive(false);
-      smokingPrepModel.SetActive(true);
-      smokedModel.SetActive(false);
+      ChangeModel(ModelState.SmokingPrep);
       yield return new WaitForSeconds(gapBetweenFrames);
-      
+
       StartCoroutine(modelChangeAnim.Play());
-      defaultModel.SetActive(false);
-      smokingPrepModel.SetActive(false);
-      smokedModel.SetActive(true);
-      /// TASK find in smokedModel object with tag SpawnPoint, and spawn there smokeParticles
-      /// in addition, make
-      /// defaultModel.SetActive(true);
-      /// smokingPrepModel.SetActive(false);
-      /// smokedModel.SetActive(false);
-      /// as a func ChangeModel(state)
-      yield return new WaitForSeconds(gapBetweenFrames);
-      
+      ChangeModel(ModelState.Smoked);
+      SpawnSmokeParticles();
+      yield return new WaitForSeconds(gapBetweenFrames*2);
+
       StartCoroutine(modelChangeAnim.Play());
-      defaultModel.SetActive(true);
-      smokingPrepModel.SetActive(false);
-      smokedModel.SetActive(false);
+      ChangeModel(ModelState.Default);
+
+      if (continuousSmoking != null)
+         continuousSmoking.Play();
+   }
+
+   private void SpawnSmokeParticles()
+   {
+      if (smokeParticles == null) return;
+
+      GameObject spawnPoint = h.FindChildWithTag(smokedModel.transform, "SpawnPoint");
+      if (spawnPoint == null)
+      {
+         h.Out("AngelSmokingAnim: no child tagged 'SpawnPoint' found in smokedModel");
+         return;
+      }
+
+      Instantiate(smokeParticles, spawnPoint.transform.position, spawnPoint.transform.rotation);
    }
 }

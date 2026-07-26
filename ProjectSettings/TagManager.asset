@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Table
   - Eye
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
