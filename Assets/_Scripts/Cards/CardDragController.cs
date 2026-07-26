@@ -150,9 +150,29 @@ public class CardDragController : MonoBehaviour
 
         Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
 
+        // Only the Hand view allows picking up / dragging cards. In the table / free / window /
+        // taxometer views the hand is frozen, so ignore hover + pick input there. An already-running
+        // drag is allowed to finish (in case the view changes mid-drag).
+        if (!dragging && !CardInteractionAllowedByView())
+        {
+            if (hovered) { hovered.SetHovered(false); hovered = null; PushHoverFocus(null); }
+            return;
+        }
+
         if (dragging) UpdateDragging(ray);
         else UpdateHoverAndPick(ray);
 
+    }
+
+    /// <summary>
+    /// True when cards may be hovered / picked / dragged based on the CAMERA view: only the Hand view
+    /// allows it. In the table / free / window / taxometer views the hand is frozen and cards can't be
+    /// picked up. Fails open (returns true) when there is no camera controller in the scene.
+    /// </summary>
+    private bool CardInteractionAllowedByView()
+    {
+        TableTopCameraController c = TableTopCameraController.Instance;
+        return !c || c.CurrentState == TableTopCameraController.State.HandView;
     }
 
     // ---- not dragging: hover + start drag -----------------------------------

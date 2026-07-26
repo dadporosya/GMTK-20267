@@ -3592,12 +3592,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6
+  m_fontSize: 6.7
   m_fontSizeBase: 7
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 4
-  m_fontSizeMax: 6
+  m_fontSizeMax: 6.7
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
@@ -6010,6 +6010,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4a2039ac57a8e6445b396c9b91c0dcea, type: 2}
   pileSuits: 00000000050000000100000004000000060000000200000003000000
   shuffleAllPiles: 0
+  canLoose: 1
+  lossDialogues:
+  - {fileID: 11400000, guid: 6dda48b225f44ae46a852cd2e4ef40ba, type: 2}
+  lossDelay: 1
   primarySuitCardAdd: 4
   secondarySuitCardAdd: 3
   thirdSuitCardAdd: 1

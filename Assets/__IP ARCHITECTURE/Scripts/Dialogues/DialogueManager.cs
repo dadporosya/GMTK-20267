@@ -13,7 +13,10 @@ public class DialogueManager : MonoBehaviour
     public GameObject dialogueWindow;
     public Image portraitImage;
     public TextMeshProUGUI portraitTitle;
-    public TMP_Text dialogueText;
+    public List<TMP_Text> dialogueTexts = new List<TMP_Text>();
+    // The text box currently in use, resolved from dialogueTexts[dialogueTextId].
+    private TMP_Text dialogueText;
+    public int dialogueTextId = 0;
     private TextAnimation textAnimationComp;
     [HideInInspector] public ScalingText portraitScalingTitle;
     [HideInInspector] public ScalingText dialogueScalingText;
@@ -58,6 +61,8 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private DialogueWindowAnimations windowAnimations;
 
     [SerializeField] private float delayBeforeDialogueStart = 0f;
+
+    public bool skipByMouse = true;
     
     private void Awake()
     {
@@ -71,9 +76,8 @@ public class DialogueManager : MonoBehaviour
         // Snap the window shut on boot; no open/close animation here.
         if (disableWindowOnStart) EndDialogue(animate: false);
         if (portraitTitle) portraitScalingTitle = portraitTitle.GetComponent<ScalingText>();
-        dialogueScalingText = dialogueText.GetComponent<ScalingText>();
-        textAnimationComp = dialogueText.GetComponent<TextAnimation>();
-        
+        ApplyDialogueTextId();
+
         typeSpeed = defaultTypeSpeed;
         
         onStartNode.AddListener(DisableSkipIcon);
@@ -107,7 +111,7 @@ public class DialogueManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space)
             || Input.GetKeyDown(KeyCode.Return)
-            || Input.GetKeyDown(KeyCode.Mouse0))
+            || (Input.GetKeyDown(KeyCode.Mouse0) && skipByMouse))
         {
             DisplayNextParagraph();
         } else if (Input.GetKeyDown(KeyCode.L))
@@ -195,6 +199,9 @@ public class DialogueManager : MonoBehaviour
         dialogue = dialogueIn;
         currentParagraphs = new Queue<DialogueNode>(dialogueIn.nodes);
 
+
+        ApplyDialogueTextId();
+
         typingState = TypingState.notStarted;
 
         SetNodeText("");
@@ -251,6 +258,24 @@ public class DialogueManager : MonoBehaviour
     private void SetNodeText(string text)
     {
         SetText(dialogueScalingText, dialogueText, text);
+    }
+
+    /// <summary>
+    /// Points the active text box (and its cached ScalingText / TextAnimation components)
+    /// at dialogueTexts[dialogueTextId]. Call after changing dialogueTextId.
+    /// </summary>
+    private void ApplyDialogueTextId()
+    {
+        if (dialogueTexts == null || dialogueTexts.Count == 0)
+        {
+            h.Out("no dialogueTexts assigned");
+            return;
+        }
+
+        dialogueTextId = Mathf.Clamp(dialogueTextId, 0, dialogueTexts.Count - 1);
+        dialogueText = dialogueTexts[dialogueTextId];
+        dialogueScalingText = dialogueText.GetComponent<ScalingText>();
+        textAnimationComp = dialogueText.GetComponent<TextAnimation>();
     }
     
     private IEnumerator TypingDialogue(
