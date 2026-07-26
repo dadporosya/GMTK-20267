@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb2952b95454955ba507c3d96778a76, type: 3}
   m_Name: VhsVol
   m_EditorClassIdentifier: VolFx::VolFx.VhsVol
-  active: 1
+  active: 0
   _weight:
     m_OverrideState: 1
     m_Value: 0.2111
@@ -45,7 +45,7 @@ MonoBehaviour:
     m_Value: 0
   _color:
     m_OverrideState: 1
-    m_Value: {r: 0, g: 1, b: 0.8962717, a: 1}
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   _bleed:
     m_OverrideState: 1
     m_Value: 0.298
@@ -764,7 +764,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a10f618ab8a42b54a8aa755b345798c0, type: 3}
   m_Name: InvertVol
   m_EditorClassIdentifier: VolFx::VolFx.InvertVol
-  active: 1
+  active: 0
   m_Weight:
     m_OverrideState: 1
     m_Value: 0

@@ -43,6 +43,7 @@ public class SinCutsceneBase : CutSceneBase
     [SerializeField] private bool changeSkyBox = true;
 
     [SerializeField] private AudioClip soundtrack;
+    [SerializeField] private float ostFadeIn = 2.67f;
 
     [Header("Dialogue")]
     [SerializeField] private DialogueContainer sinDialogue;
@@ -227,7 +228,7 @@ public class SinCutsceneBase : CutSceneBase
     public virtual IEnumerator DialogueStart()
     {
         // Bring in this sin's soundtrack (crossfades up from the silence left by OnWin's fade-out).
-        if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusic(soundtrack);
+        if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusic(soundtrack, fadeTime:ostFadeIn);
 
         DialogueContainer desiredDialogue;
         if (TableManager.Instance.playedCutScenes.Contains(sin))

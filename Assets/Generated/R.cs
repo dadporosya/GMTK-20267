@@ -111,14 +111,112 @@ public static class R
         {
             public static class AndreOst
             {
-                public static class gamePlayIdk
+                public static class ambient
                 {
+                    public static AudioClip ambientCalmParkovka => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/ambient/ambientCalmParkovka");
+                    public static AudioClip ambientEpicMelancholic => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/ambient/ambientEpicMelancholic");
+                    public static AudioClip ambientSemiDarkMysticCalm => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/ambient/ambientSemiDarkMysticCalm");
+                    public static AudioClip ambientSoul1 => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/ambient/ambientSoul1");
+                    public static AudioClip ambientSoul2Calm => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/ambient/ambientSoul2Calm");
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                            ambientCalmParkovka,
+                            ambientEpicMelancholic,
+                            ambientSemiDarkMysticCalm,
+                            ambientSoul1,
+                            ambientSoul2Calm,
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
+                public static class drum
+                {
+                    public static AudioClip cursedDrums => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/drum/cursedDrums");
+                    public static AudioClip wDrum1 => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/drum/wDrum1");
+                    public static AudioClip wDrum2 => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/drum/wDrum2");
+                    public static AudioClip wDrum3 => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/drum/wDrum3");
+                    public static AudioClip wDrum4 => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/drum/wDrum4");
+                    public static AudioClip wDrum5DarkWCuresedAmen => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/drum/wDrum5DarkWCuresedAmen");
+                    public static AudioClip wDrum6AgressiveNoise => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/drum/wDrum6AgressiveNoise");
+
+                    private static readonly System.Lazy<object[]> _all = new(() =>
+                    {
+                        var list = new System.Collections.Generic.List<object>
+                        {
+                            cursedDrums,
+                            wDrum1,
+                            wDrum2,
+                            wDrum3,
+                            wDrum4,
+                            wDrum5DarkWCuresedAmen,
+                            wDrum6AgressiveNoise,
+                        };
+
+                        return list.ToArray();
+                    });
+
+                    public static object[] All => _all.Value;
+                }
+                public static class m4a
+                {
+                    public static class gamePlayIdk
+                    {
+
+                        private static readonly System.Lazy<object[]> _all = new(() =>
+                        {
+                            var list = new System.Collections.Generic.List<object>
+                            {
+                            };
+
+                            return list.ToArray();
+                        });
+
+                        public static object[] All => _all.Value;
+                    }
+                    public static class sins
+                    {
+
+                        private static readonly System.Lazy<object[]> _all = new(() =>
+                        {
+                            var list = new System.Collections.Generic.List<object>
+                            {
+                            };
+
+                            return list.ToArray();
+                        });
+
+                        public static object[] All => _all.Value;
+                    }
+                    public static class wDrums
+                    {
+
+                        private static readonly System.Lazy<object[]> _all = new(() =>
+                        {
+                            var list = new System.Collections.Generic.List<object>
+                            {
+                            };
+
+                            return list.ToArray();
+                        });
+
+                        public static object[] All => _all.Value;
+                    }
 
                     private static readonly System.Lazy<object[]> _all = new(() =>
                     {
                         var list = new System.Collections.Generic.List<object>
                         {
                         };
+
+                        list.AddRange(gamePlayIdk.All);
+                        list.AddRange(sins.All);
+                        list.AddRange(wDrums.All);
 
                         return list.ToArray();
                     });
@@ -127,25 +225,25 @@ public static class R
                 }
                 public static class sins
                 {
+                    public static AudioClip sinEnvy => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/sins/sinEnvy");
+                    public static AudioClip sinGluttony => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/sins/sinGluttony");
+                    public static AudioClip sinGreed => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/sins/sinGreed");
+                    public static AudioClip sinLust => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/sins/sinLust");
+                    public static AudioClip sinPride => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/sins/sinPride");
+                    public static AudioClip sinSloth => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/sins/sinSloth");
+                    public static AudioClip sinWrath => Resources.Load<AudioClip>("PROJECT/Audio/AndreOst/sins/sinWrath");
 
                     private static readonly System.Lazy<object[]> _all = new(() =>
                     {
                         var list = new System.Collections.Generic.List<object>
                         {
-                        };
-
-                        return list.ToArray();
-                    });
-
-                    public static object[] All => _all.Value;
-                }
-                public static class wDrums
-                {
-
-                    private static readonly System.Lazy<object[]> _all = new(() =>
-                    {
-                        var list = new System.Collections.Generic.List<object>
-                        {
+                            sinEnvy,
+                            sinGluttony,
+                            sinGreed,
+                            sinLust,
+                            sinPride,
+                            sinSloth,
+                            sinWrath,
                         };
 
                         return list.ToArray();
@@ -160,9 +258,10 @@ public static class R
                     {
                     };
 
-                    list.AddRange(gamePlayIdk.All);
+                    list.AddRange(ambient.All);
+                    list.AddRange(drum.All);
+                    list.AddRange(m4a.All);
                     list.AddRange(sins.All);
-                    list.AddRange(wDrums.All);
 
                     return list.ToArray();
                 });

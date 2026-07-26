@@ -7,7 +7,8 @@ public class BGMManager : AudioManagerBase
 {
     public static BGMManager Instance; // Instance
 
-    [SerializeField] private AudioClip deafultBGMusic;
+    public AudioClip deafultBGMusic;
+    public List<AudioClip> bgTracks = new List<AudioClip>();
     private string defaultBGMusicPath = "Audio/Music/bgMusicTest";
     
     private AudioSource musicSourceA;
@@ -44,6 +45,40 @@ public class BGMManager : AudioManagerBase
     }
 
     /// <summary>
+    /// Starts playing a random track from <see cref="bgTracks"/>. When that clip ends,
+    /// another random track is picked and crossfaded in, looping the playlist indefinitely.
+    /// </summary>
+    public void PlayRandomBgTrack(float fadeTime = 1.5f)
+    {
+        if (bgTracks == null || bgTracks.Count == 0)
+        {
+            h.Out("bgTracks is empty");
+            return;
+        }
+
+        var clip = h.RandChoice(bgTracks);
+        // Avoid immediately repeating the same track when there's a choice.
+        while (bgTracks.Count > 1 && clip == current.clip)
+            clip = h.RandChoice(bgTracks);
+
+        StopAllCoroutines();
+        StartCoroutine(PlaylistRoutine(clip, fadeTime));
+    }
+
+    private IEnumerator PlaylistRoutine(AudioClip clip, float fadeTime)
+    {
+        // Crossfade in the new clip without looping so we can detect when it ends.
+        yield return CrossFade(clip, fadeTime, loop: false);
+
+        // Wait for the clip to finish (stalling while the game is paused).
+        while (current.clip == clip && (current.isPlaying || GameFlowManager.Instance.IsPaused()))
+            yield return null;
+
+        // Clip ended, chain into the next random track.
+        PlayRandomBgTrack(fadeTime);
+    }
+
+    /// <summary>
     /// Fades the currently playing music down to silence over <paramref name="fadeTime"/> seconds,
     /// then stops the source and restores its volume so a later <see cref="PlayMusic"/> starts clean.
     /// </summary>
@@ -70,11 +105,11 @@ public class BGMManager : AudioManagerBase
         current.volume = 1f;
     }
     
-    private IEnumerator CrossFade(AudioClip newClip, float fadeTime, bool changeSource=true)
+    private IEnumerator CrossFade(AudioClip newClip, float fadeTime, bool changeSource=true, bool loop=true)
     {
         next.clip = newClip;
         next.volume = 0f;
-        next.loop = true;
+        next.loop = loop;
         next.Play();
 
         float t = 0f;

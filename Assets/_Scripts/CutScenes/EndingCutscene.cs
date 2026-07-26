@@ -48,6 +48,8 @@ public class EngingCutscene : CutSceneBase
     [Tooltip("Name of the credits scene to load once the cutscene ends. Must be added to Build Settings.")]
     [SerializeField] private string creditsSceneName = "CreditsScene";
 
+    [SerializeField] private AudioClip ost;
+
     public override void Init()
     {
         base.Init();
@@ -81,7 +83,9 @@ public class EngingCutscene : CutSceneBase
     public virtual IEnumerator DefaultStep()
     {
         yield return null;
-
+        
+        // if (!ost) ost = 
+        BGMManager.Instance.PlayMusic(ost, 1f);
         
         if (runDialogue) DialogueManager.Instance.StartDialogue(dialogue);
 
