@@ -82,14 +82,9 @@ public class AngelSmokingAnim : MonoBehaviour
 
    private void SpawnSmokeParticles()
    {
-      if (smokeParticles == null) return;
+
 
       GameObject spawnPoint = h.FindChildWithTag(smokedModel.transform, "SpawnPoint");
-      if (spawnPoint == null)
-      {
-         h.Out("AngelSmokingAnim: no child tagged 'SpawnPoint' found in smokedModel");
-         return;
-      }
 
       Instantiate(smokeParticles, spawnPoint.transform.position, spawnPoint.transform.rotation);
    }

@@ -118,7 +118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7329436232161477217, guid: 2a97d65a67a6a204cbaca8c0728563e8, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.data[0].probability
-      value: 0.67
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7329436232161477217, guid: 2a97d65a67a6a204cbaca8c0728563e8, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.data[0].repeatInterval
