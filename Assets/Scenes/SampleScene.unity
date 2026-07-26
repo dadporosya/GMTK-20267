@@ -901,6 +901,7 @@ GameObject:
   m_Component:
   - component: {fileID: 519850928}
   - component: {fileID: 519850927}
+  - component: {fileID: 519850929}
   m_Layer: 0
   m_Name: AngelParent
   m_TagString: Untagged
@@ -933,8 +934,8 @@ MonoBehaviour:
       m_Calls: []
   animationSpeed: 1
   squishes:
-  - {x: -0.01, y: 0.01, z: 0}
-  - {x: 0.01, y: -0.01, z: 0}
+  - {x: -0.0167, y: 0.0167, z: 0}
+  - {x: 0.0167, y: -0.0167, z: 0}
   durations: []
   defaultDuration: 4
   ease: 4
@@ -955,6 +956,21 @@ Transform:
   - {fileID: 1643283418}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -181.771, z: 0}
+--- !u!114 &519850929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519850926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8416f347baf640da8f30bb9479d78454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FacedAlwaysToCamera
+  lockedAxes: 0000000002000000
+  rotationOffs: {x: 0, y: 0, z: 0}
+  targetCamera: {fileID: 0}
 --- !u!1 &523500369
 GameObject:
   m_ObjectHideFlags: 0
@@ -20822,7 +20838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: returningTime
-      value: 0.067
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: defaultDuration
@@ -20830,7 +20846,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: returningEasing
-      value: 30
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: squishes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: squishes.Array.data[0].x
+      value: -0.00333
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: squishes.Array.data[0].y
+      value: 0.00333
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: squishes.Array.data[1].x
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8333347603250158349, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: squishes.Array.data[1].y
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
