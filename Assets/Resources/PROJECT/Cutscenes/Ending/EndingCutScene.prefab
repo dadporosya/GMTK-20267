@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EngingCutscene
   runOnStart: 0
-  customDestroy: 0
+  customDestroy: 1
   dialogue: {fileID: 11400000, guid: 8bd2bbe266cfb3f4eabf2904bc402118, type: 2}
-  fadeDurationInSeconds: 60
+  fadeDurationInSeconds: 120
   fadeEase: 1

@@ -358,7 +358,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FadeImageController
   image: {fileID: 761899334}
   enableStartFadeOut: 1
-  startFadeDurationOut: 100
+  startFadeDurationOut: 1.67
+--- !u!1 &145228350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 145228351}
+  m_Layer: 0
+  m_Name: ----VOLUMES----
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &145228351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145228350}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1212299300}
+  m_Father: {fileID: 1479293829371882046}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &205821365
 GameObject:
   m_ObjectHideFlags: 0
@@ -1667,7 +1699,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+  sharedProfile: {fileID: 11400000, guid: d53fdf3574b59644998f526b58021d10, type: 2}
 --- !u!4 &832575519
 Transform:
   m_ObjectHideFlags: 0
@@ -2140,6 +2172,51 @@ MonoBehaviour:
   constPerLevel: 1000
   constBoostPerLevel: 500
   level: 1
+--- !u!1 &1212299299
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1212299300}
+  - component: {fileID: 1212299301}
+  m_Layer: 0
+  m_Name: VHS volume manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1212299300
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212299299}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 145228351}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1212299301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212299299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7029b230ed8aa6a43b93b3c3d2873d60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VhsVolumeManager
+  volume: {fileID: 832575518}
 --- !u!1 &1266318198
 GameObject:
   m_ObjectHideFlags: 0
@@ -3559,7 +3636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7c40a3748db2f46b589fd0280379bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CutSceneManager
-  currentCutScene: {fileID: 7333800463253256475, guid: 0aa7dbb0414d10e4fbaa167e71070382, type: 3}
+  currentCutScene: {fileID: 2395032513394667707, guid: 007b032013b6f9f41904e830eb85e133, type: 3}
   currentCutScenePath: 
   defaultLabel: Cutscenes/
   runOnStart: 1
@@ -3759,6 +3836,7 @@ Transform:
   - {fileID: 2650034401415303331}
   - {fileID: 2290024210082597162}
   - {fileID: 1911867793}
+  - {fileID: 145228351}
   m_Father: {fileID: 1128023985745765558}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1711813855470969264
