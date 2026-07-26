@@ -1650,6 +1650,7 @@ Transform:
   m_Children:
   - {fileID: 490359879}
   - {fileID: 1384954253}
+  - {fileID: 2057005619}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &584108699
@@ -2892,6 +2893,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BGMManager
   defaultAudioSource: {fileID: 0}
   deafultBGMusic: {fileID: 0}
+  bgTracks: []
 --- !u!1 &1398658802
 GameObject:
   m_ObjectHideFlags: 0
@@ -3237,8 +3239,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 376bdb72c649f874e8f8da4a634013e7, type: 2}
-  m_sharedMaterial: {fileID: -9054310753409103145, guid: 376bdb72c649f874e8f8da4a634013e7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: cb672658946e0ff40ba554aa333e28b2, type: 2}
+  m_sharedMaterial: {fileID: -9054310753409103145, guid: cb672658946e0ff40ba554aa333e28b2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3335,7 +3337,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -9054310753409103145, guid: 376bdb72c649f874e8f8da4a634013e7, type: 2}
+  - {fileID: -9054310753409103145, guid: cb672658946e0ff40ba554aa333e28b2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5091,6 +5093,57 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047959270}
   m_Mesh: {fileID: 4493585093827132993, guid: 8adc031a61e10274bafebac9aef4acbe, type: 3}
+--- !u!1 &2057005618
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2057005619}
+  - component: {fileID: 2057005620}
+  m_Layer: 0
+  m_Name: CONTROLLER BGM MANAGER CONTROLLER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2057005619
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057005618}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 539506732}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2057005620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057005618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23077ff41b944948cbf187ba9985205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BGMManagerController
+  deafultBGMusic: {fileID: 8300000, guid: 0ea13c9877c51da42bd46363713a302d, type: 3}
+  bgTracks:
+  - {fileID: 8300000, guid: 25c76c1384a02374e9a5c4593cf97d1c, type: 3}
+  - {fileID: 8300000, guid: 0ea13c9877c51da42bd46363713a302d, type: 3}
+  - {fileID: 8300000, guid: d12c0a4373fd44642b247b37d676dc73, type: 3}
+  - {fileID: 8300000, guid: 2e066b9a00386c84f98f02fcbb1d1e1e, type: 3}
+  - {fileID: 8300000, guid: b79e8ba700abe934d9fbd88d5801d9e2, type: 3}
 --- !u!1 &2094432163
 GameObject:
   m_ObjectHideFlags: 0

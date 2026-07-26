@@ -127,34 +127,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: VolFx::VolFx.VhsVol
   active: 1
   _weight:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.511
   _tape:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.015
   _shades:
-    m_OverrideState: 1
-    m_Value: 1.01
+    m_OverrideState: 0
+    m_Value: 1.193
   _rocking:
-    m_OverrideState: 1
-    m_Value: 0.0103
+    m_OverrideState: 0
+    m_Value: 0
   _squeeze:
-    m_OverrideState: 1
-    m_Value: 0.555
+    m_OverrideState: 0
+    m_Value: 0
   _density:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.044
   _intensity:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   _scale:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   _flickering:
-    m_OverrideState: 1
-    m_Value: 0
+    m_OverrideState: 0
+    m_Value: 0.019
   _lines:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   _color:
     m_OverrideState: 0
@@ -163,10 +163,10 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0.7
   _flow:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 6.88
   _pulsation:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 7.07
 --- !u!114 &11400000
 MonoBehaviour:

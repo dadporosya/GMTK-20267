@@ -113,7 +113,7 @@ public class Taximeter : MonoBehaviour
             ApplyRoadSpeed();
             running      = false;
             UpdateText();
-            StopCameraShake();
+            // Camera shake intentionally left running when time hits 0.
 
             if (!reached)
             {

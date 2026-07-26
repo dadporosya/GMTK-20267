@@ -676,7 +676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f87d2427ed3459e8c4345aacc689427, type: 3}
   m_Name: BlurVol
   m_EditorClassIdentifier: VolFx::VolFx.BlurVol
-  active: 0
+  active: 1
   m_Radius:
     m_OverrideState: 1
     m_Value: 0.116

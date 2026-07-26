@@ -48,7 +48,7 @@ MonoBehaviour:
   customDestroy: 1
   dialogue: {fileID: 11400000, guid: 8bd2bbe266cfb3f4eabf2904bc402118, type: 2}
   runDialogue: 0
-  fadeDurationInSeconds: 10
+  fadeDurationInSeconds: 60
   fadeEase: 1
   vhsDensityTarget: 0.2
   invertWeightTarget: 0.0067
@@ -58,3 +58,4 @@ MonoBehaviour:
   delayBeforeBlackScreen: 0
   blackScreenDuration: 5
   creditsSceneName: CreditsScene
+  ost: {fileID: 8300000, guid: 2e066b9a00386c84f98f02fcbb1d1e1e, type: 3}
