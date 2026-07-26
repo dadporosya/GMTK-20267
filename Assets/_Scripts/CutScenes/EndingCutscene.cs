@@ -91,7 +91,20 @@ public class EngingCutscene : CutSceneBase
         BGMManager.Instance.PlayMusic(ost, 1f);
         
         TableTopCameraController.Instance.ChangeMainState(TableTopCameraController.State.Free);
-        if (runDialogue) DialogueManager.Instance.StartDialogue(dialogue);
+        if (runDialogue)
+        {
+            // When the dialogue closes, re-assert Free as the camera's home state so it stays Free
+            // after the cutscene's dialogue ends (a stray onDialogueEnd listener could otherwise flip
+            // the main state back to Hand view). One-shot: removes itself once it has run.
+            void KeepMainStateFree()
+            {
+                TableTopCameraController.Instance.ChangeMainState(TableTopCameraController.State.Free);
+                DialogueManager.Instance.onDialogueEnd.RemoveListener(KeepMainStateFree);
+            }
+
+            DialogueManager.Instance.onDialogueEnd.AddListener(KeepMainStateFree);
+            DialogueManager.Instance.StartDialogue(dialogue);
+        }
 
         // Fade the global volume's VHS noise density and the Invert effect weight to their configured
         // end values over fadeDurationInSeconds, using PrimeTween (fadeEase controls the easing). Both

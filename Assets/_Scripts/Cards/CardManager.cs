@@ -389,10 +389,41 @@ public class CardManager : MonoBehaviour
             while (!dialogueDone) yield return null;
         }
 
+        // Burn away every card still in play (hand + tables) as part of the loss before the
+        // round is rebuilt, so the player sees a clean wipe rather than cards lingering.
+        yield return BurnAllCards();
+
         // Hand card interaction back to the player, then replay the current level.
         if (CardDragController.Instance) CardDragController.Instance.SetDraggingEnabled(true);
 
         ResetRound();
+    }
+
+    /// <summary>
+    /// Burns every card currently in play — everything tracked in <see cref="Cards"/>, which
+    /// covers both the hand and any cards on the tables (each spawned card is registered there in
+    /// <see cref="SpawnCard"/>). Cards are burned staggered by <see cref="previewBurnStagger"/> so
+    /// they clear in a cascade, and the coroutine waits for every burn to finish before returning.
+    /// <see cref="Cards"/> is cleared afterwards so the next round starts from an empty tracking list.
+    /// Display-only preview/draft cards are not registered in <see cref="Cards"/>, so they are untouched.
+    /// </summary>
+    private IEnumerator BurnAllCards()
+    {
+        // Snapshot first: Card.Burn destroys the GameObject, which would disturb iteration.
+        var toBurn = new List<Card>(Cards);
+
+        int running = 0;
+        foreach (Card card in toBurn)
+        {
+            if (!card) continue;   // skip already-destroyed entries
+            running++;
+            card.StartCoroutine(card.Burn(() => running--));
+            if (previewBurnStagger > 0f) yield return new WaitForSeconds(previewBurnStagger);
+        }
+
+        while (running > 0) yield return null;
+
+        Cards.Clear();
     }
 
     /// <summary>
