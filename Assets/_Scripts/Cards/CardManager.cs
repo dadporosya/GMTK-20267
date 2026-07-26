@@ -22,6 +22,18 @@ public class CardManager : MonoBehaviour
     public Dictionary<CP.Suit, ScriptableObjectContainer> additionalPiles = new Dictionary<CP.Suit, ScriptableObjectContainer>();
     [SerializeField] private bool shuffleAllPiles = false;
 
+    [Header("Losing")]
+    [Tooltip("When ON, an empty pile is NOT reshuffled: the player can no longer draw, and once the " +
+             "hand is empty too the round is lost (OnLoss runs). When OFF, the pile reshuffles as before.")]
+    public bool canLoose = true;
+    [Tooltip("Dialogues played when the player loses. One is chosen at random in OnLoss.")]
+    [SerializeField] private List<DialogueContainer> lossDialogues = new List<DialogueContainer>();
+    [Tooltip("Small delay (seconds) before the loss dialogue starts.")]
+    [SerializeField] private float lossDelay = 1f;
+
+    // Set true the moment a loss is triggered so OnLoss only ever runs once per round; cleared in ResetRound.
+    private bool lost = false;
+
     [Header("Add cards (folding extra cards in from additional piles)")]
     [Tooltip("How many cards the most-present / primary suit adds when extending the pile.")]
     [SerializeField] private int primarySuitCardAdd = 4;
@@ -166,6 +178,14 @@ public class CardManager : MonoBehaviour
     {
         if (!pile || pile.scriptableObjects.Count == 0)
         {
+            // Losing enabled: an empty pile is NEVER reshuffled. The player simply can't draw any
+            // more; the loss itself is detected once the hand is empty too (see CheckForLoss).
+            if (canLoose)
+            {
+                h.Out("CardManager: pile empty and canLoose is on — no reshuffle, cannot draw.");
+                return null;
+            }
+
             // Pile ran out mid-round — just rebuild the draw pile from the full pile.
             // Do NOT call RoundStart() here: that would advance the level and reset the score
             // in the middle of a round. Reshuffling only refills the pile.
@@ -307,8 +327,88 @@ public class CardManager : MonoBehaviour
 
             yield return wait;   // small beat so cards are dealt one after another
         }
+
+        // With losing enabled, the round is lost once the pile is empty and the hand couldn't be
+        // refilled — i.e. the player has no cards left to draw or play.
+        CheckForLoss();
     }
-    
+
+    /// <summary>
+    /// When <see cref="canLoose"/> is on, triggers the loss (<see cref="OnLoss"/>) if the player is
+    /// out of cards: the draw <see cref="pile"/> is empty AND the hand is empty. Fires at most once
+    /// per round (guarded by <see cref="lost"/>, cleared in <see cref="ResetRound"/>).
+    /// </summary>
+    private void CheckForLoss()
+    {
+        if (!canLoose || lost) return;
+        if (pile && pile.scriptableObjects.Count > 0) return;   // still cards left to draw
+        if (PlayerManager.Instance && PlayerManager.Instance.Hand != null
+            && PlayerManager.Instance.Hand.Count > 0) return;   // still cards left to play
+
+        lost = true;
+        StartCoroutine(OnLoss());
+    }
+
+    /// <summary>
+    /// Loss flow: waits a small <see cref="lossDelay"/>, plays a random dialogue from
+    /// <see cref="lossDialogues"/> (same StartDialogue / onDialogueEnd pattern as
+    /// <see cref="SinCutsceneBase.DialogueStart"/>), waits for it to close, then restarts the SAME
+    /// level via <see cref="ResetRound"/>. Card dragging is locked out while the dialogue plays.
+    /// </summary>
+    private IEnumerator OnLoss()
+    {
+        h.Out("CardManager: player lost — no cards left to draw or play.");
+
+        // Lock out card interaction while the loss dialogue plays (re-enabled before the reset).
+        if (CardDragController.Instance) CardDragController.Instance.SetDraggingEnabled(false);
+
+        yield return new WaitForSeconds(lossDelay);
+
+        if (lossDialogues != null && lossDialogues.Count > 0 && DialogueManager.Instance)
+        {
+            DialogueContainer chosen = h.RandChoice(lossDialogues);
+
+            bool dialogueDone = false;
+            void OnDialogueEnd()
+            {
+                dialogueDone = true;
+                DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
+            }
+
+            DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
+            DialogueManager.Instance.StartDialogue(chosen);
+
+            // Wait for the dialogue to finish before resetting the round.
+            while (!dialogueDone) yield return null;
+        }
+
+        // Hand card interaction back to the player, then replay the current level.
+        if (CardDragController.Instance) CardDragController.Instance.SetDraggingEnabled(true);
+
+        ResetRound();
+    }
+
+    /// <summary>
+    /// Restarts the CURRENT round after a loss. Works exactly like <see cref="RoundStart"/> —
+    /// rebuilding <see cref="pile"/> as a fresh copy of <see cref="fullPile"/> and dealing a full
+    /// hand — except it re-applies the current level (<see cref="ProgressionManager.CurrentLevel"/>)
+    /// instead of advancing to the next one (<see cref="ProgressionManager.NextLevel"/>).
+    /// </summary>
+    public void ResetRound()
+    {
+        h.Out("Deal cards (reset round after loss)");
+        pile = fullPile ? Instantiate(fullPile) : null;
+        lost = false;
+        if (!gameStarted)
+        {
+            ProgressionManager.Instance.level -= 1;
+            gameStarted = true;
+        }
+        h.Out(gameStarted);
+        ProgressionManager.Instance.CurrentLevel();
+        DealFullHand();
+    }
+
     /// <summary>
     /// Ticks the table's countdowns after the placed card's effects have resolved.
     ///
