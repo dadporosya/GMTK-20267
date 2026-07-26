@@ -66,7 +66,7 @@ Material:
     - _DissloveTwirlStrength: 9.8
     - _DissolvePixelation: 1000
     - _DissolvePixelationShape: 1
-    - _Dissolve_amount: 0.394
+    - _Dissolve_amount: 0.333
     - _Distortion: 0
     - _DistortionScale: 10
     - _DistortionStrength: 1

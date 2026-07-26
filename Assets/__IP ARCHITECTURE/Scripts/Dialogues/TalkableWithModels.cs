@@ -448,13 +448,6 @@ public class TalkableWithModels : Talkable
         ApplyIdleState(true);
     }
 
-    // private void Update()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.Q))
-    //     {
-    //         Talk();
-    //     }
-    // }
 }
 
 [Serializable]

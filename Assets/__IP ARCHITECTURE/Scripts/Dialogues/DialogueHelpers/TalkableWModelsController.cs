@@ -80,11 +80,7 @@ public class TalkableWModelsController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Talk();
-            h.Out("Dialogue controller");
-        }
+        
     }
 }
 //

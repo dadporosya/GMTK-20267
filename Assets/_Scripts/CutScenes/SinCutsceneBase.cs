@@ -78,7 +78,7 @@ public class SinCutsceneBase : CutSceneBase
         
         yield return OnWin();
         // yield return TurnCameraToWindow();
-        // yield return ChangeEnvironment();
+        StartCoroutine(ChangeEnvironment());
         yield return DialogueStart();
 
 

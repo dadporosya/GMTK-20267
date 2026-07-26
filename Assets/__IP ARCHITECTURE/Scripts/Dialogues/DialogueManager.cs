@@ -119,10 +119,11 @@ public class DialogueManager : MonoBehaviour
             || (Input.GetKeyDown(KeyCode.Mouse0) && skipByMouse))
         {
             DisplayNextParagraph();
-        } else if (Input.GetKeyDown(KeyCode.L))
-        {
-            EndDialogue();
-        }
+        } 
+        // else if (Input.GetKeyDown(KeyCode.L))
+        // {
+        //     EndDialogue();
+        // }
     }
 
     public void SetText(

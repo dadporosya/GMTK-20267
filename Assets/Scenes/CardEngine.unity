@@ -3264,7 +3264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce26e6f932b07be449395e15b79a402b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TalkableWithModels
-  speakerName: '?'
+  speakerName: angel
   portrait: {fileID: 0}
   portraitAtlas: []
   material: {fileID: 0}
@@ -4130,8 +4130,8 @@ MonoBehaviour:
   dialogueScalingText: {fileID: 0}
   defaultTypeSpeed: 6.7
   typeSpeed: 0
-  pauseAfterComma: 0
-  pauseAfterDot: 0
+  pauseAfterComma: 0.333
+  pauseAfterDot: 0.67
   skipIcon: {fileID: 0}
   defaultMaterial: {fileID: 0}
   onDialogueEnd:

@@ -10,6 +10,14 @@ public class TutorialCutscene : CutSceneBase
     [SerializeField] private float delayBeforeDialogue;
     [SerializeField] private DialogueContainer introDialogue;
     [SerializeField] private DialogueContainer tutorialDialogue;
+
+    [Header("Additional dialogue window dissolve")]
+    [SerializeField] private float dissolveAnimDuration = 0.4f;
+    [SerializeField] private Ease dissolveAnimEase = Ease.Default;
+
+    // Cached once resolved (while the window is still active/findable) so the dissolve-out path
+    // can still reach it after we deactivate the object.
+    private MasterMaterialController additionalWindowMat;
     public override void Init()
     {
         base.Init();
@@ -89,11 +97,13 @@ public class TutorialCutscene : CutSceneBase
             DialogueManager.Instance.onDialogueStartEvents = true;
             DialogueManager.Instance.dialogueTextId=0;
             SetAdditionalWindowDissolve(false);
+            DialogueManager.Instance.skipByMouse = true;
             DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
         }
         DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
         
         DialogueManager.Instance.onDialogueStartEvents = false;
+        DialogueManager.Instance.skipByMouse = false;
 
         // Reveal the extra dialogue window used for the tutorial's second text box (dissolve in).
         SetAdditionalWindowDissolve(true);
@@ -103,28 +113,58 @@ public class TutorialCutscene : CutSceneBase
     }
 
     /// <summary>
-    /// Shows/hides the AdditionalDialogueWindow through its MasterMaterialController dissolve
-    /// amount instead of toggling the GameObject active state: 1 = fully dissolved (hidden),
-    /// 0.333 = visible.
+    /// Shows/hides the AdditionalDialogueWindow by animating its MasterMaterialController dissolve
+    /// amount (1 = fully dissolved/hidden, 0.333 = visible) instead of snapping the GameObject
+    /// active state. When showing, the object is enabled before the dissolve-in; when hiding, it
+    /// is disabled once the dissolve-out finishes.
     /// </summary>
     private void SetAdditionalWindowDissolve(bool visible)
     {
+        MasterMaterialController matController = ResolveAdditionalWindowMat();
+        if (!matController) return;
+
+        GameObject go = matController.gameObject;
+        float from = matController.GetDissolveAmount();
+        float target = visible ? 0.333f : 1f;
+
+        if (visible)
+        {
+            // Enable the window and turn the dissolve effect on, then dissolve in.
+            go.SetActive(true);
+            matController.SetDissolve(true);
+            Tween.Custom(from, target, dissolveAnimDuration,
+                val => matController.SetDissolveAmount(val), dissolveAnimEase);
+        }
+        else
+        {
+            // Dissolve out, then disable the window once it is fully dissolved.
+            Tween.Custom(from, target, dissolveAnimDuration,
+                    val => matController.SetDissolveAmount(val), dissolveAnimEase)
+                .OnComplete(() => go.SetActive(false));
+        }
+    }
+
+    /// <summary>
+    /// Resolves (and caches) the MasterMaterialController on the AdditionalDialogueWindow. The
+    /// lookup relies on GameObject.FindGameObjectWithTag, which only sees active objects, so it is
+    /// cached the first time the window is found while still active.
+    /// </summary>
+    private MasterMaterialController ResolveAdditionalWindowMat()
+    {
+        if (additionalWindowMat) return additionalWindowMat;
+
         GameObject additionalWindow = GameObject.FindGameObjectWithTag("AdditionalDialogueWindow");
         if (!additionalWindow)
         {
             h.Out("AdditionalDialogueWindow not found");
-            return;
+            return null;
         }
 
-        MasterMaterialController matController =
-            additionalWindow.GetComponentInChildren<MasterMaterialController>(true);
-        if (!matController)
-        {
+        additionalWindowMat = additionalWindow.GetComponentInChildren<MasterMaterialController>(true);
+        if (!additionalWindowMat)
             h.Out("AdditionalDialogueWindow has no MasterMaterialController");
-            return;
-        }
 
-        matController.SetDissolveAmount(visible ? 0.333f : 1f);
+        return additionalWindowMat;
     }
 
 }
