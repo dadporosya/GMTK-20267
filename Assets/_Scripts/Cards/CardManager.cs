@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
+    
+    public bool startRoundOnStart = false;
     public static CardManager Instance;
     public Transform cardsParent;
     public Transform cardsSpawnPoint;
@@ -90,7 +92,6 @@ public class CardManager : MonoBehaviour
              "is destroyed at once (no burn). 0 = snap instantly.")]
     [SerializeField] private float draftPickMoveDuration = 0.25f;
 
-    public bool startRoundOnStart = false;
     
     private void Awake()
     {
