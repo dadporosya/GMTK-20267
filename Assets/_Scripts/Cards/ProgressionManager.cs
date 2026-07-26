@@ -8,23 +8,28 @@ using UnityEngine;
 ///   1            initialScore
 ///   2            initialScore + constPerLevel
 ///   3            initialScore + constPerLevel * 2 + constBoostPerLevel
+///   4            initialScore + constPerLevel * 3 + constBoostPerLevel * 2 + constBoostPerLevel2
 ///
 /// General form:
-///   score = initialScore + constPerLevel * (level - 1) + constBoostPerLevel * max(0, level - 2)
+///   score = initialScore + constPerLevel * (level - 1)
+///           + constBoostPerLevel  * max(0, level - 2)
+///           + constBoostPerLevel2 * max(0, level - 3)
 ///
-/// The boost multiplier is clamped at 0 so level 1 stays exactly at initialScore
-/// (and level 2 gets no boost yet).
+/// Each boost multiplier is clamped at 0 so level 1 stays exactly at initialScore,
+/// level 2 gets no boost yet, and constBoostPerLevel2 only kicks in from level 4 onward.
 /// </summary>
 public class ProgressionManager : MonoBehaviour
 {
     public static ProgressionManager Instance;
 
     [Tooltip("Target score of level 1.")]
-    public int initialScore = 100;
+    public int initialScore = 2500;
     [Tooltip("Flat amount added to the target score for each level past the first.")]
-    public int constPerLevel = 50;
+    public int constPerLevel = 1500;
     [Tooltip("Extra amount that accumulates on top of constPerLevel from level 3 onward.")]
-    public int constBoostPerLevel = 25;
+    public int constBoostPerLevel = 1250;
+    [Tooltip("Further extra amount that accumulates on top from level 4 onward.")]
+    public int constBoostPerLevel2 = 1000;
     [Tooltip("Current level (starts at 1).")]
     public int level = 1;
 
@@ -48,7 +53,8 @@ public class ProgressionManager : MonoBehaviour
 
         int score = initialScore
                     + constPerLevel * (levelIn - 1)
-                    + constBoostPerLevel * Mathf.Max(0, levelIn - 2);
+                    + constBoostPerLevel * Mathf.Max(0, levelIn - 2)
+                    + constBoostPerLevel2 * Mathf.Max(0, levelIn - 3);
 
         // overrideScore == true means the designer pins targetScore in the inspector, so the
         // progression only writes it when overrideScore is false.

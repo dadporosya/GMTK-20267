@@ -924,7 +924,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &375803494
 SpriteRenderer:
   serializedVersion: 2
@@ -2240,9 +2240,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0d23056a670de479873b8eec61eb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionManager
-  initialScore: 2500
-  constPerLevel: 1250
-  constBoostPerLevel: 750
+  initialScore: 2750
+  constPerLevel: 1500
+  constBoostPerLevel: 1250
   level: 1
 --- !u!1 &1212299299
 GameObject:
@@ -3928,6 +3928,7 @@ GameObject:
   - component: {fileID: 3469287837115913594}
   - component: {fileID: 1711813855470969264}
   - component: {fileID: 3469287837115913595}
+  - component: {fileID: 3469287837115913596}
   m_Layer: 0
   m_Name: MILLES TAXO METER
   m_TagString: Untagged
@@ -5220,6 +5221,103 @@ MonoBehaviour:
   kmValue: 0
   timeInMinutes: 10
   timeBeforeEndToCallEndingDialogue: 0
+--- !u!82 &3469287837115913596
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149597061221}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: ebe7a50b72dd07b45bb104f078dbd090, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.77
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 33
+  MaxDistance: 44
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &3570303577819389374
 Transform:
   m_ObjectHideFlags: 0
@@ -6858,7 +6956,7 @@ MonoBehaviour:
   previewHoverRaise: 0.15
   previewHoverSmoothing: 0.08
   cardDrafting: 1
-  draftCardCount: 5
+  draftCardCount: 4
   draftPickMoveDuration: 0.25
   Pick5Container: {fileID: 0}
 --- !u!4 &6674368213915398119
