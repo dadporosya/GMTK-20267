@@ -19,5 +19,6 @@ public class EndingManager : MonoBehaviour
     public void StartEndingCutscene()
     {
         CutSceneManager.Instance.RunCutscene(endingCutscene);
+        
     }
 }

@@ -43,7 +43,7 @@ public class Taximeter : MonoBehaviour
     [SerializeField] private float timeInMinutes = 5f;
 
     [Header("Ending")]
-    [SerializeField] private float timeBeforeEndToCallEndingDialogue; // TASK: call EndingManager.Instance.StartEndingDialogue() then there are remain timeBeforeEndToCallEndingDialogue time to end
+    [SerializeField] private float timeBeforeEndToCallEndingDialogue; // seconds left in the trip at which the ending dialogue fires
     private bool endDialogueWasCalled = false;
 
     private float totalKm;    // full distance for this trip, computed from speed + time
@@ -98,6 +98,13 @@ public class Taximeter : MonoBehaviour
         kmValue = Mathf.Max(0f, totalKm * (1f - travelledFraction));
 
         UpdateText();
+
+        // Fire the ending dialogue once, when the trip has this many seconds left.
+        if (!endDialogueWasCalled && (duration - elapsed) <= timeBeforeEndToCallEndingDialogue)
+        {
+            endDialogueWasCalled = true;
+            EndingManager.Instance.StartEndingDialogue();
+        }
 
         if (t >= 1f || kmValue <= 0f)
         {
