@@ -5545,7 +5545,7 @@ MonoBehaviour:
   label: KM
   decimalPlaces: 2
   kmValue: 0
-  timeInMinutes: 8
+  timeInMinutes: 10
   timeBeforeEndToCallEndingDialogue: 0
   speedForDontHaveMuchTimeDialogue: 200
   debugSkipEnabled: 0

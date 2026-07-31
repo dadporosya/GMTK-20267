@@ -40,14 +40,14 @@ public class Car : MonoBehaviour
         h.Out($"Car '{name}' found {wheels.Count} wheel(s).");
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            transform.position = carStartPoint.position;
-            MoveToThePoint();
-        }
-    }
+    // private void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.E))
+    //     {
+    //         transform.position = carStartPoint.position;
+    //         MoveToThePoint();
+    //     }
+    // }
 
     /// <summary>
     /// Moves the car to <see cref="animEndPoint"/>: it leaves at <see cref="initSpeed"/> and
