@@ -26,9 +26,9 @@ using UnityEngine;
 /// which decides whether a sin's dialogue was already heard. This manager only tracks the card
 /// achievement colouring.
 /// </summary>
-public class SinAchivementManager : MonoBehaviour
+public class GamePlusManager : MonoBehaviour
 {
-    public static SinAchivementManager Instance;
+    public static GamePlusManager Instance;
 
     [Header("Achievement Look")]
     [Tooltip("Color written into the TextureColor material property of an achieved suit tracker's " +

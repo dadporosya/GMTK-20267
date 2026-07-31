@@ -99,7 +99,7 @@ public class SuitTracker : MonoBehaviour
     ///
     /// When <paramref name="markSinAchieved"/> is on (the sin cutscene passes it), this doubles as
     /// the achievement moment: the first time this suit's cutscene is chosen, the tracker's front
-    /// and back meshes are recolored to <see cref="SinAchivementManager.achivedCardColor"/> — started
+    /// and back meshes are recolored to <see cref="GamePlusManager.achivedCardColor"/> — started
     /// right here so it runs alongside the animation — and the suit is written to the save file.
     /// If the sin was already achieved before, only the animation plays and the color is left alone.
     /// </summary>
@@ -110,7 +110,7 @@ public class SuitTracker : MonoBehaviour
 
         if (!markSinAchieved) return;
 
-        SinAchivementManager achievements = SinAchivementManager.Instance;
+        GamePlusManager achievements = GamePlusManager.Instance;
         if (achievements == null)
         {
             h.Out("SuitTracker: no SinAchivementManager in the scene — achievement color skipped.");

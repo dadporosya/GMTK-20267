@@ -802,6 +802,8 @@ MonoBehaviour:
   suitAnim: {fileID: 5684657223830156337}
   targetSuit: 0
   currentCount: 0
+  front: {fileID: 4291813592895567093}
+  back: {fileID: 7517986285431085719}
 --- !u!114 &4746714585834494565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -832,3 +834,13 @@ MonoBehaviour:
   defaultDuration: 0.05
   ease: 5
   initialState: {x: 1, y: 1, z: 1}
+--- !u!1 &4291813592895567093 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8397760802324866212, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+  m_PrefabInstance: {fileID: 5694031304522092625}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7517986285431085719 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2832768547768142534, guid: 26668fb9128675e439aa4e702c2b6e59, type: 3}
+  m_PrefabInstance: {fileID: 5694031304522092625}
+  m_PrefabAsset: {fileID: 0}
