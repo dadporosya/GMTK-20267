@@ -1833,7 +1833,7 @@ MonoBehaviour:
   colorFadeDuration: 0
   colorTrackersOnStart: 1
   loadFromDisk: 1
-  achievedSins: 
+  achievedSins: 00000000010000000200000003000000040000000500000006000000
 --- !u!1001 &881007008
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5327,7 +5327,7 @@ MonoBehaviour:
   label: KM
   decimalPlaces: 2
   kmValue: 0
-  timeInMinutes: 7
+  timeInMinutes: 0.05
   timeBeforeEndToCallEndingDialogue: 0
   speedForDontHaveMuchTimeDialogue: 200
 --- !u!82 &3469287837115913596
@@ -7100,6 +7100,10 @@ MonoBehaviour:
   draftPickMoveDuration: 0.25
   Pick5Container: {fileID: 0}
   draftInputDelay: 0.67
+  lossDraft: 1
+  lossDraftCandidateCount: 3
+  lossDraftPickCount: 1
+  lossDraftDialogue: {fileID: 0}
 --- !u!4 &6674368213915398119
 Transform:
   m_ObjectHideFlags: 0

@@ -84,6 +84,51 @@ public class GamePlusManager : MonoBehaviour
     public bool IsAchieved(CP.Suit suit) => achievedSins.Contains(suit);
 
     /// <summary>
+    /// Every suit that actually has a sin cutscene registered on <see cref="TableManager"/>. Falls
+    /// back to all <see cref="CP.Suit"/> values when the table isn't up yet (or has no cutscenes
+    /// wired), so the check never silently passes on an empty set.
+    /// </summary>
+    public static List<CP.Suit> SuitsWithCutscenes()
+    {
+        List<CP.Suit> suits = new List<CP.Suit>();
+
+        if (TableManager.Instance != null && TableManager.Instance.SinCutScenes != null)
+        {
+            foreach (KeyValuePair<CP.Suit, CutSceneBase> pair in TableManager.Instance.SinCutScenes)
+                if (pair.Value != null && !suits.Contains(pair.Key)) suits.Add(pair.Key);
+        }
+
+        if (suits.Count == 0)
+            foreach (CP.Suit suit in Enum.GetValues(typeof(CP.Suit))) suits.Add(suit);
+
+        return suits;
+    }
+
+    /// <summary>
+    /// True when every suit that has a sin cutscene (see <see cref="SuitsWithCutscenes"/>) has been
+    /// achieved — i.e. the player collected all of them across this and earlier sessions. Used by the
+    /// ending cutscene to swap in the secret ending dialogue.
+    /// </summary>
+    public bool AreAllSinsAchieved()
+    {
+        foreach (CP.Suit suit in SuitsWithCutscenes())
+            if (!IsAchieved(suit)) return false;
+
+        return true;
+    }
+
+    /// <summary>Suits that still have to be achieved before <see cref="AreAllSinsAchieved"/> is true. Handy for logging.</summary>
+    public List<CP.Suit> MissingSins()
+    {
+        List<CP.Suit> missing = new List<CP.Suit>();
+
+        foreach (CP.Suit suit in SuitsWithCutscenes())
+            if (!IsAchieved(suit)) missing.Add(suit);
+
+        return missing;
+    }
+
+    /// <summary>
     /// Records <paramref name="suit"/> as achieved and writes the whole list to disk immediately, so
     /// the progress survives a crash as well as a clean quit.
     /// Returns true only when this was the FIRST time the suit was achieved — callers use that to

@@ -58,6 +58,14 @@ public class TableTopCameraController : MonoBehaviour
     /// <summary>The home/main mode the camera returns to when a peek/hold key is released.</summary>
     public State MainState => mainState;
 
+    // While locked, ChangeMainState (and therefore the ChangeMainStateToHand / ToFree UnityEvent hooks
+    // fired by DialogueManager) is ignored, so the home state stays wherever a cutscene put it.
+    // Only ForceChangeMainState can move it. See SetMainStateLocked.
+    private bool mainStateLocked = false;
+
+    /// <summary>Whether the home/main state is currently locked against ChangeMainState.</summary>
+    public bool MainStateLocked => mainStateLocked;
+
     [Header("Transition")]
     [Tooltip("Seconds to ease from one mode's pose to the next. 0 = snap instantly.")]
     [SerializeField] private float transitionDuration = 0.5f;
@@ -307,11 +315,40 @@ public class TableTopCameraController : MonoBehaviour
     /// released. Also moves the camera there right away, unless a peek is currently being held (in which
     /// case releasing the key brings it to the new home). Example: after ChangeMainState(State.Free),
     /// every peek release turns the camera to Free view.
+    /// Does nothing while the main state is locked (<see cref="SetMainStateLocked"/>) — use
+    /// <see cref="ForceChangeMainState"/> to move the home state anyway.
     /// </summary>
     public void ChangeMainState(State newMainState)
     {
+        if (mainStateLocked)
+        {
+            h.Out("TableTopCameraController: main state is locked —", newMainState, "ignored.");
+            return;
+        }
+
+        ForceChangeMainState(newMainState);
+    }
+
+    /// <summary>
+    /// Same as <see cref="ChangeMainState"/>, but goes through even when the main state is locked.
+    /// Use this from the code that owns the lock.
+    /// </summary>
+    public void ForceChangeMainState(State newMainState)
+    {
         mainState = newMainState;
         if (!isHoldingView) SwitchState(mainState);
+    }
+
+    /// <summary>
+    /// Locks (or unlocks) the home/main state so <see cref="ChangeMainState"/> is ignored. This is what
+    /// keeps outside hooks — notably DialogueManager's onDialogueStart / onDialogueEnd UnityEvents wired
+    /// to ChangeMainStateToFree / ChangeMainStateToHand — from yanking the camera home back during a
+    /// cutscene that has deliberately parked it somewhere. Peek/hold keys still work; they just return
+    /// to the locked home state.
+    /// </summary>
+    public void SetMainStateLocked(bool locked)
+    {
+        mainStateLocked = locked;
     }
 
     public void ChangeMainStateToHand()

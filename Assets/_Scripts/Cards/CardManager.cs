@@ -104,6 +104,19 @@ public class CardManager : MonoBehaviour
              "Hovering still works during this window.")]
     [SerializeField] private float draftInputDelay = 1.67f;
 
+    [Header("Loss consolation draft")]
+    [Tooltip("When ON, losing a round offers the player a small draft: a few new cards are pulled " +
+             "from the additional piles and the player keeps lossDraftPickCount of them (folded " +
+             "into the full pile), so the retried round starts with a slightly better deck.")]
+    [SerializeField] private bool lossDraft = true;
+    [Tooltip("How many cards are laid out to choose from after a loss.")]
+    [SerializeField] private int lossDraftCandidateCount = 3;
+    [Tooltip("How many of those cards the player actually keeps after a loss.")]
+    [SerializeField] private int lossDraftPickCount = 1;
+    [Tooltip("Optional dialogue played right before the loss draft cards are shown. Leave empty to " +
+             "show the cards immediately.")]
+    [SerializeField] private DialogueContainer lossDraftDialogue;
+
     
     private void Awake()
     {
@@ -389,32 +402,51 @@ public class CardManager : MonoBehaviour
 
         yield return new WaitForSeconds(lossDelay);
 
-        if (lossDialogues != null && lossDialogues.Count > 0 && DialogueManager.Instance)
-        {
-            DialogueContainer chosen = h.RandChoice(lossDialogues);
-
-            bool dialogueDone = false;
-            void OnDialogueEnd()
-            {
-                dialogueDone = true;
-                DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
-            }
-
-            DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
-            DialogueManager.Instance.StartDialogue(chosen);
-
-            // Wait for the dialogue to finish before resetting the round.
-            while (!dialogueDone) yield return null;
-        }
+        if (lossDialogues != null && lossDialogues.Count > 0)
+            yield return PlayDialogueAndWait(h.RandChoice(lossDialogues));
 
         // Burn away every card still in play (hand + tables) as part of the loss before the
         // round is rebuilt, so the player sees a clean wipe rather than cards lingering.
         yield return BurnAllCards();
 
+        // Consolation draft: pull a few new cards from the additional piles and let the player keep
+        // some of them. Runs on the cleared screen, after the wipe and before the round is rebuilt,
+        // so the picks are already in fullPile when ResetRound copies it into the new draw pile.
+        if (lossDraft && lossDraftCandidateCount > 0 && lossDraftPickCount > 0)
+        {
+            List<CardDataBase> candidates = CollectRandomCards(lossDraftCandidateCount);
+            if (candidates.Count > 0)
+            {
+                if (lossDraftDialogue) yield return PlayDialogueAndWait(lossDraftDialogue);
+                yield return DraftCardsCoroutine(candidates, lossDraftPickCount);
+            }
+        }
+
         // Hand card interaction back to the player, then replay the current level.
         if (CardDragController.Instance) CardDragController.Instance.SetDraggingEnabled(true);
 
         ResetRound();
+    }
+
+    /// <summary>
+    /// Starts <paramref name="container"/> on the <see cref="DialogueManager"/> and yields until it
+    /// closes. No-op (returns immediately) when the container or the manager is missing.
+    /// </summary>
+    private IEnumerator PlayDialogueAndWait(DialogueContainer container)
+    {
+        if (!container || !DialogueManager.Instance) yield break;
+
+        bool dialogueDone = false;
+        void OnDialogueEnd()
+        {
+            dialogueDone = true;
+            DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
+        }
+
+        DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
+        DialogueManager.Instance.StartDialogue(container);
+
+        while (!dialogueDone) yield return null;
     }
 
     /// <summary>
@@ -818,20 +850,7 @@ public class CardManager : MonoBehaviour
 
         // Play the pick-cards dialogue first and wait for it to close before offering any cards
         // (same StartDialogue / onDialogueEnd wait pattern as OnLoss).
-        if (Pick5Container != null && DialogueManager.Instance)
-        {
-            bool dialogueDone = false;
-            void OnDialogueEnd()
-            {
-                dialogueDone = true;
-                DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
-            }
-
-            DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
-            DialogueManager.Instance.StartDialogue(Pick5Container);
-
-            while (!dialogueDone) yield return null;
-        }
+        yield return PlayDialogueAndWait(Pick5Container);
 
         if (randomExtendSuits)
         {
@@ -955,8 +974,12 @@ public class CardManager : MonoBehaviour
     /// <see cref="draftCardCount"/> cards have been picked (or every candidate has been taken), the
     /// remaining candidates burn away. These draft cards are display-only: they never enter the hand,
     /// <see cref="Cards"/>, or any pile except through a deliberate pick.
+    ///
+    /// <paramref name="picksOverride"/> replaces <see cref="draftCardCount"/> for this draft only
+    /// (used by the loss consolation draft, which offers a single pick). Pass a value &lt;= 0 to keep
+    /// the configured <see cref="draftCardCount"/>.
     /// </summary>
-    private IEnumerator DraftCardsCoroutine(List<CardDataBase> candidates)
+    private IEnumerator DraftCardsCoroutine(List<CardDataBase> candidates, int picksOverride = -1)
     {
         if (candidates == null || candidates.Count == 0) yield break;
 
@@ -1025,7 +1048,7 @@ public class CardManager : MonoBehaviour
         }
 
         // Never ask for more picks than there are cards on offer.
-        int picksTarget = Mathf.Min(draftCardCount, count);
+        int picksTarget = Mathf.Min(picksOverride > 0 ? picksOverride : draftCardCount, count);
         int picked = 0;
 
         yield return new WaitForEndOfFrame();   // swallow the click/press that opened the draft

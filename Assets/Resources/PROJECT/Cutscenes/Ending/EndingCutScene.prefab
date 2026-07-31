@@ -47,6 +47,7 @@ MonoBehaviour:
   runOnStart: 0
   customDestroy: 1
   dialogue: {fileID: 11400000, guid: 8bd2bbe266cfb3f4eabf2904bc402118, type: 2}
+  secretEndingDialogue: {fileID: 11400000, guid: 1bb7a29a0833afc44bf7de4c644531e4, type: 2}
   runDialogue: 0
   fadeDurationInSeconds: 40
   fadeEase: 1

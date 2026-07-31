@@ -19,6 +19,9 @@ using VolFx;
 public class EngingCutscene : CutSceneBase
 {
     [SerializeField] private DialogueContainer dialogue;
+    [Tooltip("Played instead of 'dialogue' when GamePlusManager reports every sin with a cutscene " +
+             "has been achieved (collected). Leave empty to always use the default dialogue.")]
+    [SerializeField] private DialogueContainer secretEndingDialogue;
     [SerializeField] private bool runDialogue = false;
     [SerializeField] private float fadeDurationInSeconds = 60;
     [Tooltip("Easing used for the VHS density / Invert weight / Bloom threshold fade.")]
@@ -90,20 +93,16 @@ public class EngingCutscene : CutSceneBase
         // if (!ost) ost = 
         BGMManager.Instance.PlayMusic(ost, 1f);
         
-        TableTopCameraController.Instance.ChangeMainState(TableTopCameraController.State.Free);
+        // Park the camera in Free and lock the home state there. The scene wires DialogueManager's
+        // onDialogueEnd to TableTopCameraController.ChangeMainStateToHand, which would otherwise pull
+        // the view back to the hand the moment the ending dialogue closes — the lock makes that call a
+        // no-op. Nothing unlocks it: the run ends in the credits scene right after this.
+        TableTopCameraController.Instance.ForceChangeMainState(TableTopCameraController.State.Free);
+        TableTopCameraController.Instance.SetMainStateLocked(true);
+
         if (runDialogue)
         {
-            // When the dialogue closes, re-assert Free as the camera's home state so it stays Free
-            // after the cutscene's dialogue ends (a stray onDialogueEnd listener could otherwise flip
-            // the main state back to Hand view). One-shot: removes itself once it has run.
-            void KeepMainStateFree()
-            {
-                TableTopCameraController.Instance.ChangeMainState(TableTopCameraController.State.Free);
-                DialogueManager.Instance.onDialogueEnd.RemoveListener(KeepMainStateFree);
-            }
-
-            DialogueManager.Instance.onDialogueEnd.AddListener(KeepMainStateFree);
-            DialogueManager.Instance.StartDialogue(dialogue);
+            DialogueManager.Instance.StartDialogue(ResolveDialogue());
         }
 
         // Fade the global volume's VHS noise density and the Invert effect weight to their configured
@@ -143,6 +142,32 @@ public class EngingCutscene : CutSceneBase
         // Hold the black screen, then load the credits scene.
         yield return new WaitForSeconds(blackScreenDuration);
         SceneManager.LoadScene(creditsSceneName);
+    }
+
+    /// <summary>
+    /// The secret ending dialogue when the player has collected every sin that has a cutscene
+    /// (<see cref="GamePlusManager.AreAllSinsAchieved"/>), otherwise the default one. Falls back to
+    /// the default whenever no secret dialogue is assigned or the manager isn't in the scene.
+    /// </summary>
+    public virtual DialogueContainer ResolveDialogue()
+    {
+        if (secretEndingDialogue == null) return dialogue;
+
+        GamePlusManager gamePlus = GamePlusManager.Instance;
+        if (gamePlus == null)
+        {
+            h.Out("EngingCutscene: no GamePlusManager in the scene — using the default ending dialogue.");
+            return dialogue;
+        }
+
+        if (!gamePlus.AreAllSinsAchieved())
+        {
+            h.Out("EngingCutscene: sins still missing", gamePlus.MissingSins(), "— using the default ending dialogue.");
+            return dialogue;
+        }
+
+        h.Out("EngingCutscene: all sins achieved — running the secret ending dialogue.");
+        return secretEndingDialogue;
     }
 
 
