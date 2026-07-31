@@ -307,6 +307,14 @@ public class TableManager : MonoBehaviour
         return decreasingScore ? currentScore <= 0 : currentScore >= targetScore;
     }
 
+    /// <summary>
+    /// True while the displayed number is still counting toward <see cref="currentScore"/>.
+    /// Note that <see cref="currentScore"/> (and therefore <see cref="IsScoreReached"/>) already
+    /// holds the value the count is heading for, so the goal can be "reached" before the count
+    /// finishes — callers that must not act until the animation settles should wait on this.
+    /// </summary>
+    public bool IsScoreCounting() => _scoreTween.isAlive;
+
     // Fires OnScoreReached once when the goal condition becomes true, and re-arms
     // if the score later leaves that state.
     private void CheckScoreReached()

@@ -35,6 +35,9 @@ public class CardManager : MonoBehaviour
 
     // Set true the moment a loss is triggered so OnLoss only ever runs once per round; cleared in ResetRound.
     private bool lost = false;
+    // True while CheckForLossCoroutine is waiting for effects/score to settle, so the deferred
+    // loss check is never started twice at once. Cleared in ResetRound.
+    private bool lossCheckPending = false;
 
     [Header("Add cards (folding extra cards in from additional piles)")]
     [Tooltip("How many cards the most-present / primary suit adds when extending the pile.")]
@@ -254,6 +257,8 @@ public class CardManager : MonoBehaviour
         h.Out("Deal cards");
         TableManager.Instance.ResetSuits();
         pile = fullPile ? Instantiate(fullPile) : null;
+        lost = false;
+        lossCheckPending = false;
         if (!gameStarted)
         {
             ProgressionManager.Instance.level -= 1;
@@ -433,16 +438,81 @@ public class CardManager : MonoBehaviour
     /// When <see cref="canLoose"/> is on, triggers the loss (<see cref="OnLoss"/>) if the player is
     /// out of cards: the draw <see cref="pile"/> is empty AND the hand is empty. Fires at most once
     /// per round (guarded by <see cref="lost"/>, cleared in <see cref="ResetRound"/>).
+    ///
+    /// Running out of cards is NOT a loss when the last play was enough to hit the score goal, so
+    /// the actual verdict is deferred to <see cref="CheckForLossCoroutine"/>, which waits for the
+    /// pending effects and the score count-up to finish first.
     /// </summary>
     private void CheckForLoss()
     {
-        if (!canLoose || lost) return;
+        if (!canLoose || lost || lossCheckPending) return;
         if (pile && pile.scriptableObjects.Count > 0) return;   // still cards left to draw
         if (PlayerManager.Instance && PlayerManager.Instance.Hand != null
             && PlayerManager.Instance.Hand.Count > 0) return;   // still cards left to play
 
+        lossCheckPending = true;
+        StartCoroutine(CheckForLossCoroutine());
+    }
+
+    /// <summary>
+    /// Decides whether being out of cards is really a loss.
+    ///
+    /// The player can run out of cards on the very play that wins the round, and the score does not
+    /// land instantly: effects resolve one at a time (<see cref="EffectResolverManager"/>) and the
+    /// number then counts up/down over time (<see cref="TableManager.SetScore"/>). Calling the loss
+    /// flow right away would cut the win off mid-count. So this waits until:
+    ///   1. every queued effect has resolved (they can still add score), and
+    ///   2. the score has finished counting.
+    ///
+    /// Then it asks <see cref="TableManager.IsScoreReached"/> — which reads currentScore, i.e. the
+    /// value the count was heading for, so it answers "is the goal reached, or would it be once the
+    /// animation finishes". If it is, the win flow (OnScoreReached) owns the round and no loss
+    /// cutscene is played. Otherwise the out-of-cards condition is re-checked (cards may have been
+    /// drawn or played meanwhile) and only then does <see cref="OnLoss"/> run.
+    /// </summary>
+    private IEnumerator CheckForLossCoroutine()
+    {
+        // 1. Let every queued card effect resolve — any of them may still push the score to the goal.
+        while (EffectResolverManager.Instance
+               && EffectResolverManager.Instance.cardsToResolve.Count > 0)
+            yield return null;
+
+        TableManager table = TableManager.Instance;
+        if (table)
+        {
+            // 2. Wait out the score count-up/-down animation.
+            while (table.IsScoreCounting())
+                yield return null;
+
+            // The goal was (or will be) reached: this is a win, not a loss. OnScoreReached fires from
+            // the count's completion callback and drives the win flow, so just bow out here.
+            if (table.IsScoreReached())
+            {
+                h.Out("CardManager: out of cards, but the score goal is reached — no loss.");
+                lossCheckPending = false;
+                yield break;
+            }
+        }
+
+        // Re-check the out-of-cards condition: the waits above take real time, during which cards
+        // may have been added to the pile or the hand (effects, extra draws).
+        if (pile && pile.scriptableObjects.Count > 0)
+        {
+            lossCheckPending = false;
+            yield break;
+        }
+        if (PlayerManager.Instance && PlayerManager.Instance.Hand != null
+            && PlayerManager.Instance.Hand.Count > 0)
+        {
+            lossCheckPending = false;
+            yield break;
+        }
+
+        lossCheckPending = false;
+        if (lost) yield break;   // something else (debug hotkey) already lost the round
+
         lost = true;
-        StartCoroutine(OnLoss());
+        yield return OnLoss();
     }
 
     /// <summary>
@@ -547,6 +617,7 @@ public class CardManager : MonoBehaviour
         TableManager.Instance.ResetSuits();
         pile = fullPile ? Instantiate(fullPile) : null;
         lost = false;
+        lossCheckPending = false;
         if (!gameStarted)
         {
             ProgressionManager.Instance.level -= 1;
