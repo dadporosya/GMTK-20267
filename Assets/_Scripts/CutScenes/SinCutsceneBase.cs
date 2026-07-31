@@ -155,7 +155,7 @@ public class SinCutsceneBase : CutSceneBase
             TableManager.Instance.suitTrackers.TryGetValue(sin, out SuitTracker tracker) && tracker)
         {
             // markSinAchieved: the first time this sin's cutscene is chosen the tracker also recolors
-            // to SinAchivementManager.achivedCardColor (alongside this animation) and the sin is
+            // to GamePlusManager.achivedCardColor (alongside this animation) and the sin is
             // written to the save file. On a repeat, only the animation plays.
             tracker.PlayCountChangeAnimation(true);
         }

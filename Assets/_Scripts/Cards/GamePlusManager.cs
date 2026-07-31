@@ -255,21 +255,39 @@ public class GamePlusManager : MonoBehaviour
         }
     }
 
-    /// <summary>Deletes the save file and forgets every achievement, so all sins count as new again.</summary>
+    /// <summary>
+    /// Deletes the save file and forgets every achievement, so all sins count as new again.
+    /// Also puts the suit trackers back to their pre-achievement color, so a reset during play mode
+    /// is visible immediately instead of only after a restart.
+    /// </summary>
     [ContextMenu("Clear Sin Achievements Save")]
     public void ClearAchievements()
     {
         achievedSins.Clear();
+        ClearSaveFile();
 
+        if (TableManager.Instance != null && TableManager.Instance.suitTrackers != null)
+        {
+            foreach (SuitTracker tracker in TableManager.Instance.suitTrackers.Values)
+                if (tracker) tracker.ResetTextureColor();
+        }
+
+        h.Out("GamePlusManager: cleared achieved sins");
+    }
+
+    /// <summary>
+    /// Deletes the save file on disk. Static so tooling can wipe the save without a manager instance
+    /// existing — e.g. the Reset Sin Achievements editor menu item outside of play mode.
+    /// </summary>
+    public static void ClearSaveFile()
+    {
         try
         {
             if (File.Exists(FilePath)) File.Delete(FilePath);
         }
         catch (Exception e)
         {
-            h.Out("SinAchivementManager: failed to clear", e.Message);
+            h.Out("GamePlusManager: failed to clear", e.Message);
         }
-
-        h.Out("SinAchivementManager: cleared achieved sins");
     }
 }

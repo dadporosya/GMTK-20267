@@ -54,12 +54,15 @@ MonoBehaviour:
   delayAfterWin: 1.67
   burnCardStagger: 0.08
   waitForBurnsToFinish: 0
+  playSuitTrackerAnim: 1
+  trackerCameraSettleDelay: 1
+  delayAfterTrackerAnim: 1
   environmentLight: {fileID: 0}
   lightColor: {r: 0.9056604, g: 0.75536186, b: 0.11534355, a: 1}
   colorFadeDuration: 3
   delayAfterColorChange: 1
   useSinColor: 1
-  changeLights: 0
+  changeLights: 1
   changeSkyBox: 0
   angelFill: 1
   angelFillAlpha: 0.99

@@ -1829,11 +1829,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6967260209811c4c99d260340858fa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GamePlusManager
-  achivedCardColor: {r: 0.827451, g: 0.6862745, b: 0.21568628, a: 1}
+  achivedCardColor: {r: 0.9811321, g: 0.8220008, b: 0.29156283, a: 1}
   colorFadeDuration: 0
   colorTrackersOnStart: 1
   loadFromDisk: 1
-  achievedSins: 0000000001000000
+  achievedSins: 
 --- !u!1001 &881007008
 PrefabInstance:
   m_ObjectHideFlags: 0

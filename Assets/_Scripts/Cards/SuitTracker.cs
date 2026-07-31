@@ -40,12 +40,16 @@ public class SuitTracker : MonoBehaviour
     public GameObject back;
 
     // The MasterShaderGraphForCard color property recolored when this suit is achieved
-    // (see SinAchivementManager).
+    // (see GamePlusManager).
     private static readonly int TextureColorId = Shader.PropertyToID("_TextureColor");
 
     // Live tweens per material, so a new recolor takes over from whatever is currently showing
     // instead of fighting it.
     private readonly Dictionary<Material, Tween> _colorTweens = new Dictionary<Material, Tween>();
+
+    // Each mesh material's TextureColor as it was before any achievement recolor, captured the
+    // first time that material is touched, so ResetTextureColor can put it back exactly.
+    private readonly Dictionary<Material, Color> _originalColors = new Dictionary<Material, Color>();
 
     private void Awake()
     {
@@ -113,7 +117,7 @@ public class SuitTracker : MonoBehaviour
         GamePlusManager achievements = GamePlusManager.Instance;
         if (achievements == null)
         {
-            h.Out("SuitTracker: no SinAchivementManager in the scene — achievement color skipped.");
+            h.Out("SuitTracker: no GamePlusManager in the scene — achievement color skipped.");
             return;
         }
 
@@ -136,6 +140,9 @@ public class SuitTracker : MonoBehaviour
             Material mat = rend.material;
             if (!mat || !mat.HasProperty(TextureColorId)) continue;
 
+            // Remember how this material looked before the first recolor (see ResetTextureColor).
+            if (!_originalColors.ContainsKey(mat)) _originalColors[mat] = mat.GetColor(TextureColorId);
+
             // Drop any recolor still running on this material so the new one starts clean.
             if (_colorTweens.TryGetValue(mat, out Tween running) && running.isAlive) running.Stop();
 
@@ -149,6 +156,25 @@ public class SuitTracker : MonoBehaviour
             _colorTweens[mat] = Tween.Custom(mat, mat.GetColor(TextureColorId), color, duration,
                 (Material m, Color c) => m.SetColor(TextureColorId, c));
         }
+    }
+
+    /// <summary>
+    /// Puts every mesh material's TextureColor back to what it was before the achievement recolor.
+    /// Used when sin achievements are reset (see GamePlusManager.ClearAchievements) so a reset made
+    /// during play mode is visible right away. No-op if this tracker was never recolored.
+    /// </summary>
+    public void ResetTextureColor()
+    {
+        foreach (KeyValuePair<Material, Color> kv in _originalColors)
+        {
+            if (!kv.Key) continue;
+
+            if (_colorTweens.TryGetValue(kv.Key, out Tween running) && running.isAlive) running.Stop();
+            kv.Key.SetColor(TextureColorId, kv.Value);
+        }
+
+        _colorTweens.Clear();
+        _originalColors.Clear();
     }
 
     // Every renderer belonging to the tracker's card meshes (front/back and anything below them).
