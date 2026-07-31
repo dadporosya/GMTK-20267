@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TutorialCutscene
   runOnStart: 0
   customDestroy: 1
-  skipIntro: 1
+  skipIntro: 0
   delayBeforeDialogue: 2
   introDialogue: {fileID: 11400000, guid: 9aa096b3feaaa2f40a978afdfa116661, type: 2}
   tutorialDialogue: {fileID: 11400000, guid: 35ff76062ef111d4f8ad6fb00b9a1924, type: 2}

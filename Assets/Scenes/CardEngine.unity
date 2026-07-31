@@ -5533,7 +5533,7 @@ MonoBehaviour:
   timeInMinutes: 8
   timeBeforeEndToCallEndingDialogue: 0
   speedForDontHaveMuchTimeDialogue: 200
-  debugSkipEnabled: 1
+  debugSkipEnabled: 0
   debugSkipKey: 26
   debugSkipToKm: 0.67
 --- !u!82 &3469287837115913596
@@ -7384,7 +7384,7 @@ MonoBehaviour:
   lossDraftPickCount: 1
   lossDraftDialogue: {fileID: 0}
   lossDraftDistanceMultiplier: 1.5
-  debugHotkeys: 1
+  debugHotkeys: 0
 --- !u!4 &6674368213915398119
 Transform:
   m_ObjectHideFlags: 0

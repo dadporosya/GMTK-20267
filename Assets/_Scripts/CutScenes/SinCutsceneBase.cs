@@ -191,7 +191,8 @@ public class SinCutsceneBase : CutSceneBase
             SFXManager.Instance.PlayRandomClip( new List<AudioClip>()
             {
                 R.PROJECT.Audio.Cards.Activate.activateFaded1   
-            }
+            },
+                randomPitchRange: new Vector2(-3,-2)
                 
                 );
         }

@@ -902,7 +902,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 98166503}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba17233c34e02024e9e4c50f01335076, type: 3}
   m_Name: 
@@ -6631,7 +6631,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1472660459}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba17233c34e02024e9e4c50f01335076, type: 3}
   m_Name: 
@@ -6639,17 +6639,17 @@ MonoBehaviour:
   animationTarget: 3
   animations: 01000000
   cleaned: 0
-  shakeStrength: 0.03
-  shakeSpeed: 0.333
-  waveAmplitude: 0.333
-  waveFrequency: 0.333
-  waveSpread: 0.777
-  bounceHeight: 7.77
-  bounceFrequency: 3.33
-  bounceSpread: 0.333
+  shakeStrength: 0.009
+  shakeSpeed: 22.5
+  waveAmplitude: 0.15
+  waveFrequency: 0.4
+  waveSpread: 0.8
+  bounceHeight: 8
+  bounceFrequency: 2
+  bounceSpread: 0.2
   fadeMinAlpha: 0
   fadeMaxAlpha: 1
-  fadeSpeed: 3.33
+  fadeSpeed: 1.5
   _tmp: {fileID: 0}
   _isDirty: 1
 --- !u!114 &1472660462
