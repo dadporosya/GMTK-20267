@@ -10,6 +10,7 @@ TagManager:
   - Wheel
   - AdditionalDialogueWindow
   - AngelFeel
+  - AngelEye
   layers:
   - Default
   - TransparentFX

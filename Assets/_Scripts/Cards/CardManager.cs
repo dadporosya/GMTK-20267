@@ -116,8 +116,16 @@ public class CardManager : MonoBehaviour
     [Tooltip("Optional dialogue played right before the loss draft cards are shown. Leave empty to " +
              "show the cards immediately.")]
     [SerializeField] private DialogueContainer lossDraftDialogue;
+    [Tooltip("How much further from the camera the loss draft cards are placed, as a multiplier of " +
+             "previewDistance. 1 = same depth as the normal draft; >1 pushes them back so they read " +
+             "as smaller / further away (spacing is still laid out at previewDistance, so the whole " +
+             "spread shrinks together). Values below 1 pull them closer.")]
+    [SerializeField] private float lossDraftDistanceMultiplier = 1.5f;
 
-    
+    [Header("Debug")]
+    [Tooltip("When ON, K instantly wins the current round and J instantly loses it. Turn OFF for builds.")]
+    [SerializeField] private bool debugHotkeys = true;
+
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
@@ -186,6 +194,56 @@ public class CardManager : MonoBehaviour
         if (startRoundOnStart) RoundStart();
     }
     
+    private void Update()
+    {
+        if (!debugHotkeys) return;
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            DebugWinRound();
+        } else if (Input.GetKeyDown(KeyCode.J))
+        {
+            DebugLoseRound();
+        }
+    }
+
+    /// <summary>
+    /// Debug hotkey (K): instantly wins the current round by pushing the score to the goal, which
+    /// runs the normal win flow (<see cref="TableManager.CheckScoreReached"/> ->
+    /// <see cref="TableManager.OnScoreReached"/> -> sin cutscene -> ExtendPileAccordingToSins ->
+    /// RoundStart). When the score is already at the goal no count would run — and therefore no
+    /// completion callback — so the win is fired directly instead.
+    /// </summary>
+    public void DebugWinRound()
+    {
+        if (!TableManager.Instance) return;
+
+        h.Out("CardManager: DEBUG win round");
+
+        TableManager table = TableManager.Instance;
+        if (table.IsScoreReached())
+            table.OnScoreReached();
+        else
+            table.SetScore(table.decreasingScore ? 0 : table.targetScore);
+    }
+
+    /// <summary>
+    /// Debug hotkey (J): instantly loses the current round, running the same
+    /// <see cref="OnLoss"/> flow the real loss uses (dialogue -> burn every card -> consolation
+    /// draft -> <see cref="ResetRound"/>). Ignores <see cref="canLoose"/> so the flow can be tested
+    /// even when losing is switched off, but still respects the once-per-round <see cref="lost"/>
+    /// guard so it can't be triggered twice while the loss is playing out.
+    /// </summary>
+    public void DebugLoseRound()
+    {
+        if (lost) return;
+
+        h.Out("CardManager: DEBUG lose round");
+
+        lost = true;
+        StartCoroutine(OnLoss());
+    }
+
 
     /// <summary>
     /// Resets the round: rebuilds <see cref="pile"/> as a fresh copy of <see cref="fullPile"/> so
@@ -418,7 +476,8 @@ public class CardManager : MonoBehaviour
             if (candidates.Count > 0)
             {
                 if (lossDraftDialogue) yield return PlayDialogueAndWait(lossDraftDialogue);
-                yield return DraftCardsCoroutine(candidates, lossDraftPickCount);
+                yield return DraftCardsCoroutine(candidates, lossDraftPickCount,
+                                                 lossDraftDistanceMultiplier);
             }
         }
 
@@ -978,8 +1037,14 @@ public class CardManager : MonoBehaviour
     /// <paramref name="picksOverride"/> replaces <see cref="draftCardCount"/> for this draft only
     /// (used by the loss consolation draft, which offers a single pick). Pass a value &lt;= 0 to keep
     /// the configured <see cref="draftCardCount"/>.
+    ///
+    /// <paramref name="distanceMultiplier"/> pushes the whole layout further from the camera:
+    /// the grid is still *sized* at <see cref="previewDistance"/> (so cell spacing and card scale are
+    /// unchanged in world units) but is *placed* at previewDistance * multiplier, which makes the
+    /// spread read as smaller and further away. 1 = unchanged.
     /// </summary>
-    private IEnumerator DraftCardsCoroutine(List<CardDataBase> candidates, int picksOverride = -1)
+    private IEnumerator DraftCardsCoroutine(List<CardDataBase> candidates, int picksOverride = -1,
+                                            float distanceMultiplier = 1f)
     {
         if (candidates == null || candidates.Count == 0) yield break;
 
@@ -992,13 +1057,18 @@ public class CardManager : MonoBehaviour
         int cols = Mathf.Max(1, Mathf.CeilToInt(Mathf.Sqrt(count * aspect)));
         int rows = Mathf.Max(1, Mathf.CeilToInt((float)count / cols));
 
+        // Layout is sized at previewDistance, but placed at previewDistance * multiplier, so raising
+        // the multiplier shrinks the whole spread on screen instead of just moving it (a frustum
+        // computed at the placement depth would grow in step and look identical).
+        float placementDistance = previewDistance * Mathf.Max(0.01f, distanceMultiplier);
+
         float frustumHeight = 2f * previewDistance * Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
         float frustumWidth = frustumHeight * aspect;
         float cellWidth = frustumWidth / cols;
         float cellHeight = frustumHeight / rows;
 
         Transform camT = cam.transform;
-        Vector3 gridCenter = camT.position + camT.forward * previewDistance;
+        Vector3 gridCenter = camT.position + camT.forward * placementDistance;
         Quaternion faceRot = Quaternion.LookRotation(camT.forward, camT.up);
 
         // Parallel lists, kept in lock-step. When a card is picked its entry is removed from ALL of

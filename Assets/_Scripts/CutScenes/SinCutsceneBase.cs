@@ -57,10 +57,29 @@ public class SinCutsceneBase : CutSceneBase
     [Tooltip("Alpha applied to the AngelFeel object's SpriteRenderer color when angelFill is on.")]
     [SerializeField] private float angelFillAlpha = 1f;
 
+    [Tooltip("If on, the object(s) tagged with eyeTag have their SpriteRenderer color set to the " +
+             "sin's color during the cutscene, then restored on cutscene end.")]
+    [SerializeField] private bool lightenEye = true;
+    [Tooltip("If on, the eye is colored with this sin's color (CP.SuitColor). If off, eyeColor is used.")]
+    [SerializeField] private bool eyeUseSinColor = true;
+    [Tooltip("Color the eye's SpriteRenderer is set to when eyeUseSinColor is off.")]
+    [SerializeField] private Color eyeColor = Color.white;
+    [Tooltip("Tag used to find the eye object(s).")]
+    [SerializeField] private string eyeTag = "AngelEye";
+
     // Remembers the AngelFeel object's original renderer color so CutsceneEnd can restore it.
     private SpriteRenderer angelFeelRenderer;
     private Color angelFeelOriginalColor;
     private bool angelFeelColorCaptured = false;
+
+    // One entry per recolored eye renderer, holding what CutsceneEnd needs to put it back.
+    private class EyeTintState
+    {
+        public SpriteRenderer renderer;
+        public Color originalColor;
+    }
+
+    private readonly List<EyeTintState> eyeStates = new List<EyeTintState>();
 
     [SerializeField] private AudioClip soundtrack;
     [SerializeField] private float ostFadeIn = 2.67f;
@@ -158,6 +177,12 @@ public class SinCutsceneBase : CutSceneBase
             // to GamePlusManager.achivedCardColor (alongside this animation) and the sin is
             // written to the save file. On a repeat, only the animation plays.
             tracker.PlayCountChangeAnimation(true);
+            SFXManager.Instance.PlayRandomClip( new List<AudioClip>()
+            {
+                R.PROJECT.Audio.Cards.Activate.activateFaded1   
+            }
+                
+                );
         }
         else
         {
@@ -294,7 +319,53 @@ public class SinCutsceneBase : CutSceneBase
             }
         }
 
+        if (lightenEye) LightenEye();
+
         yield return new WaitForSeconds(delayAfterColorChange);
+    }
+
+    /// <summary>
+    /// Finds the object(s) tagged <see cref="eyeTag"/> ("AngelEye") and fades their
+    /// <c>SpriteRenderer.color</c> to the sin's color over <see cref="colorFadeDuration"/>.
+    /// Original colors are remembered so <see cref="CutsceneEnd"/> can put them back.
+    /// </summary>
+    protected virtual void LightenEye()
+    {
+        eyeStates.Clear();
+
+        Color target = eyeUseSinColor ? CP.SuitColor(sin) : eyeColor;
+
+        foreach (SpriteRenderer sr in ResolveEyeRenderers())
+        {
+            if (!sr) continue;
+
+            eyeStates.Add(new EyeTintState { renderer = sr, originalColor = sr.color });
+
+            // Alpha is left as the renderer had it — only the RGB is swapped.
+            target.a = sr.color.a;
+
+            Tween.Custom(sr, sr.color, target, colorFadeDuration,
+                (SpriteRenderer r, Color c) => { if (r) r.color = c; });
+        }
+
+        if (eyeStates.Count == 0)
+            h.Out($"SinCutsceneBase: no object tagged '{eyeTag}' with a SpriteRenderer found — eye color skipped.");
+    }
+
+    /// <summary>Eye renderers: the SpriteRenderers on everything tagged <see cref="eyeTag"/>.</summary>
+    private List<SpriteRenderer> ResolveEyeRenderers()
+    {
+        List<SpriteRenderer> found = new List<SpriteRenderer>();
+        if (string.IsNullOrEmpty(eyeTag)) return found;
+
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(eyeTag))
+        {
+            if (!go) continue;
+            foreach (SpriteRenderer sr in go.GetComponentsInChildren<SpriteRenderer>(true))
+                if (sr && !found.Contains(sr)) found.Add(sr);
+        }
+
+        return found;
     }
 
     /// <summary>Environment light to recolor: the assigned one, else the sun, else the first Light found.</summary>
@@ -325,7 +396,6 @@ public class SinCutsceneBase : CutSceneBase
 
         void OnDialogueEnd()
         {
-            h.Out("Dialogue End Event BEBRA");
             StartCoroutine(CutsceneEnd());
             DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
         }
@@ -349,6 +419,17 @@ public class SinCutsceneBase : CutSceneBase
                 (SpriteRenderer r, Color c) => r.color = c);
             angelFeelColorCaptured = false;
         }
+
+        // Fade the eye(s) back to the color they had before LightenEye brightened them.
+        foreach (EyeTintState state in eyeStates)
+        {
+            if (state == null || !state.renderer) continue;
+
+            SpriteRenderer sr = state.renderer;
+            Tween.Custom(sr, sr.color, state.originalColor, 2f,
+                (SpriteRenderer r, Color c) => { if (r) r.color = c; });
+        }
+        eyeStates.Clear();
 
         TableManager.Instance.AddPlayedCutscene(sin);
 

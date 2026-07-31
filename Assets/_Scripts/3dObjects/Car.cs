@@ -14,8 +14,8 @@ public class Car : MonoBehaviour
     public Transform animEndPoint;
     [SerializeField] private Transform carStartPoint;
 
-    [Tooltip("Speed (units/second) at the very start of the move.")]
-    public float initSpeed = 10f;
+    [Tooltip("Duration of the trip in seconds.")]
+    public float tripDuration = 3f;
 
     [Tooltip("How the car slows down. An ease-out gives a natural deceleration.")]
     public Ease movementEase = Ease.OutCubic;
@@ -27,7 +27,6 @@ public class Car : MonoBehaviour
     public List<GameObject> wheels = new List<GameObject>();
 
 
-    
     void Start()
     {
         // Find every child GameObject tagged "wheel" and assign them to the list.
@@ -70,28 +69,26 @@ public class Car : MonoBehaviour
         endPos.y = startPos.y;
 
         float distance = Vector3.Distance(startPos, endPos);
-        if (distance <= 0.0001f || initSpeed <= 0f)
+        if (distance <= 0.0001f || tripDuration <= 0f)
             return;
 
-        // With an ease-out the car covers the distance while slowing down. Basing the
-        // duration on distance / initSpeed makes the opening pace match initSpeed, and the
-        // easing curve handles the natural slow-down toward the end.
-        float duration = distance / initSpeed;
-
         float circumference = 2f * Mathf.PI * Mathf.Max(0.0001f, wheelRadius);
-        Vector3 prevPos = startPos;
+        float totalWheelRotation = (distance / circumference) * 360f;
 
-        Tween.Custom(0f, 1f, duration, ease: movementEase, onValueChange: t =>
+        // Track the accumulated wheel rotation to calculate delta per frame
+        float previousRotationProgress = 0f;
+
+        Tween.Custom(0f, 1f, tripDuration, ease: movementEase, onValueChange: t =>
         {
             Vector3 newPos = Vector3.Lerp(startPos, endPos, t);
             transform.position = newPos;
 
-            // Spin the wheels by the distance travelled this frame (positive = forward roll).
-            float delta = Vector3.Distance(newPos, prevPos);
-            float degrees = (delta / circumference) * 360f;
-            RotateWheels(degrees);
+            // Calculate wheel rotation based on progress, not frame-dependent distance
+            float currentRotationProgress = t * totalWheelRotation;
+            float rotationDelta = currentRotationProgress - previousRotationProgress;
+            RotateWheels(rotationDelta);
 
-            prevPos = newPos;
+            previousRotationProgress = currentRotationProgress;
         });
     }
 

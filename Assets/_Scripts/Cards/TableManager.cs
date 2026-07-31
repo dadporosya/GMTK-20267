@@ -137,7 +137,10 @@ public class TableManager : MonoBehaviour
         // rawSuitTrackers = FindObjectsOfType<SuitTracker>().ToList();
         BuildSuitTrackers();
     }
-    
+
+
+
+
     // Keys every SuitTracker by its own suit, then seeds each suit's starting count and
     // initializes the matching tracker. Expects one tracker per suit (7 total); list order
     // doesn't matter since the dictionary is keyed by each tracker's targetSuit.

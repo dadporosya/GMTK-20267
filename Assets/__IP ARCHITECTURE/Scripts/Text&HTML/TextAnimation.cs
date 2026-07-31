@@ -9,11 +9,11 @@ using UnityEngine;
 [RequireComponent(typeof(TMP_Text))]
 public class TextAnimation : MonoBehaviour
 {
-    
+
     // ─────────────────────────────────────────────────────────────
     //  Enum
     // ─────────────────────────────────────────────────────────────
-    
+
     /// <summary>
     /// None - no animation at all
     /// WholeText - Animate whole text with assigned in animations
@@ -27,7 +27,7 @@ public class TextAnimation : MonoBehaviour
         Tags,
         Both
     }
-    
+
     public enum AnimationType
     {
         None,
@@ -42,10 +42,10 @@ public class TextAnimation : MonoBehaviour
     //  Inspector
     // ─────────────────────────────────────────────────────────────
     private bool sleepUpdate = false;
-    
+
     [Header("Animation Target")]
     public AnimationTarget animationTarget = AnimationTarget.Both;
-    
+
     [Header("Animation Types")]
     public List<AnimationType> animations = new List<AnimationType>();
     private AnimationType currentAnimation = AnimationType.None;
@@ -54,23 +54,23 @@ public class TextAnimation : MonoBehaviour
 
     [Header("Shake")]
     public float shakeStrength = 3f;
-    public float shakeSpeed    = 25f;
+    public float shakeSpeed = 25f;
 
     [Header("Wave")]
     public float waveAmplitude = 6f;
     public float waveFrequency = 2f;
-    public float waveSpread    = 0.3f;
+    public float waveSpread = 0.3f;
 
     [Header("Bounce")]
-    public float bounceHeight    = 8f;
+    public float bounceHeight = 8f;
     public float bounceFrequency = 2f;
-    public float bounceSpread    = 0.2f;
+    public float bounceSpread = 0.2f;
 
     [Header("Fade")]
     [Range(0f, 1f)] public float fadeMinAlpha = 0f;
     [Range(0f, 1f)] public float fadeMaxAlpha = 1f;
     public float fadeSpeed = 1.5f;
-    
+
 
     // ─────────────────────────────────────────────────────────────
     //  Private state
@@ -81,7 +81,7 @@ public class TextAnimation : MonoBehaviour
     // Cached BASE vertex positions per mesh, rebuilt only when text changes.
     // Key = materialReferenceIndex, Value = unmodified vertex array copy.
     private readonly Dictionary<int, Vector3[]> _baseVertices = new();
-    private readonly Dictionary<int, Color32[]> _baseColors   = new();
+    private readonly Dictionary<int, Color32[]> _baseColors = new();
 
     // Stable per-character noise seeds for smooth shake.
     private readonly Dictionary<int, Vector2> _noiseSeed = new();
@@ -137,7 +137,7 @@ public class TextAnimation : MonoBehaviour
         if (obj == _tmp) _isDirty = true;
     }
 
-    public void ForceUpdate(string text="")
+    public void ForceUpdate(string text = "")
     {
         if (text != "") _tmp.text = text;
         _tmp.ForceMeshUpdate();
@@ -154,19 +154,19 @@ public class TextAnimation : MonoBehaviour
     {
         sleepUpdate = false;
     }
-    
+
     private void Update()
     {
         if (_tmp.textInfo == null || _tmp.textInfo.characterCount == 0) return;
         string cleanText = _tmp.text;
-        
+
         // Rebuild base cache only when text actually changed
         if (_isDirty)
         {
             _tmp.ForceMeshUpdate();
             CacheBaseVertices();
             _isDirty = false;
-            
+
             if (!cleaned && !sleepUpdate)
             {
                 // h.Out("clear");
@@ -186,18 +186,18 @@ public class TextAnimation : MonoBehaviour
                         cleanText += dirtText[dirtCi];
                         continue;
                     }
-                
+
                     AnimationType chosenAnimation;
                     switch (tag)
                     {
-                        case "shake":   chosenAnimation = AnimationType.Shake;   break;
-                        case "wave":    chosenAnimation = AnimationType.Wave;    break;
-                        case "bounce":  chosenAnimation = AnimationType.Bounce;  break;
-                        case "fade":    chosenAnimation = AnimationType.Fade;    break;
+                        case "shake": chosenAnimation = AnimationType.Shake; break;
+                        case "wave": chosenAnimation = AnimationType.Wave; break;
+                        case "bounce": chosenAnimation = AnimationType.Bounce; break;
+                        case "fade": chosenAnimation = AnimationType.Fade; break;
                         case "rainbow": chosenAnimation = AnimationType.Rainbow; break;
-                        default:        chosenAnimation = AnimationType.None;    break;
+                        default: chosenAnimation = AnimationType.None; break;
                     }
-                
+
                     animationsById.Add(dirtCi - gap, chosenAnimation);
                     int d = tag.Length + 2 + HTML.ANIMATION_TAG.Length;
                     gap += d;
@@ -212,10 +212,10 @@ public class TextAnimation : MonoBehaviour
                 cleaned = false;
             }
         }
-        
+
         AnimateCharacters();
     }
-    
+
     private string ProcessTag(int ci, string text)
     {
         char c = text[ci];
@@ -261,7 +261,7 @@ public class TextAnimation : MonoBehaviour
         {
             // Deep copy — TMP reuses the same arrays, so we must clone.
             _baseVertices[m] = (Vector3[])info.meshInfo[m].vertices.Clone();
-            _baseColors[m]   = (Color32[])info.meshInfo[m].colors32.Clone();
+            _baseColors[m] = (Color32[])info.meshInfo[m].colors32.Clone();
         }
     }
 
@@ -273,14 +273,14 @@ public class TextAnimation : MonoBehaviour
     {
         currentAnimation = AnimationType.None;
         TMP_TextInfo info = _tmp.textInfo;
-        float        t    = Time.time;
+        float t = Time.time;
 
         // Step 1: Reset working arrays to base values for this frame.
         for (int m = 0; m < info.meshInfo.Length; m++)
         {
             if (!_baseVertices.ContainsKey(m)) continue;
             _baseVertices[m].CopyTo(info.meshInfo[m].vertices, 0);
-            _baseColors[m].CopyTo(info.meshInfo[m].colors32,   0);
+            _baseColors[m].CopyTo(info.meshInfo[m].colors32, 0);
         }
 
         void ProcessCharacterAnimation(int ci, AnimationType animationIn = AnimationType.None, List<AnimationType> animationsIn = null)
@@ -288,24 +288,24 @@ public class TextAnimation : MonoBehaviour
             TMP_CharacterInfo charInfo = info.characterInfo[ci];
             if (!charInfo.isVisible) return;
 
-            int       mi    = charInfo.materialReferenceIndex;
-            int       vi    = charInfo.vertexIndex;
+            int mi = charInfo.materialReferenceIndex;
+            int vi = charInfo.vertexIndex;
             Vector3[] verts = info.meshInfo[mi].vertices;
-            Color32[] cols  = info.meshInfo[mi].colors32;
-            
+            Color32[] cols = info.meshInfo[mi].colors32;
+
             if (animationsIn == null) animationsIn = new List<AnimationType>();
             if (animationIn != AnimationType.None) animationsIn.Add(animationIn);
-            
+
             foreach (var at in animationsIn)
             {
                 switch (at)
                 {
-                    case AnimationType.Shake:   ApplyShake(verts, vi, ci, t);  break;
-                    case AnimationType.Wave:    ApplyWave(verts, vi, ci, t);   break;
-                    case AnimationType.Bounce:  ApplyBounce(verts, vi, ci, t); break;
-                    case AnimationType.Fade:    ApplyFade(cols, vi, ci, t);    break;
+                    case AnimationType.Shake: ApplyShake(verts, vi, ci, t); break;
+                    case AnimationType.Wave: ApplyWave(verts, vi, ci, t); break;
+                    case AnimationType.Bounce: ApplyBounce(verts, vi, ci, t); break;
+                    case AnimationType.Fade: ApplyFade(cols, vi, ci, t); break;
                     case AnimationType.Rainbow: ApplyRainbow(cols, vi, ci, t); break;
-                    case AnimationType.None: default:                           break;
+                    case AnimationType.None: default: break;
                 }
             }
         }
@@ -320,15 +320,15 @@ public class TextAnimation : MonoBehaviour
             if (animationsById.TryGetValue(ci, out var value)) currentAnimation = value;
             ProcessCharacterAnimation(ci, animationIn: currentAnimation);
         }
-        
+
         // Step 2: Apply animation offsets on top of clean base.
         for (int ci = 0; ci < info.characterCount; ci++)
         {
             switch (animationTarget)
             {
-                case AnimationTarget.None:      default: break;
+                case AnimationTarget.None: default: break;
                 case AnimationTarget.WholeText: ProcessWholeTextTarget(ci); break;
-                case AnimationTarget.Tags:      ProcessTagsTarget(ci);      break;
+                case AnimationTarget.Tags: ProcessTagsTarget(ci); break;
                 case AnimationTarget.Both:
                     ProcessWholeTextTarget(ci);
                     ProcessTagsTarget(ci);
@@ -373,30 +373,30 @@ public class TextAnimation : MonoBehaviour
             _noiseSeed[ci] = seed;
         }
 
-        float dx     = (Mathf.PerlinNoise(seed.x + t * shakeSpeed, 0f) - 0.5f) * 2f * shakeStrength;
-        float dy     = (Mathf.PerlinNoise(0f, seed.y + t * shakeSpeed) - 0.5f) * 2f * shakeStrength;
-        var   offset = new Vector3(dx, dy, 0f);
+        float dx = (Mathf.PerlinNoise(seed.x + t * shakeSpeed, 0f) - 0.5f) * 2f * shakeStrength;
+        float dy = (Mathf.PerlinNoise(0f, seed.y + t * shakeSpeed) - 0.5f) * 2f * shakeStrength;
+        var offset = new Vector3(dx, dy, 0f);
 
         for (int v = 0; v < 4; v++) verts[vi + v] += offset;
     }
 
     private void ApplyWave(Vector3[] verts, int vi, int ci, float t)
     {
-        float dy     = Mathf.Sin(t * waveFrequency * Mathf.PI * 2f + ci * waveSpread) * waveAmplitude;
-        var   offset = new Vector3(0f, dy, 0f);
+        float dy = Mathf.Sin(t * waveFrequency * Mathf.PI * 2f + ci * waveSpread) * waveAmplitude;
+        var offset = new Vector3(0f, dy, 0f);
         for (int v = 0; v < 4; v++) verts[vi + v] += offset;
     }
 
     private void ApplyBounce(Vector3[] verts, int vi, int ci, float t)
     {
-        float raw    = Mathf.Sin(t * bounceFrequency * Mathf.PI * 2f + ci * bounceSpread);
-        var   offset = new Vector3(0f, Mathf.Abs(raw) * bounceHeight, 0f);
+        float raw = Mathf.Sin(t * bounceFrequency * Mathf.PI * 2f + ci * bounceSpread);
+        var offset = new Vector3(0f, Mathf.Abs(raw) * bounceHeight, 0f);
         for (int v = 0; v < 4; v++) verts[vi + v] += offset;
     }
 
     private void ApplyFade(Color32[] colors, int vi, int ci, float t)
     {
-        float wave  = (Mathf.Sin(t * fadeSpeed * Mathf.PI * 2f + ci * 0.4f) + 1f) * 0.5f;
+        float wave = (Mathf.Sin(t * fadeSpeed * Mathf.PI * 2f + ci * 0.4f) + 1f) * 0.5f;
         float alpha = Mathf.Lerp(fadeMinAlpha, fadeMaxAlpha, wave);
 
         for (int v = 0; v < 4; v++)
@@ -410,7 +410,7 @@ public class TextAnimation : MonoBehaviour
 
     private void ApplyRainbow(Color32[] colors, int vi, int ci, float t)
     {
-        Color   c   = Color.HSVToRGB(Mathf.Repeat(t * 0.3f + ci * 0.07f, 1f), 1f, 1f);
+        Color c = Color.HSVToRGB(Mathf.Repeat(t * 0.3f + ci * 0.07f, 1f), 1f, 1f);
         Color32 c32 = c;
         for (int v = 0; v < 4; v++)
             colors[vi + v] = new Color32(c32.r, c32.g, c32.b, colors[vi + v].a);

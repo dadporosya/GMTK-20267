@@ -1,6 +1,7 @@
 using EZCameraShake;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// A trip timer. The total distance is DERIVED from the speed settings and the
@@ -50,6 +51,12 @@ public class Taximeter : MonoBehaviour
     [SerializeField] private float speedForDontHaveMuchTimeDialogue = 50f; // speed at/above which the dialogue fires
     private bool dontHaveMuchTimeDialogueWasCalled = false;
 
+    [Header("Debug")]
+    [Tooltip("While on, pressing debugSkipKey jumps the trip forward so only debugSkipToKm km are left.")]
+    [SerializeField] private bool  debugSkipEnabled = true;
+    [SerializeField] private Key   debugSkipKey = Key.L;
+    [SerializeField] private float debugSkipToKm = 0.67f;
+
     private float totalKm;    // full distance for this trip, computed from speed + time
     private float elapsed;    // seconds
     private float duration;   // seconds
@@ -86,6 +93,8 @@ public class Taximeter : MonoBehaviour
 
     private void Update()
     {
+        HandleDebugSkip();
+
         if (!running) return;
 
         elapsed += Time.deltaTime;
@@ -114,7 +123,7 @@ public class Taximeter : MonoBehaviour
         if (!endDialogueWasCalled && (duration - elapsed) <= timeBeforeEndToCallEndingDialogue)
         {
             endDialogueWasCalled = true;
-            EndingManager.Instance.StartEndingDialogue();
+            // EndingManager.Instance.StartEndingDialogue();
         }
 
         if (t >= 1f || kmValue <= 0f)
@@ -144,6 +153,63 @@ public class Taximeter : MonoBehaviour
         float area  = minSpeed * t + (maxSpeed - minSpeed) * t * t * 0.5f;
         float total = (minSpeed + maxSpeed) * 0.5f;
         return total <= 0f ? t : area / total;   // fallback if both speeds are 0
+    }
+
+    // ---------------------------------------------------------------- debug
+
+    /// <summary>Debug shortcut: press debugSkipKey to jump straight to debugSkipToKm km left.</summary>
+    private void HandleDebugSkip()
+    {
+        if (!debugSkipEnabled || Keyboard.current == null) return;
+        if (!Keyboard.current[debugSkipKey].wasPressedThisFrame) return;
+
+        SetKmLeft(debugSkipToKm);
+    }
+
+    /// <summary>
+    /// Moves the trip to the moment where <paramref name="km"/> km are left. kmValue is recomputed
+    /// from elapsed every frame, so the clock itself has to be moved — writing kmValue alone would be
+    /// overwritten on the next Update. Speed, road speed and the dialogue triggers all follow from
+    /// elapsed, so they stay consistent with the new position.
+    /// </summary>
+    public void SetKmLeft(float km)
+    {
+        if (totalKm <= 0f) return;
+
+        km = Mathf.Clamp(km, 0f, totalKm);
+
+        float travelledFraction = 1f - km / totalKm;
+        float t = acceleration ? InverseAccelFraction(travelledFraction) : travelledFraction;
+
+        elapsed = Mathf.Clamp01(t) * duration;
+        running = true;    // lets a finished trip be rewound for testing
+        reached = false;   // so OnTargetReached still fires when the new position runs out
+
+        h.Out("Taximeter: debug skip to", km, "km left");
+    }
+
+    /// <summary>
+    /// Inverse of <see cref="AccelFraction"/>: the time-fraction t at which the given fraction of the
+    /// distance has been covered. Solves area(t) = f * total, a quadratic in t, and takes the root in
+    /// 0..1. Falls back to the linear case when the speed never ramps.
+    /// </summary>
+    private float InverseAccelFraction(float f)
+    {
+        f = Mathf.Clamp01(f);
+
+        float total = (minSpeed + maxSpeed) * 0.5f;
+        if (total <= 0f) return f;
+
+        float a = (maxSpeed - minSpeed) * 0.5f;
+        float c = -f * total;
+
+        // No ramp: area is linear in t, so t = -c / minSpeed.
+        if (Mathf.Abs(a) < 0.0001f) return minSpeed <= 0f ? f : Mathf.Clamp01(-c / minSpeed);
+
+        float disc = minSpeed * minSpeed - 4f * a * c;
+        if (disc < 0f) return f;
+
+        return Mathf.Clamp01((-minSpeed + Mathf.Sqrt(disc)) / (2f * a));
     }
 
     /// <summary>Pushes the current speed onto the road manager.</summary>

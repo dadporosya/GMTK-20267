@@ -56,7 +56,7 @@ MonoBehaviour:
   waitForBurnsToFinish: 0
   playSuitTrackerAnim: 1
   trackerCameraSettleDelay: 1
-  delayAfterTrackerAnim: 1
+  delayAfterTrackerAnim: 0.3
   environmentLight: {fileID: 0}
   lightColor: {r: 0.9056604, g: 0.75536186, b: 0.11534355, a: 1}
   colorFadeDuration: 3
@@ -65,7 +65,10 @@ MonoBehaviour:
   changeLights: 1
   changeSkyBox: 0
   angelFill: 1
-  angelFillAlpha: 0.99
+  angelFillAlpha: 1
+  lightenEye: 1
+  eyeLightenAmount: 0.31
+  eyeTag: AngelEye
   soundtrack: {fileID: 8300000, guid: 2392d9ad2faace242a957e32bb238502, type: 3}
   ostFadeIn: 2.67
   continuePlayingOst: 0

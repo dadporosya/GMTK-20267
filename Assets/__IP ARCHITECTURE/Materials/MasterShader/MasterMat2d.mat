@@ -99,7 +99,7 @@ Material:
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
     - _Distortion_Direction: {r: 0, g: 0.01, b: 0, a: 0}
-    - _EdgeColor: {r: 2.2956316, g: 2.0273368, b: 0.7038493, a: 1}
+    - _EdgeColor: {r: 1.5324243, g: 1.5324243, b: 1.5324243, a: 1}
     - _Hit_Color: {r: 1, g: 1, b: 1, a: 1}
     - _OUtlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
