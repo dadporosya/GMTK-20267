@@ -99,6 +99,10 @@ public class CardManager : MonoBehaviour
     [Tooltip("Dialogue played right before the player is offered cards to choose in " +
              "ExtendPileAccordingToSins. The cards are only shown once this dialogue finishes.")]
     [SerializeField] private DialogueContainer Pick5Container;
+    [Tooltip("Grace period (seconds) after the draft cards appear during which clicks do NOT pick a " +
+             "card, so a click left over from the previous screen can't accidentally choose one. " +
+             "Hovering still works during this window.")]
+    [SerializeField] private float draftInputDelay = 1.67f;
 
     
     private void Awake()
@@ -601,6 +605,8 @@ public class CardManager : MonoBehaviour
             Transform holder = new GameObject("CardPreviewHolder").transform;
             holder.SetParent(cardsParent, false);
             holder.SetPositionAndRotation(pos, faceRot);
+            // Keep the preview card facing the camera every frame, not just at spawn.
+            MakeHolderFaceCamera(holder);
 
             Card card = Instantiate(pfbTest, holder, false);
             card.transform.localPosition = Vector3.zero;
@@ -671,6 +677,28 @@ public class CardManager : MonoBehaviour
         // Clean up the now-empty holders left behind after each card destroyed itself.
         foreach (Transform holder in previewHolders)
             if (holder) Destroy(holder.gameObject);
+    }
+
+    /// <summary>
+    /// Attaches a <see cref="FacedAlwaysToCamera"/> billboard to a preview/draft card holder so the
+    /// generated choice card keeps facing the camera every frame, instead of only being oriented once
+    /// at spawn. Full billboard (no locked axes, no rotation offset). Safe to call once per holder —
+    /// re-calling just ensures the lockedAxes list is initialised.
+    /// </summary>
+    private static void MakeHolderFaceCamera(Transform holder)
+    {
+        if (!holder) return;
+
+        if (holder.TryGetComponent(out FacedAlwaysToCamera existing))
+        {
+            existing.lockedAxes ??= new List<FacedAlwaysToCamera.Axes>();
+            return;
+        }
+
+        FacedAlwaysToCamera billboard = holder.gameObject.AddComponent<FacedAlwaysToCamera>();
+        // AddComponent leaves the public list null; initialise it so LateUpdate never NREs.
+        billboard.lockedAxes = new List<FacedAlwaysToCamera.Axes>();
+        billboard.rotationOffs = Vector3.zero;
     }
 
     /// <summary>
@@ -973,6 +1001,8 @@ public class CardManager : MonoBehaviour
             Transform holder = new GameObject("CardDraftHolder").transform;
             holder.SetParent(cardsParent, false);
             holder.SetPositionAndRotation(pos, faceRot);
+            // Keep each drafted choice card facing the camera every frame, not just at spawn.
+            MakeHolderFaceCamera(holder);
 
             Card card = Instantiate(pfbTest, holder, false);
             card.transform.localPosition = Vector3.zero;
@@ -999,6 +1029,12 @@ public class CardManager : MonoBehaviour
         int picked = 0;
 
         yield return new WaitForEndOfFrame();   // swallow the click/press that opened the draft
+
+        // Input grace period: for the first draftInputDelay seconds after the cards appear, clicks
+        // are ignored so a stray/leftover click can't instantly pick a random card. Hovering still
+        // runs, so the player sees the cards react while the window is closed.
+        float pickUnlockTime = Time.unscaledTime + Mathf.Max(0f, draftInputDelay);
+
         while (picked < picksTarget)
         {
             int hoveredIndex = PreviewCardUnderMouse(cam, draftCards);
@@ -1029,8 +1065,8 @@ public class CardManager : MonoBehaviour
                 }
             }
 
-            // Click keeps the hovered card.
-            if (Input.GetMouseButtonDown(0) && hoveredIndex >= 0)
+            // Click keeps the hovered card — but only once the input grace period has elapsed.
+            if (Time.unscaledTime >= pickUnlockTime && Input.GetMouseButtonDown(0) && hoveredIndex >= 0)
             {
                 CardDataBase chosenData = draftData[hoveredIndex];
                 Transform chosenHolder = holders[hoveredIndex];

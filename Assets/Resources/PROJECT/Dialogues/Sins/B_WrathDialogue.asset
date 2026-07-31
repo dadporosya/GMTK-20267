@@ -42,7 +42,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: It was Tuesday, around eight in the morning.
+    text: it was tuesday, around eight in the morning.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -64,7 +64,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Half asleep and barely aware of yourself, you dragged your feet toward
+    text: half asleep and barely aware of yourself, you dragged your feet toward
       the room where you brushed your teeth.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -87,7 +87,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: The furniture watched every reluctant peel of your feet from the floor
+    text: the furniture watched every reluctant peel of your feet from the floor
       with invisible eyes, until the spiteful chest of drawers stuck out a leg.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -110,7 +110,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: You crashed onto the bathroom's cold tile, splitting your nostrils open.
+    text: you crashed onto the bathroom's cold tile, splitting your nostrils open.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -132,7 +132,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Blood streamed into the cracks between the tiles, flooding the apartment
+    text: blood streamed into the cracks between the tiles, flooding the apartment
       below in a crimson deluge.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -155,7 +155,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: You tried to breathe, but every breath drew your own blood into your lungs.
+    text: you tried to breathe, but every breath drew your own blood into your lungs.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -177,7 +177,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: It spread through your body until even your eyes drowned in red.
+    text: it spread through your body until even your eyes drowned in red.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -199,7 +199,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: You knew who had done this.
+    text: you knew who had done this.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -221,7 +221,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Forcing yourself upright with unsteady legs, you rose from the blood-soaked
+    text: forcing yourself upright with unsteady legs, you rose from the blood-soaked
       floor.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -244,7 +244,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: 'With a scream of pure rage, you tore your own arms apart, wrenching from
+    text: 'with a scream of pure rage, you tore your own arms apart, wrenching from
       your bones the sharpest spear you knew how to make. '
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -267,7 +267,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: "You had already swung it at the chest of drawers when its fleshly soul
+    text: "you had already swung it at the chest of drawers when its fleshly soul
       slithered out from between the drawers\u2014a drooling tongue of raw meat that
       coiled around your body, tightening as it tried to strangle you."
     initFromScriptableObject: 0
@@ -291,7 +291,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: You screamed louder still and ripped at its sinewy, boneless flesh with
+    text: you screamed louder still and ripped at its sinewy, boneless flesh with
       your bare hands, clawing yourself a way out of its body.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -314,7 +314,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: You left thousands of punctures and tunnels through its veins, shredding
+    text: you left thousands of punctures and tunnels through its veins, shredding
       its tongue until it resembled the tentacles of an octopus.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -337,7 +337,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Even after you broke free, you kept driving the spear into that mass of
+    text: even after you broke free, you kept driving the spear into that mass of
       meat, over and over, determined that it would never again be able to speak
       your name.
     initFromScriptableObject: 0
@@ -361,7 +361,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: So, the haze of memory is clearing now, isn't it?
+    text: so, the haze of memory is clearing now, isn't it?
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -383,7 +383,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: The rest will be forgotten. Choose your three.
+    text: the rest will be forgotten. choose your three.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}

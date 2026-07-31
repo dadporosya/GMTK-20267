@@ -42,7 +42,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Sitting in your office chair, you watched them with your yellow eyes, your
+    text: sitting in your office chair, you watched them with your yellow eyes, your
       gaze glinting.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -65,8 +65,8 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: "You looked at the freckles scattered across your body and at the worms
-      threading through your veins\u2014an inheritance from your grandmother."
+    text: you looked at the freckles scattered across your body and at the worms
+      threading through your veins, an inheritance from your grandmother.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -88,7 +88,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: A syrupy smile spread across your face as you thought that your worms were
+    text: a syrupy smile spread across your face as you thought that your worms were
       lovelier than any other creatures in the world.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -111,7 +111,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Brimming with delight, you stepped outside and set your worms loose across
+    text: brimming with delight, you stepped outside and set your worms loose across
       the land, despising the wretched faces of those who refused to stroke them.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -134,7 +134,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: 'After three hours of wandering through the city center, you had not found
+    text: 'after three hours of wandering through the city center, you had not found
       a single person carrying worms in their hands, and at last you decided:'
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -157,7 +157,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: '"None of them will ever raise worms more beautiful than mine."'
+    text: '"none of them will ever raise worms more beautiful than mine."'
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -179,7 +179,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: All the while, the worms continued to massage your bones, whispering through
+    text: all the while, the worms continued to massage your bones, whispering through
       your flesh that soon the whole world would be massaging them alongside you.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -202,7 +202,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Well then, the fog of memory is beginning to lift, isn't it?
+    text: well then, the fog of memory is beginning to lift, isn't it?
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -224,7 +224,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: If you had to save just three, which would they be?
+    text: if you had to save just three, which would they be?
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}

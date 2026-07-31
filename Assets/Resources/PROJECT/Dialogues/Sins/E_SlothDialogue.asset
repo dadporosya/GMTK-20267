@@ -42,9 +42,9 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: "One sweltering July morning, you woke with tears streaming down your face\u2014tears
-      brought on by the dust surrounding your body, wrung out like a lemon after
-      twelve hours of sleep."
+    text: one sweltering july morning, you woke with tears streaming down your face,
+      tears brought on by the dust surrounding your body, wrung out like a lemon
+      after twelve hours of sleep.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -66,7 +66,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: The morning light stabbed at your eyes, and you cursed the sun for refusing
+    text: the morning light stabbed at your eyes, and you cursed the sun for refusing
       to let you sleep another couple of hours.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -89,8 +89,8 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: "It was that Monday\u2014the one when you'd promised yourself everything
-      would change."
+    text: it was that monday, the one when you'd promised yourself everything would
+      change.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -112,7 +112,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: You lay in bed for twenty-four minutes before finally dragging yourself
+    text: you lay in bed for twenty-four minutes before finally dragging yourself
       up, only to pull the curtains shut, crawl back beneath the covers, and close
       your eyes again.
     initFromScriptableObject: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: To close your eyes as another day slipped down the drain of your life,
+    text: to close your eyes as another day slipped down the drain of your life,
       seeping away through rusted pipes.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -159,7 +159,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: The veil over your memories is beginning to lift now, isn't it?
+    text: the veil over your memories is beginning to lift now, isn't it?
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -181,7 +181,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Three will remain. The others disappear. Choose wisely.
+    text: three will remain. the others disappear. choose wisely.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}

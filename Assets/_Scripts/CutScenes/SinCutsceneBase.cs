@@ -298,10 +298,12 @@ public class SinCutsceneBase : CutSceneBase
     {
         TableTopCameraController.Instance.SwitchToFree();
 
-        // Put the AngelFeel object's color back to how it was before ChangeEnvironment tinted it.
+        // Fade the AngelFeel object's color back to how it was before ChangeEnvironment tinted it,
+        // smoothly over 2 seconds instead of snapping.
         if (angelFill && angelFeelColorCaptured && angelFeelRenderer)
         {
-            angelFeelRenderer.color = angelFeelOriginalColor;
+            Tween.Custom(angelFeelRenderer, angelFeelRenderer.color, angelFeelOriginalColor, 2f,
+                (SpriteRenderer r, Color c) => r.color = c);
             angelFeelColorCaptured = false;
         }
 

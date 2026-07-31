@@ -42,9 +42,9 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: "The blue glow from the refrigerator fell so grotesquely across your face,
-      and I watched you from inside the trash bin\u2014the one where you usually
-      toss empty chip bags and the wrappings of wayward winds."
+    text: the blue glow from the refrigerator fell so grotesquely across your face,
+      and i watched you from inside the trash bin, the one where you usually toss
+      empty chip bags and the wrappings of wayward winds.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -66,7 +66,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: 'The tips of my wings showed through the wire mesh, but all you saw was
+    text: 'the tips of my wings showed through the wire mesh, but all you saw was
       whatever might silence the bottomless void inside your head for another evening
       in front of the television.
 
@@ -92,7 +92,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: The room smelled of a damp rag gone moldy, and I watched you shovel down
+    text: the room smelled of a damp rag gone moldy, and i watched you shovel down
       yogurts and sweet cheese bars you'd picked up at twenty percent off in the
       cats' clearance sale.
     initFromScriptableObject: 0
@@ -116,7 +116,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: 'When that white, poisonous delight was gone, you set to work with practiced
+    text: 'when that white, poisonous delight was gone, you set to work with practiced
       precision, slicing sausage and piling it onto thick, greasy slices of toast. '
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -139,7 +139,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Mayonnaise dripped from your mustache, splattering your worn house shorts
+    text: mayonnaise dripped from your mustache, splattering your worn house shorts
       in foul little stains while you kept feeding your gut.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: When you were finished, you buried my face beneath bread crumbs, scraps
+    text: when you were finished, you buried my face beneath bread crumbs, scraps
       of stale sausage, and the empty wrappers from the yogurts and cheese bars.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -185,7 +185,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: But when the dust settles, only three can remain. Which three?
+    text: but when the dust settles, only three can remain. which three?
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}

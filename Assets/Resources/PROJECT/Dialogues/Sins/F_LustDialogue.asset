@@ -42,7 +42,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Across the fallen leaves of the autumn park, you followed the echo of her
+    text: across the fallen leaves of the autumn park, you followed the echo of her
       voice without ever knowing her name.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -65,7 +65,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Silken hair and the graceful curve of her body drew your mortal flesh toward
+    text: silken hair and the graceful curve of her body drew your mortal flesh toward
       hers.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -88,7 +88,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: You let every stop where the sunsets were at their most beautiful slip
+    text: you let every stop where the sunsets were at their most beautiful slip
       past, unwilling to lose the rhythm of her footsteps.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -111,7 +111,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: You kept following until she turned onto a path you had never walked before.
+    text: you kept following until she turned onto a path you had never walked before.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -133,9 +133,9 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: "Watching her disappear with a hungry, slavering gaze, you turned your
-      flesh\u2014and your legs, slick with clammy sweat\u2014toward another enticing
-      scent, in search of yet another pair of eyes."
+    text: watching her disappear with a hungry, slavering gaze, you turned your flesh,
+      and your legs, slick with clammy sweat, toward another enticing scent, in search
+      of yet another pair of eyes.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -157,7 +157,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: So... your memories are coming back to you now, aren't they?
+    text: so... your memories are coming back to you now, aren't they?
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -179,7 +179,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Choose your Three. The rest are already gone.
+    text: choose your three. The rest are already gone.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}

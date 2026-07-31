@@ -42,7 +42,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: The metallic chime of gold coins deafened you, filling your ears with the
+    text: the metallic chime of gold coins deafened you, filling your ears with the
       shrill whine of desire.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -65,9 +65,9 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: "You slipped another token into the slot machine and pulled its beckoning
-      lever, watching the symbols spin\u2014icons of vice painted by artists for
-      soulless hotels."
+    text: you slipped another token into the slot machine and pulled its beckoning
+      lever, watching the symbols spin icons of vice painted by artists for soulless
+      hotels.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -89,9 +89,9 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: The throb of techno music and the bodies dancing somewhere in the distance
+    text: the throb of techno music and the bodies dancing somewhere in the distance
       blurred your thoughts, yet all you could do was wait for three axes to line
-      up and punish your sister, Temperance, with their sharpened blades.
+      up and punish your sister, temperance, with their sharpened blades.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -113,7 +113,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Then they did.
+    text: then they did.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -135,7 +135,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: They carved deep gashes across her belly, sheared away every strand of
+    text: they carved deep gashes across her belly, sheared away every strand of
       her graying hair, and you rejoiced as your winnings tripled.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -158,7 +158,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Counting your crumpled bills, you finally forgot the day you told yourself
+    text: counting your crumpled bills, you finally forgot the day you told yourself
       that the smell of the walls alone would be enough to keep you alive.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
@@ -181,7 +181,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Well? The mist is finally lifting from your memories, isn't it?
+    text: well? the mist is finally lifting from your memories, isn't it?
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -203,7 +203,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: Three. No more, no less.
+    text: three. no more, no less.
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}

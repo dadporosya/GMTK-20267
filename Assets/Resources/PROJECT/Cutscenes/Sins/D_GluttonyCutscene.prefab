@@ -59,10 +59,11 @@ MonoBehaviour:
   colorFadeDuration: 3
   delayAfterColorChange: 1
   useSinColor: 1
-  changeLights: 1
+  changeLights: 0
   changeSkyBox: 0
   angelFill: 1
   angelFillAlpha: 0.99
   soundtrack: {fileID: 8300000, guid: 337f82c1973c7c44fb5ed21855eb562b, type: 3}
   ostFadeIn: 2.67
+  continuePlayingOst: 0
   sinDialogue: {fileID: 11400000, guid: 619faff4ea5912447bfd395370ba2abd, type: 2}
