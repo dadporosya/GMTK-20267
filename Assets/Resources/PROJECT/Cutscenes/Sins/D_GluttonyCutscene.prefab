@@ -67,7 +67,10 @@ MonoBehaviour:
   angelFill: 1
   angelFillAlpha: 1
   lightenEye: 1
-  eyeLightenAmount: 0.31
+  eyeUseSinColor: 1
+  eyeColor: {r: 1, g: 1, b: 1, a: 1}
+  eyeLightenAmount: 0
+  eyeColorIntensity: 3
   eyeTag: AngelEye
   soundtrack: {fileID: 8300000, guid: 337f82c1973c7c44fb5ed21855eb562b, type: 3}
   ostFadeIn: 2.67

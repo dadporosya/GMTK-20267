@@ -64,6 +64,13 @@ public class SinCutsceneBase : CutSceneBase
     [SerializeField] private bool eyeUseSinColor = true;
     [Tooltip("Color the eye's SpriteRenderer is set to when eyeUseSinColor is off.")]
     [SerializeField] private Color eyeColor = Color.white;
+    [Tooltip("How much the eye's target color is washed out towards white. 0 = the raw sin/eye color, " +
+             "1 = pure white. Use this to make the eye read brighter without changing the sin's palette.")]
+    [Range(0f, 1f)]
+    [SerializeField] private float eyeLightenAmount = 0f;
+    [Tooltip("Multiplies the eye's target RGB after lightening. 1 = unchanged, >1 pushes the color " +
+             "into HDR territory so it can bloom. Alpha is never touched.")]
+    [SerializeField] private float eyeColorIntensity = 1f;
     [Tooltip("Tag used to find the eye object(s).")]
     [SerializeField] private string eyeTag = "AngelEye";
 
@@ -326,14 +333,15 @@ public class SinCutsceneBase : CutSceneBase
 
     /// <summary>
     /// Finds the object(s) tagged <see cref="eyeTag"/> ("AngelEye") and fades their
-    /// <c>SpriteRenderer.color</c> to the sin's color over <see cref="colorFadeDuration"/>.
+    /// <c>SpriteRenderer.color</c> to the sin's color over <see cref="colorFadeDuration"/>,
+    /// brightened by <see cref="eyeLightenAmount"/> / <see cref="eyeColorIntensity"/>.
     /// Original colors are remembered so <see cref="CutsceneEnd"/> can put them back.
     /// </summary>
     protected virtual void LightenEye()
     {
         eyeStates.Clear();
 
-        Color target = eyeUseSinColor ? CP.SuitColor(sin) : eyeColor;
+        Color target = Lighten(eyeUseSinColor ? CP.SuitColor(sin) : eyeColor);
 
         foreach (SpriteRenderer sr in ResolveEyeRenderers())
         {
@@ -350,6 +358,24 @@ public class SinCutsceneBase : CutSceneBase
 
         if (eyeStates.Count == 0)
             h.Out($"SinCutsceneBase: no object tagged '{eyeTag}' with a SpriteRenderer found — eye color skipped.");
+    }
+
+    /// <summary>
+    /// Washes <paramref name="c"/> towards white by <see cref="eyeLightenAmount"/> and then scales the
+    /// RGB by <see cref="eyeColorIntensity"/>. Alpha is passed through untouched — the caller decides
+    /// the eye's transparency.
+    /// </summary>
+    protected Color Lighten(Color c)
+    {
+        Color result = Color.Lerp(c, Color.white, Mathf.Clamp01(eyeLightenAmount));
+
+        float intensity = Mathf.Max(0f, eyeColorIntensity);
+        result.r *= intensity;
+        result.g *= intensity;
+        result.b *= intensity;
+        result.a = c.a;
+
+        return result;
     }
 
     /// <summary>Eye renderers: the SpriteRenderers on everything tagged <see cref="eyeTag"/>.</summary>
