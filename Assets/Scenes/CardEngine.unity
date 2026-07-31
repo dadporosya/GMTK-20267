@@ -2416,12 +2416,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0d23056a670de479873b8eec61eb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionManager
-  initialScore: 3000
-  constPerLevel: 1500
-  constBoostPerLevel: 1500
-  constBoostPerLevel2: 1500
-  exponential: 1
   level: 1
+  baseBoost: 0.1
+  boostGrowth: 0.05
+  limitMaxBoost: 0
+  maxBoost: 1.5
+  compoundingBoost: 0
+  difficultyMultiplier: 1
+  baseDeckSize: 28
+  cardsPerWin: 3
+  normalizeDeckSizeToWinCount: 1
+  simulationRuns: 240
+  simulationSeed: 20260801
+  fallbackHandSize: 6
+  roundScoreTo: 50
+  minTargetScore: 500
+  enforceMonotonic: 1
+  minIncreasePerLevel: 100
+  fallbackInitialScore: 2500
+  lastAverageScore: 0
+  lastBoost: 0
+  lastSimulatedDeckSize: 0
 --- !u!1 &1212299299
 GameObject:
   m_ObjectHideFlags: 0
