@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PrimeTween;
 using TMPro;
 using UnityEngine;
 
@@ -32,6 +33,19 @@ public class SuitTracker : MonoBehaviour
     [Tooltip("The suit this tracker represents. Set per-instance so TableManager can key its dictionary by it.")]
     public CP.Suit targetSuit;
     public int currentCount;
+
+
+    [Header("Meshes")]
+    public GameObject front;
+    public GameObject back;
+
+    // The MasterShaderGraphForCard color property recolored when this suit is achieved
+    // (see SinAchivementManager).
+    private static readonly int TextureColorId = Shader.PropertyToID("_TextureColor");
+
+    // Live tweens per material, so a new recolor takes over from whatever is currently showing
+    // instead of fighting it.
+    private readonly Dictionary<Material, Tween> _colorTweens = new Dictionary<Material, Tween>();
 
     private void Awake()
     {
@@ -82,11 +96,74 @@ public class SuitTracker : MonoBehaviour
     /// Plays the count-change animation on its own. Public so beats that want the tracker to react
     /// without its number changing can trigger it — e.g. the sin cutscene's "adding suit" moment,
     /// where the tracker matching the cutscene's suit animates but its count stays put.
+    ///
+    /// When <paramref name="markSinAchieved"/> is on (the sin cutscene passes it), this doubles as
+    /// the achievement moment: the first time this suit's cutscene is chosen, the tracker's front
+    /// and back meshes are recolored to <see cref="SinAchivementManager.achivedCardColor"/> — started
+    /// right here so it runs alongside the animation — and the suit is written to the save file.
+    /// If the sin was already achieved before, only the animation plays and the color is left alone.
     /// </summary>
-    public void PlayCountChangeAnimation()
+    public void PlayCountChangeAnimation(bool markSinAchieved = false)
     {
         ResolveRefs();
         if (countChangeAnim) countChangeAnim.PlayInstantly();
+
+        if (!markSinAchieved) return;
+
+        SinAchivementManager achievements = SinAchivementManager.Instance;
+        if (achievements == null)
+        {
+            h.Out("SuitTracker: no SinAchivementManager in the scene — achievement color skipped.");
+            return;
+        }
+
+        // TryAchieve saves to disk and returns true only on the first time for this suit.
+        if (!achievements.TryAchieve(targetSuit)) return;
+
+        achievements.ApplyAchievedColor(this);
+    }
+
+    /// <summary>
+    /// Writes <paramref name="color"/> into the TextureColor material property of every renderer
+    /// under <see cref="front"/> and <see cref="back"/>, fading over <paramref name="duration"/>
+    /// seconds (0 = snap). Renderer.material is used, so each tracker gets its own material instance
+    /// and the shared asset on disk is never touched.
+    /// </summary>
+    public void SetTextureColor(Color color, float duration = 0f)
+    {
+        foreach (Renderer rend in GetMeshRenderers())
+        {
+            Material mat = rend.material;
+            if (!mat || !mat.HasProperty(TextureColorId)) continue;
+
+            // Drop any recolor still running on this material so the new one starts clean.
+            if (_colorTweens.TryGetValue(mat, out Tween running) && running.isAlive) running.Stop();
+
+            if (duration <= 0f)
+            {
+                mat.SetColor(TextureColorId, color);
+                _colorTweens.Remove(mat);
+                continue;
+            }
+
+            _colorTweens[mat] = Tween.Custom(mat, mat.GetColor(TextureColorId), color, duration,
+                (Material m, Color c) => m.SetColor(TextureColorId, c));
+        }
+    }
+
+    // Every renderer belonging to the tracker's card meshes (front/back and anything below them).
+    private List<Renderer> GetMeshRenderers()
+    {
+        List<Renderer> renderers = new List<Renderer>();
+
+        foreach (GameObject go in new[] { front, back })
+        {
+            if (!go) continue;
+            foreach (Renderer rend in go.GetComponentsInChildren<Renderer>(true))
+                if (rend && !renderers.Contains(rend)) renderers.Add(rend);
+        }
+
+        return renderers;
     }
 
     // Builds one sprite-tag frame per suit sprite frame (id 1..CP.SuitFrameCount) and cycles

@@ -124,6 +124,7 @@ public class SinCutsceneBase : CutSceneBase
         if (CardDragController.Instance) CardDragController.Instance.SetDraggingEnabled(false);
 
         yield return BurnAllCards();
+        yield return new WaitForSeconds(1.67f);
 
         // With the table cleared, turn to it and let this sin's tracker react before moving on.
         yield return ShowSuitTracker();
@@ -153,7 +154,10 @@ public class SinCutsceneBase : CutSceneBase
         if (TableManager.Instance != null &&
             TableManager.Instance.suitTrackers.TryGetValue(sin, out SuitTracker tracker) && tracker)
         {
-            tracker.PlayCountChangeAnimation();
+            // markSinAchieved: the first time this sin's cutscene is chosen the tracker also recolors
+            // to SinAchivementManager.achivedCardColor (alongside this animation) and the sin is
+            // written to the save file. On a repeat, only the animation plays.
+            tracker.PlayCountChangeAnimation(true);
         }
         else
         {

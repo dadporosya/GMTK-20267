@@ -1769,7 +1769,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: e77ebb607c5f58a49b2f96c0cee893b2, type: 2}
+  sharedProfile: {fileID: 11400000, guid: d53fdf3574b59644998f526b58021d10, type: 2}
 --- !u!4 &832575519
 Transform:
   m_ObjectHideFlags: 0
@@ -5245,6 +5245,7 @@ MonoBehaviour:
   - {fileID: 5260520136636283828, guid: a21ce02d45c42394383500686c9ec5cf, type: 3}
   suitsForCutscenes: 00000000050000000100000004000000060000000200000003000000
   playedCutScenes: 
+  loadSeenCutscenesFromDisk: 1
 --- !u!33 &3469287837115913594
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -7049,6 +7050,7 @@ MonoBehaviour:
   draftCardCount: 3
   draftPickMoveDuration: 0.25
   Pick5Container: {fileID: 0}
+  draftInputDelay: 1.67
 --- !u!4 &6674368213915398119
 Transform:
   m_ObjectHideFlags: 0

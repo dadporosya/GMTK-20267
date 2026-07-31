@@ -7,6 +7,8 @@ using Unity.VisualScripting;
 
 public class TutorialCutscene : CutSceneBase
 {
+    [SerializeField] private bool skipIntro = false;
+    
     [SerializeField] private float delayBeforeDialogue;
     [SerializeField] private DialogueContainer introDialogue;
     [SerializeField] private DialogueContainer tutorialDialogue;
@@ -52,6 +54,12 @@ public class TutorialCutscene : CutSceneBase
     
     public virtual IEnumerator DefaultStep()
     {
+        if (skipIntro)
+        {
+            CardManager.Instance.RoundStart();
+            yield break;
+        }
+        
         yield return null;
         
         float timeElapsed = 0f;

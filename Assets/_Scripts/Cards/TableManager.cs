@@ -75,13 +75,35 @@ public class TableManager : MonoBehaviour
 
     [SerializeField] private List<CP.Suit> suitsForCutscenes;
     public Dictionary<CP.Suit, CutSceneBase> SinCutScenes = new Dictionary<CP.Suit, CutSceneBase>();
+    [Tooltip("Suits whose cutscene has already been reached. Persisted to disk by SeenCutscenesSave " +
+             "and reloaded on the next launch, so seen sins stay seen between play sessions.")]
     public List<CP.Suit> playedCutScenes = new List<CP.Suit>();
-    
+
+    [Tooltip("If false, the saved list of seen cutscenes on disk is ignored (useful while testing).")]
+    [SerializeField] private bool loadSeenCutscenesFromDisk = true;
+
     // Created in Awake (not Start) so ProgressionManager can reliably reach TableManager.Instance
     // from its own Start, regardless of script execution order.
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance);
+
+        LoadPlayedCutscenes();
+    }
+
+    // Merges the suits saved by previous launches into playedCutScenes. Anything already set in the
+    // inspector is kept, so authored "pretend this was seen" entries still work.
+    private void LoadPlayedCutscenes()
+    {
+        if (!loadSeenCutscenesFromDisk) return;
+
+        foreach (CP.Suit suit in SeenCutscenesSave.Load())
+        {
+            if (!playedCutScenes.Contains(suit))
+                playedCutScenes.Add(suit);
+        }
+
+        h.Out("Loaded seen cutscenes", playedCutScenes);
     }
 
     private void Start()
@@ -330,10 +352,23 @@ public class TableManager : MonoBehaviour
         h.Out("ScoreReached");
     }
 
+    // Records a suit as seen and immediately writes the whole list to disk, so the progress
+    // survives a crash or an alt-F4 as well as a clean quit.
     public void AddPlayedCutscene(CP.Suit suit)
     {
-        if (!playedCutScenes.Contains(suit))
-            playedCutScenes.Add(suit);
+        if (playedCutScenes.Contains(suit)) return;
+
+        playedCutScenes.Add(suit);
+        SeenCutscenesSave.Save(playedCutScenes);
+    }
+
+    // Dev helper: wipes the saved progress so every sin cutscene counts as unseen again.
+    [ContextMenu("Clear Seen Cutscenes Save")]
+    public void ClearSeenCutscenesSave()
+    {
+        playedCutScenes.Clear();
+        SeenCutscenesSave.Clear();
+        h.Out("Cleared seen cutscenes save");
     }
     
     private void RefreshScoreText(int value)
