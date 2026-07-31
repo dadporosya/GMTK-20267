@@ -7378,7 +7378,7 @@ MonoBehaviour:
   draftCardCount: 3
   draftPickMoveDuration: 0.25
   Pick5Container: {fileID: 0}
-  draftInputDelay: 1.67
+  draftInputDelay: 0.2
   lossDraft: 1
   lossDraftCandidateCount: 3
   lossDraftPickCount: 1
