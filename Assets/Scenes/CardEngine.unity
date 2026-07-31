@@ -5518,8 +5518,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33600937c557f134b837730acd288032, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Taximeter
-  minSpeed: 30
-  maxSpeed: 333
+  minSpeed: 33.3
+  maxSpeed: 333.333
   currentSpeed: 0
   acceleration: 1
   roadSpeedScale: 1.2
@@ -5530,7 +5530,7 @@ MonoBehaviour:
   label: KM
   decimalPlaces: 2
   kmValue: 0
-  timeInMinutes: 10.05
+  timeInMinutes: 8
   timeBeforeEndToCallEndingDialogue: 0
   speedForDontHaveMuchTimeDialogue: 200
   debugSkipEnabled: 1

@@ -18,6 +18,9 @@ public class SinCutsceneBase : CutSceneBase
 {
     public CP.Suit sin;
     [Header("Place Holder Settings")]
+    [Tooltip("Used only when this sin is chosen a SECOND (or further) time within the same run. " +
+             "The first time a sin comes up in a run it always plays its normal dialogue, even if " +
+             "earlier runs already showed it. Leave empty to always use the normal dialogue.")]
     [SerializeField] private List<DialogueContainer> placeholderDialogues;
     
     [Header("After Win")]
@@ -121,7 +124,8 @@ public class SinCutsceneBase : CutSceneBase
     /// -> small delay
     /// -> camera turns to the left window
     /// -> environment completely changes it color to the matching sin's color. then, small delay
-    /// -> dialogue start (place holder if suit was previusly selected), and camera turns to angel
+    /// -> dialogue start (place holder only if this suit already came up earlier in the SAME run),
+    ///    and camera turns to angel
     /// -> after dialogue gp starts again
     /// </summary>
     /// <returns></returns>
@@ -410,14 +414,16 @@ public class SinCutsceneBase : CutSceneBase
         // based on continuePlayingOst.
         if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusic(soundtrack, fadeTime:ostFadeIn);
 
-        DialogueContainer desiredDialogue;
-        if (TableManager.Instance.playedCutScenes.Contains(sin))
+        // The placeholder is for repeats *within the same run* only: the first time a sin comes up in
+        // a run it always gets its normal dialogue, no matter how many earlier runs already showed it.
+        // Only the second and further times the same suit is chosen in this run fall back to a
+        // placeholder. (Falls back to the normal dialogue if no placeholders are authored.)
+        bool repeatThisRun = TableManager.Instance && TableManager.Instance.HasPlayedThisRun(sin);
+
+        DialogueContainer desiredDialogue = sinDialogue;
+        if (repeatThisRun && placeholderDialogues != null && placeholderDialogues.Count > 0)
         {
             desiredDialogue = h.RandChoice(placeholderDialogues);
-        }
-        else
-        {
-            desiredDialogue = sinDialogue;
         }
 
         void OnDialogueEnd()

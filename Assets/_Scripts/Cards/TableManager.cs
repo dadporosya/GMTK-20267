@@ -79,6 +79,15 @@ public class TableManager : MonoBehaviour
              "and reloaded on the next launch, so seen sins stay seen between play sessions.")]
     public List<CP.Suit> playedCutScenes = new List<CP.Suit>();
 
+    /// <summary>
+    /// Suits whose cutscene has already played *in this run*. Runtime only — never serialized and
+    /// never written to disk, so it starts empty every time the scene loads (i.e. every new run).
+    /// This is what decides the placeholder dialogue: a sin always gets its normal dialogue the
+    /// first time it comes up in a run, no matter how many earlier runs already showed it, and only
+    /// repeats within the same run fall back to the placeholder.
+    /// </summary>
+    [NonSerialized] public List<CP.Suit> playedCutScenesThisRun = new List<CP.Suit>();
+
     [Tooltip("If false, the saved list of seen cutscenes on disk is ignored (useful while testing).")]
     [SerializeField] private bool loadSeenCutscenesFromDisk = true;
 
@@ -337,10 +346,17 @@ public class TableManager : MonoBehaviour
 
         if (tied.Count == 0) return;
 
-        // Tie-break: prefer a tied suit whose cutscene hasn't been played yet; among those pick at
-        // random. If every tied suit has already been played, pick at random from all of them.
-        List<CP.Suit> unplayed = tied.FindAll(s => !playedCutScenes.Contains(s));
-        List<CP.Suit> pool = unplayed.Count > 0 ? unplayed : tied;
+        // Tie-break, in order of preference:
+        //  1. tied suits not yet played this run AND never seen in an earlier run — brand new content;
+        //  2. tied suits not yet played this run — they still get their normal dialogue;
+        //  3. all tied suits — every one of them would repeat, so it doesn't matter which.
+        // Within the chosen tier the pick is random.
+        List<CP.Suit> freshThisRun = tied.FindAll(s => !HasPlayedThisRun(s));
+        List<CP.Suit> neverSeen = freshThisRun.FindAll(s => !playedCutScenes.Contains(s));
+
+        List<CP.Suit> pool = neverSeen.Count > 0 ? neverSeen
+                           : freshThisRun.Count > 0 ? freshThisRun
+                           : tied;
         CP.Suit mostPlayed = h.RandChoice(pool);
 
         // Play the matching cutscene for that suit, if one is registered.
@@ -355,14 +371,37 @@ public class TableManager : MonoBehaviour
         h.Out("ScoreReached");
     }
 
-    // Records a suit as seen and immediately writes the whole list to disk, so the progress
-    // survives a crash or an alt-F4 as well as a clean quit.
+    /// <summary>
+    /// True if this suit's cutscene already played earlier in the *current run*. Repeats within a
+    /// run are what the placeholder dialogue is for — cross-run history (<see cref="playedCutScenes"/>)
+    /// deliberately does not count here.
+    /// </summary>
+    public bool HasPlayedThisRun(CP.Suit suit) =>
+        playedCutScenesThisRun != null && playedCutScenesThisRun.Contains(suit);
+
+    // Records a suit as seen: always in the per-run list, and (the first time ever) in the persisted
+    // list, which is immediately written to disk so the progress survives a crash or an alt-F4 as
+    // well as a clean quit.
     public void AddPlayedCutscene(CP.Suit suit)
     {
+        if (playedCutScenesThisRun == null) playedCutScenesThisRun = new List<CP.Suit>();
+        if (!playedCutScenesThisRun.Contains(suit)) playedCutScenesThisRun.Add(suit);
+
         if (playedCutScenes.Contains(suit)) return;
 
         playedCutScenes.Add(suit);
         SeenCutscenesSave.Save(playedCutScenes);
+    }
+
+    /// <summary>
+    /// Forgets which sins played in the current run, so every sin gets its normal dialogue again.
+    /// Call this when a new run begins without the scene being reloaded; on a scene reload the list
+    /// starts empty by itself. Cross-run progress on disk is untouched.
+    /// </summary>
+    public void ResetRunCutscenes()
+    {
+        if (playedCutScenesThisRun == null) playedCutScenesThisRun = new List<CP.Suit>();
+        else playedCutScenesThisRun.Clear();
     }
 
     // Dev helper: wipes the saved progress so every sin cutscene counts as unseen again.
