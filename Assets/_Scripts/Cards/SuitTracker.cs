@@ -78,8 +78,14 @@ public class SuitTracker : MonoBehaviour
         if (countTmp) countTmp.text = currentCount.ToString();
     }
 
-    private void PlayCountChangeAnimation()
+    /// <summary>
+    /// Plays the count-change animation on its own. Public so beats that want the tracker to react
+    /// without its number changing can trigger it — e.g. the sin cutscene's "adding suit" moment,
+    /// where the tracker matching the cutscene's suit animates but its count stays put.
+    /// </summary>
+    public void PlayCountChangeAnimation()
     {
+        ResolveRefs();
         if (countChangeAnim) countChangeAnim.PlayInstantly();
     }
 

@@ -27,7 +27,16 @@ public class SinCutsceneBase : CutSceneBase
     [SerializeField] private float burnCardStagger = 0.08f;
     [Tooltip("If on, OnWin waits for every card's burn to finish before the cutscene continues.")]
     [SerializeField] private bool waitForBurnsToFinish = false;
-    
+
+    [Header("Suit Tracker Beat")]
+    [Tooltip("If on, after the cards burn the camera turns to the table and the SuitTracker matching " +
+             "this cutscene's sin plays its count-change animation (the count itself is left alone).")]
+    [SerializeField] private bool playSuitTrackerAnim = true;
+    [Tooltip("Time given to the camera to settle in table view before the tracker animates.")]
+    [SerializeField] private float trackerCameraSettleDelay = 1f;
+    [Tooltip("Time held on the table after the tracker animation before the cutscene continues.")]
+    [SerializeField] private float delayAfterTrackerAnim = 1f;
+
     [Header("Environment")]
     [Tooltip("Light whose color is faded to lightColor. Falls back to RenderSettings.sun, then the " +
              "first Light in the scene, if left empty.")]
@@ -116,12 +125,42 @@ public class SinCutsceneBase : CutSceneBase
 
         yield return BurnAllCards();
 
+        // With the table cleared, turn to it and let this sin's tracker react before moving on.
+        yield return ShowSuitTracker();
+
         // Fade the current background music out to silence so the win lands in quiet before the
         // sin's soundtrack comes in during DialogueStart.
         if (BGMManager.Instance) BGMManager.Instance.FadeOutMusic();
 
         yield return new WaitForSeconds(delayAfterWin);
         yield return null;
+    }
+
+    /// <summary>
+    /// Turns the camera to the table and plays the count-change animation on the
+    /// <see cref="SuitTracker"/> whose suit matches this cutscene's <see cref="sin"/>, so the win
+    /// visibly lands on that sin's tracker. The tracker's count is not touched — this is purely the
+    /// "adding suit" flourish; the actual suit bookkeeping stays where it already happens.
+    /// </summary>
+    public virtual IEnumerator ShowSuitTracker()
+    {
+        if (!playSuitTrackerAnim) yield break;
+
+        if (TableTopCameraController.Instance) TableTopCameraController.Instance.SwitchToTableView();
+
+        if (trackerCameraSettleDelay > 0f) yield return new WaitForSeconds(trackerCameraSettleDelay);
+
+        if (TableManager.Instance != null &&
+            TableManager.Instance.suitTrackers.TryGetValue(sin, out SuitTracker tracker) && tracker)
+        {
+            tracker.PlayCountChangeAnimation();
+        }
+        else
+        {
+            h.Out("SinCutsceneBase: no SuitTracker found for suit", sin, "— tracker animation skipped.");
+        }
+
+        if (delayAfterTrackerAnim > 0f) yield return new WaitForSeconds(delayAfterTrackerAnim);
     }
 
     /// <summary>
