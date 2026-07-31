@@ -2417,8 +2417,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionManager
   level: 1
-  baseBoost: 0.1
-  boostGrowth: 0.05
+  baseBoost: 0.09
+  boostGrowth: 0.0333
   limitMaxBoost: 0
   maxBoost: 1.5
   compoundingBoost: 0
@@ -5546,8 +5546,44 @@ MonoBehaviour:
   decimalPlaces: 2
   kmValue: 0
   timeInMinutes: 10
+  globalLight: {fileID: 0}
+  changeLightColor: 1
+  targetLightColor: {r: 0.509434, g: 0.15138839, b: 0.15138839, a: 1}
+  lightColorCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.22007202
+      value: 0.09240486
+      inSlope: 0.60227615
+      outSlope: 0.60227615
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.19448885
+    - serializedVersion: 3
+      time: 0.9833374
+      value: 0.80952835
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   timeBeforeEndToCallEndingDialogue: 0
-  speedForDontHaveMuchTimeDialogue: 200
+  speedForDontHaveMuchTimeDialogue: 167
   debugSkipEnabled: 0
   debugSkipKey: 26
   debugSkipToKm: 0.67
@@ -5558,7 +5594,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132149597061221}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -7395,8 +7431,8 @@ MonoBehaviour:
   Pick5Container: {fileID: 0}
   draftInputDelay: 0.2
   lossDraft: 1
-  lossDraftCandidateCount: 3
-  lossDraftPickCount: 1
+  lossDraftCandidateCount: 5
+  lossDraftPickCount: 2
   lossDraftDialogue: {fileID: 0}
   lossDraftDistanceMultiplier: 1.5
   debugHotkeys: 0

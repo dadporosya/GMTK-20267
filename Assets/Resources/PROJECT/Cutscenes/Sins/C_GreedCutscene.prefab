@@ -62,7 +62,7 @@ MonoBehaviour:
   colorFadeDuration: 3
   delayAfterColorChange: 1
   useSinColor: 1
-  changeLights: 1
+  changeLights: 0
   changeSkyBox: 0
   angelFill: 1
   angelFillAlpha: 1

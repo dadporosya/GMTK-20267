@@ -43,6 +43,19 @@ public class Taximeter : MonoBehaviour
     [SerializeField] private float kmValue;              // OUTPUT: km left, computed then counted to 0
     [SerializeField] private float timeInMinutes = 5f;
 
+    [Header("Global light")]
+    [Tooltip("Light recolored over the trip. Falls back to RenderSettings.sun, then the first Light " +
+             "in the scene, if left empty.")]
+    [SerializeField] private Light globalLight;
+    [SerializeField] private bool  changeLightColor = true;
+    [Tooltip("Color the light reaches exactly when the timer runs out. The start color is whatever " +
+             "the light has when the trip starts.")]
+    [SerializeField] private Color targetLightColor = Color.white;
+    [Tooltip("Remaps normalized trip time before the color lerp. Leave linear for an even fade.")]
+    [SerializeField] private AnimationCurve lightColorCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+
+    private Color startLightColor;
+
     [Header("Ending")]
     [SerializeField] private float timeBeforeEndToCallEndingDialogue; // seconds left in the trip at which the ending dialogue fires
     private bool endDialogueWasCalled = false;
@@ -88,7 +101,14 @@ public class Taximeter : MonoBehaviour
         elapsed = 0f;
         reached = false;
         running = true;
+
+        // Capture the light's current color as the start of the fade, so the trip always begins
+        // from whatever the scene is lit with and ends on targetLightColor.
+        Light light = ResolveGlobalLight();
+        if (light) startLightColor = light.color;
+
         UpdateText();
+        UpdateLightColor(0f);
     }
 
     private void Update()
@@ -111,6 +131,7 @@ public class Taximeter : MonoBehaviour
         kmValue = Mathf.Max(0f, totalKm * (1f - travelledFraction));
 
         UpdateText();
+        UpdateLightColor(t);
 
         // Fire the "don't have much time" dialogue once, when speed reaches its threshold.
         if (!dontHaveMuchTimeDialogueWasCalled && currentSpeed >= speedForDontHaveMuchTimeDialogue)
@@ -133,6 +154,7 @@ public class Taximeter : MonoBehaviour
             ApplyRoadSpeed();
             running      = false;
             UpdateText();
+            UpdateLightColor(1f);   // land exactly on targetLightColor
             // Camera shake intentionally left running when time hits 0.
 
             if (!reached)
@@ -265,6 +287,34 @@ public class Taximeter : MonoBehaviour
     }
 
     private void OnDisable() => StopCameraShake();
+
+    /// <summary>
+    /// Lerps the global light from the color it had at trip start to <see cref="targetLightColor"/>,
+    /// reaching it exactly at t = 1 (the end of the timer). Driven by normalized time rather than by
+    /// a tween, so debug skips and rewinds stay in sync with the clock.
+    /// </summary>
+    private void UpdateLightColor(float t)
+    {
+        if (!changeLightColor) return;
+
+        Light light = ResolveGlobalLight();
+        if (!light) return;
+
+        float k = lightColorCurve != null && lightColorCurve.length > 0
+            ? lightColorCurve.Evaluate(Mathf.Clamp01(t))
+            : Mathf.Clamp01(t);
+
+        light.color = Color.Lerp(startLightColor, targetLightColor, k);
+    }
+
+    /// <summary>Light to recolor: the assigned one, else the sun, else the first Light in the scene.</summary>
+    private Light ResolveGlobalLight()
+    {
+        if (globalLight) return globalLight;
+
+        globalLight = RenderSettings.sun ? RenderSettings.sun : FindFirstObjectByType<Light>();
+        return globalLight;
+    }
 
     private void UpdateText()
     {
