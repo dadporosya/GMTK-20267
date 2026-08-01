@@ -16,6 +16,10 @@ using UnityEngine.InputSystem;
 ///     <see cref="handViewIsInitView"/>) and the hand follows the camera.
 ///   - <see cref="State.Free"/>: minimal for now — the camera just levels out to look forward at
 ///     the horizon and the hand does not follow the camera.
+///   - <see cref="State.InitView"/>: a one-time-only initial view shown at the very start of the game.
+///     Once faded to any other state, it never appears again. While active, all player input AND
+///     mouse cursor are locked. When another script transitions away from InitView, the mouse is
+///     permanently unlocked for the rest of the game.
 ///
 /// Transitions are eased with PrimeTween. Table view is authored in world space (above the
 /// table); hand/free views are authored in the camera's local space (relative to its parent
@@ -33,7 +37,8 @@ public class TableTopCameraController : MonoBehaviour
         HandView,
         Free,
         TaxometerView,
-        WindowView
+        WindowView,
+        InitView
     }
 
     [Header("References")]
@@ -73,6 +78,23 @@ public class TableTopCameraController : MonoBehaviour
     [SerializeField] private Ease transitionEase = Ease.OutCubic;
     [Tooltip("Snap (no tween) when the starting state is applied on Start.")]
     [SerializeField] private bool instantOnStart = true;
+
+    [Header("Init view")]
+    [Tooltip("If true, the game starts in InitView instead of MainState. InitView only appears once — " +
+             "after transitioning away from it, it never comes back. While InitView is active, ALL player " +
+             "input AND the mouse cursor are locked. When another script transitions away, the mouse is " +
+             "permanently unlocked.")]
+    [SerializeField] private bool useInitView = true;
+    [Tooltip("Camera LOCAL position (relative to its parent) used for the Init view.")]
+    [SerializeField] private Vector3 initViewLocalPosition;
+    [Tooltip("Camera LOCAL rotation, in euler degrees, used for the Init view.")]
+    [SerializeField] private Vector3 initViewLocalEuler;
+    [Tooltip("Player local rotation, in euler degrees, restored when entering the Init view (only its " +
+             "Y/yaw is applied).")]
+    [SerializeField] private Vector3 initViewPlayerLocalEuler;
+    [Tooltip("If true, the InitView pose is captured from the scene at startup (overrides the serialized " +
+             "initViewLocalPosition/Euler fields).")]
+    [SerializeField] private bool initViewIsScenePose = true;
 
     [Header("Table view")]
     [Tooltip("If true, W becomes hold-to-peek: hold W for Table view, release to return to Hand view. " +
@@ -187,6 +209,10 @@ public class TableTopCameraController : MonoBehaviour
     private bool isHoldingView;
     private KeyCode holdViewKey;
 
+    // Tracks whether the InitView has been used. Once true, InitView is permanently disabled
+    // AND the mouse is permanently unlocked.
+    private bool initViewUsed = false;
+
     private void Awake()
     {
         h.CreateStaticInstance(this, ref Instance, setDontDestroy: false);
@@ -222,13 +248,36 @@ public class TableTopCameraController : MonoBehaviour
             }
         }
 
+        // Capture InitView pose from the scene if requested, BEFORE the start state is applied.
+        if (useInitView && initViewIsScenePose && camTransform)
+        {
+            initViewLocalPosition = camTransform.localPosition;
+            initViewLocalEuler = camTransform.localEulerAngles;
+            if (playerTransform)
+            {
+                initViewPlayerLocalEuler = playerTransform.localEulerAngles;
+            }
+        }
+
         if (!currentTable) currentTable = FindTable();
 
-        SwitchState(mainState, instant: instantOnStart);
+        // If InitView is enabled and hasn't been used yet, start there; otherwise start at the main state.
+        if (useInitView && !initViewUsed)
+        {
+            SwitchState(State.InitView, instant: instantOnStart);
+        }
+        else
+        {
+            SwitchState(mainState, instant: instantOnStart);
+        }
     }
 
     private void Update()
     {
+        // While InitView is active, block ALL player input.
+        // The state can only be changed by another script calling SwitchToHandView(), etc.
+        if (state == State.InitView) return;
+
         // While a hold view is active, ignore the W/S ladder so releasing the held key restores the
         // intended state. When holdToTable is on, W is consumed by the hold system (below), not the ladder.
         if (!isHoldingView)
@@ -295,7 +344,7 @@ public class TableTopCameraController : MonoBehaviour
         isHoldingView = isHoldingViewIn;
     }
 
-    
+
 
     private void BeginHoldView(KeyCode key, State view)
     {
@@ -367,19 +416,21 @@ public class TableTopCameraController : MonoBehaviour
         if (state == State.HandView)
         {
             SwitchToTableView();
-        } else if (state == State.Free)
+        }
+        else if (state == State.Free)
         {
             SwitchToHandView();
         }
     }
-    
+
     public void ChangeStateDown()
     {
         if (state == State.Free) return;
         if (state == State.HandView)
         {
             SwitchToFree();
-        } else if (state == State.TableView)
+        }
+        else if (state == State.TableView)
         {
             SwitchToHandView();
         }
@@ -399,6 +450,20 @@ public class TableTopCameraController : MonoBehaviour
     /// </summary>
     public void SwitchState(State newState, bool instant = false)
     {
+        // Prevent InitView from being re-entered once it's been used.
+        if (newState == State.InitView && initViewUsed)
+        {
+            h.Out("TableTopCameraController: InitView has already been used. Ignoring switch to InitView.");
+            return;
+        }
+
+        // If InitView was active and we're leaving it, mark it as used and permanently unlock the mouse.
+        if (state == State.InitView && newState != State.InitView)
+        {
+            initViewUsed = true;
+            UnlockMousePermanently();
+        }
+
         previousState = state;
         state = newState;
 
@@ -429,6 +494,10 @@ public class TableTopCameraController : MonoBehaviour
 
             case State.WindowView:
                 ApplyWindowView(instant);
+                break;
+
+            case State.InitView:
+                ApplyInitView(instant);
                 break;
         }
     }
@@ -461,6 +530,31 @@ public class TableTopCameraController : MonoBehaviour
     }
 
     // ---- per-mode application -----------------------------------------------
+
+    /// <summary>
+    /// One-time initial view pose. Hand stops following the camera, mouse is locked and hidden.
+    /// When leaving this state (via any external script call), the mouse is permanently unlocked.
+    /// </summary>
+    private void ApplyInitView(bool instant)
+    {
+        if (mouseLook) mouseLook.canLook = false;
+        // Lock and hide the mouse during the intro.
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        SetCardsFollow(false);
+        MoveToLocal(initViewLocalPosition, Quaternion.Euler(initViewLocalEuler), instant);
+        RestorePlayerYaw(initViewPlayerLocalEuler, instant);
+    }
+
+    /// <summary>
+    /// Permanently unlocks the mouse cursor for the rest of the game.
+    /// Called automatically when transitioning away from InitView.
+    /// </summary>
+    private void UnlockMousePermanently()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
 
     /// <summary>Top-down over the table; hand stops following the camera (frozen like the peek views).</summary>
     private void ApplyTableView(bool instant)
@@ -515,7 +609,8 @@ public class TableTopCameraController : MonoBehaviour
         bool cameFromFreeViews = previousState == State.TableView
                               || previousState == State.Free
                               || previousState == State.WindowView
-                              || previousState == State.TaxometerView;
+                              || previousState == State.TaxometerView
+                              || previousState == State.InitView;
         if (cameFromFreeViews && !instant && handFollowDelayAfterFreeViews > 0f)
         {
             SetCardsFollow(false);

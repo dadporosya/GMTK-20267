@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using EZCameraShake;
 using TMPro;
 using UnityEngine;
@@ -18,6 +19,8 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class Taximeter : MonoBehaviour
 {
+    public static Taximeter Instance;
+    
     [Header("Speed (km/h)")]
     [SerializeField] private float minSpeed = 0f;
     [SerializeField] private float maxSpeed = 60f;
@@ -64,6 +67,18 @@ public class Taximeter : MonoBehaviour
     [SerializeField] private float speedForDontHaveMuchTimeDialogue = 50f; // speed at/above which the dialogue fires
     private bool dontHaveMuchTimeDialogueWasCalled = false;
 
+    [Header("Km OST")]
+    [Tooltip("Switches the background music as the trip progresses: when the distance travelled passes " +
+             "kmCounts[n], ost[n] is crossfaded in through the BGMManager.")]
+    [SerializeField] public bool sequenceOst;
+    [Tooltip("Tracks played over the trip, index-matched to kmCounts.")]
+    [SerializeField] private List<AudioClip> ost = new List<AudioClip>();
+    [Tooltip("Km TRAVELLED at which the matching ost entry starts. Ascending, e.g. 0, 3, 7, 10.")]
+    [SerializeField] private List<float> kmCounts = new List<float>();
+    [SerializeField] private float ostFadeTime = 1.5f;
+
+    private int currentOstIndex = -1;
+
     [Header("Debug")]
     [Tooltip("While on, pressing debugSkipKey jumps the trip forward so only debugSkipToKm km are left.")]
     [SerializeField] private bool  debugSkipEnabled = true;
@@ -83,7 +98,7 @@ public class Taximeter : MonoBehaviour
 
     private void Start()
     { 
-
+        h.CreateStaticInstance(this, ref Instance);
         StartTrip();
     }
 
@@ -101,6 +116,7 @@ public class Taximeter : MonoBehaviour
         elapsed = 0f;
         reached = false;
         running = true;
+        currentOstIndex = -1;
 
         // Capture the light's current color as the start of the fade, so the trip always begins
         // from whatever the scene is lit with and ends on targetLightColor.
@@ -132,6 +148,7 @@ public class Taximeter : MonoBehaviour
 
         UpdateText();
         UpdateLightColor(t);
+        UpdateOst();
 
         // Fire the "don't have much time" dialogue once, when speed reaches its threshold.
         if (!dontHaveMuchTimeDialogueWasCalled && currentSpeed >= speedForDontHaveMuchTimeDialogue)
@@ -175,6 +192,58 @@ public class Taximeter : MonoBehaviour
         float area  = minSpeed * t + (maxSpeed - minSpeed) * t * t * 0.5f;
         float total = (minSpeed + maxSpeed) * 0.5f;
         return total <= 0f ? t : area / total;   // fallback if both speeds are 0
+    }
+
+    // ------------------------------------------------------------------ ost
+
+    /// <summary>
+    /// Distance driven so far, i.e. the counterpart of <see cref="kmValue"/> (which is km LEFT).
+    /// </summary>
+    public float KmTravelled => Mathf.Max(0f, totalKm - kmValue);
+
+    /// <summary>
+    /// Picks the track whose km threshold the trip has passed and crossfades it in through the
+    /// BGMManager. Driven by distance rather than by one-shot flags, so debug skips and rewinds land
+    /// on the right track too: the index is recomputed every frame and the music only changes when it
+    /// actually differs from what is playing.
+    /// </summary>
+    private void UpdateOst()
+    {
+        if (!sequenceOst || ost == null || ost.Count == 0 || kmCounts == null) return;
+
+        int index = ResolveOstIndex(KmTravelled);
+        if (index < 0 || index == currentOstIndex) return;
+
+        currentOstIndex = index;
+
+        AudioClip clip = ost[index];
+        if (!clip) return;   // an empty slot just leaves the previous track running
+
+        if (BGMManager.Instance == null)
+        {
+            h.Out("Taximeter: no BGMManager to play the km OST on");
+            return;
+        }
+
+        // PlayMusic crossfades between the manager's two sources, so the current track fades out
+        // while the new one fades in.
+        BGMManager.Instance.PlayMusic(clip, ostFadeTime);
+    }
+
+    /// <summary>
+    /// Highest index whose kmCounts entry has been reached by <paramref name="kmTravelled"/>.
+    /// Returns -1 while the trip is still short of the first threshold. Entries past the end of
+    /// either list are ignored, so mismatched list lengths degrade gracefully.
+    /// </summary>
+    private int ResolveOstIndex(float kmTravelled)
+    {
+        int index = -1;
+        int count = Mathf.Min(ost.Count, kmCounts.Count);
+
+        for (int i = 0; i < count; i++)
+            if (kmTravelled >= kmCounts[i]) index = i;
+
+        return index;
     }
 
     // ---------------------------------------------------------------- debug

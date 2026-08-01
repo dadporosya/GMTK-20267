@@ -53,6 +53,10 @@ public class EngingCutscene : CutSceneBase
 
     [SerializeField] private AudioClip ost;
 
+    [Header("hoarime edited this shittt")]
+    [SerializeField] AudioClip taxometerEndingSound;
+    [SerializeField] AudioSource taxometerEndingAS;
+
     public override void Init()
     {
         base.Init();
@@ -88,10 +92,11 @@ public class EngingCutscene : CutSceneBase
         yield return null;
         BGMManager.Instance.FadeOutMusic(1f);
         TableTopCameraController.Instance.ChangeMainState(TableTopCameraController.State.TaxometerView);
-        SFXManager.Instance.PlayClip(R.PROJECT.Audio.Clock.eClock);
+        taxometerEndingAS.PlayOneShot(taxometerEndingSound);
+        GameObject.Find("---CARDS PARENT IDK---").gameObject.SetActive(false);
         yield return new WaitForSeconds(3.33f);
         // if (!ost) ost = 
-        BGMManager.Instance.PlayMusic(ost, 1f);
+        BGMManager.Instance.PlayMusic(ost, 3.33f);
         
         // Park the camera in Free and lock the home state there. The scene wires DialogueManager's
         // onDialogueEnd to TableTopCameraController.ChangeMainStateToHand, which would otherwise pull

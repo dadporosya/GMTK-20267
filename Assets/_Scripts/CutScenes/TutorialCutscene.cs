@@ -10,6 +10,7 @@ public class TutorialCutscene : CutSceneBase
     [SerializeField] private bool skipIntro = false;
     
     [SerializeField] private float delayBeforeDialogue;
+    [SerializeField] float delayBeforeIntro;
     [SerializeField] private DialogueContainer introDialogue;
     [SerializeField] private DialogueContainer tutorialDialogue;
 
@@ -88,7 +89,8 @@ public class TutorialCutscene : CutSceneBase
             DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
         }
         DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
-        
+
+        yield return new WaitForSeconds(delayBeforeIntro);
         DialogueManager.Instance.StartDialogue(introDialogue);
     }
     

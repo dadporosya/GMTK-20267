@@ -13,8 +13,8 @@ public class BGMManager : AudioManagerBase
     
     private AudioSource musicSourceA;
     private AudioSource musicSourceB;
-    private AudioSource current;
-    private AudioSource next;
+    [HideInInspector] public AudioSource current;
+    [HideInInspector] public AudioSource next;
     private void Awake()
     {
         // h.Out(Instance);

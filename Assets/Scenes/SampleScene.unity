@@ -251,7 +251,7 @@ GameObject:
   - component: {fileID: 22196491}
   - component: {fileID: 22196493}
   - component: {fileID: 22196492}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: angelcollider2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -425,7 +425,7 @@ MonoBehaviour:
   sceneTransitionWaitTime: 0
   sceneTransitionTime: 0
   sceneTransitionDelay: 0
-  fadeInSoundTime: 3.33
+  fadeInSoundTime: 7.77
   fadeLPFTime: 0
   fadePitchSoundTime: 0
   disableSoundOnSceneTransition: 0
@@ -776,7 +776,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 28.050829, y: 33.04596}
+  m_AnchoredPosition: {x: 28.050829, y: 44}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &98166505
@@ -801,8 +801,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: no, i dont smoke anymore...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
-  m_sharedMaterial: {fileID: -9054310753409103145, guid: ace7a3984f64f984aa17e19faeaeb961, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: eeca754c97ac216418ff1536e44f5e17, type: 2}
+  m_sharedMaterial: {fileID: -3671496888450152090, guid: eeca754c97ac216418ff1536e44f5e17, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -836,10 +836,10 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -3.33
   m_characterHorizontalScale: 1
-  m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_wordSpacing: -7.77
+  m_lineSpacing: -33
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -902,7 +902,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 98166503}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba17233c34e02024e9e4c50f01335076, type: 3}
   m_Name: 
@@ -2063,7 +2063,7 @@ GameObject:
   - component: {fileID: 404210617}
   - component: {fileID: 404210616}
   - component: {fileID: 404210615}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: fencecollider1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2783,6 +2783,7 @@ GameObject:
   - component: {fileID: 584108702}
   - component: {fileID: 584108701}
   - component: {fileID: 584108700}
+  - component: {fileID: 584108703}
   m_Layer: 0
   m_Name: grasscollider2
   m_TagString: Untagged
@@ -2834,6 +2835,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1191859471}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &584108703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584108699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010e738023eff1c479eddd90bacf2014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceSound
+  footstepSounds:
+  - {fileID: 8300000, guid: ee4f6edef2fa43e41bccb00d7c5c08e0, type: 3}
+  - {fileID: 8300000, guid: 2cca85b0a40eb2543ab103e747719c36, type: 3}
+  - {fileID: 8300000, guid: 4defcfefe825dd746bd654842580de01, type: 3}
 --- !u!1 &586013861
 GameObject:
   m_ObjectHideFlags: 0
@@ -3761,9 +3778,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: bc87c9f081f96f148945a2d89061da67, type: 3}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.333
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -4063,8 +4080,8 @@ MonoBehaviour:
   smoothing: 15
   rotationTime: 0.67
   cameraMoveTime: 0.67
-  minY: -67
-  maxY: 67
+  minY: -77
+  maxY: 77
   yOffset: 0
   minX: 0
   maxX: 0
@@ -4093,11 +4110,11 @@ MonoBehaviour:
   walkSpeed: 3.33
   gravity: -7.77
   smoothing: 16.7
-  stepSoundsEnabled: 0
-  magnitudeThreshold: 0
-  stepSoundsDelayRange: {x: 0, y: 0}
-  soundPitchRange: {x: 0, y: 0}
-  stepSoundsSource: {fileID: 0}
+  stepSoundsEnabled: 1
+  magnitudeThreshold: 0.5
+  stepSoundsDelayRange: {x: 1.2, y: 1.4}
+  soundPitchRange: {x: 0.88, y: 1.111}
+  stepSoundsSource: {fileID: 1734849612}
 --- !u!143 &849515914
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4140,11 +4157,12 @@ Transform:
   m_GameObject: {fileID: 849515911}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: -2.02, y: 2.15, z: -4.83}
+  m_LocalPosition: {x: -2.02, y: 2.54, z: -4.83}
   m_LocalScale: {x: 0.6990022, y: 2.2793763, z: 0.6990022}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 758091523}
+  - {fileID: 1734849611}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &917032822
@@ -4462,7 +4480,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: bc87c9f081f96f148945a2d89061da67, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.777
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -5392,7 +5410,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 2b38432691918db43894ab898bd5c386, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.333
+  m_Volume: 0.111
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -5521,9 +5539,9 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 34de9c915cac8d145a787a4e2712eaf3, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.333
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -6212,7 +6230,15 @@ PrefabInstance:
       propertyPath: RainExplosionParticleSystem
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 19831730, guid: 69b40ef7ee16c834c844b3fa26e0fdda, type: 3}
+      propertyPath: CollisionModule.collidesWith.m_Bits
+      value: 55
+      objectReference: {fileID: 0}
     - target: {fileID: 19945500, guid: 69b40ef7ee16c834c844b3fa26e0fdda, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19948124, guid: 69b40ef7ee16c834c844b3fa26e0fdda, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -6263,7 +6289,7 @@ GameObject:
   - component: {fileID: 1398658806}
   - component: {fileID: 1398658805}
   - component: {fileID: 1398658804}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: angelcollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6631,7 +6657,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1472660459}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba17233c34e02024e9e4c50f01335076, type: 3}
   m_Name: 
@@ -6687,8 +6713,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cb672658946e0ff40ba554aa333e28b2, type: 2}
-  m_sharedMaterial: {fileID: -9054310753409103145, guid: cb672658946e0ff40ba554aa333e28b2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: eeca754c97ac216418ff1536e44f5e17, type: 2}
+  m_sharedMaterial: {fileID: -3671496888450152090, guid: eeca754c97ac216418ff1536e44f5e17, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6722,10 +6748,10 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -3.33
   m_characterHorizontalScale: 1
-  m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_wordSpacing: -7.77
+  m_lineSpacing: -33
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -6785,7 +6811,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -9054310753409103145, guid: cb672658946e0ff40ba554aa333e28b2, type: 2}
+  - {fileID: -3671496888450152090, guid: eeca754c97ac216418ff1536e44f5e17, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6837,7 +6863,7 @@ GameObject:
   - component: {fileID: 1497623605}
   - component: {fileID: 1497623604}
   - component: {fileID: 1497623606}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: carentertrig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7294,7 +7320,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.67
+  m_Volume: 0.222
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -8421,7 +8447,7 @@ GameObject:
   - component: {fileID: 1677822095}
   - component: {fileID: 1677822094}
   - component: {fileID: 1677822093}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: roadcollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8472,6 +8498,135 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1191859471}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!1 &1734849610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1734849611}
+  - component: {fileID: 1734849612}
+  m_Layer: 3
+  m_Name: footstepsas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1734849611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734849610}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.777, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 849515917}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1734849612
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734849610}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.666
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1744286018
 GameObject:
   m_ObjectHideFlags: 0
@@ -8948,7 +9103,7 @@ GameObject:
   - component: {fileID: 1951665237}
   - component: {fileID: 1951665236}
   - component: {fileID: 1951665235}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: fencecollider2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9449,6 +9604,7 @@ GameObject:
   - component: {fileID: 2094432167}
   - component: {fileID: 2094432166}
   - component: {fileID: 2094432164}
+  - component: {fileID: 2094432168}
   m_Layer: 0
   m_Name: grasscollider1
   m_TagString: Untagged
@@ -9475,8 +9631,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.977318, y: 1, z: 1}
+  m_Center: {x: 0.011341353, y: 0, z: 0}
 --- !u!33 &2094432166
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9500,6 +9656,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1191859471}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2094432168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094432163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010e738023eff1c479eddd90bacf2014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceSound
+  footstepSounds:
+  - {fileID: 8300000, guid: ee4f6edef2fa43e41bccb00d7c5c08e0, type: 3}
+  - {fileID: 8300000, guid: 2cca85b0a40eb2543ab103e747719c36, type: 3}
+  - {fileID: 8300000, guid: 4defcfefe825dd746bd654842580de01, type: 3}
 --- !u!1 &2097327270
 GameObject:
   m_ObjectHideFlags: 0
@@ -12147,7 +12319,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 376e11218e5d7864cab6aa0359eb806c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.33
+  m_Volume: 0.111
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -21573,6 +21745,7 @@ GameObject:
   - component: {fileID: 4497019148723641021}
   - component: {fileID: 2574948885848512155}
   - component: {fileID: 7022097294607391367}
+  - component: {fileID: 7022097294607391368}
   m_Layer: 0
   m_Name: road
   m_TagString: Untagged
@@ -22887,6 +23060,8 @@ GameObject:
   - component: {fileID: 7471418876249917279}
   - component: {fileID: 5556767151968081558}
   - component: {fileID: 6126077125018097438}
+  - component: {fileID: 7471418876249917281}
+  - component: {fileID: 7471418876249917280}
   m_Layer: 0
   m_Name: border1
   m_TagString: Untagged
@@ -26635,6 +26810,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 519850928}
     m_Modifications:
+    - target: {fileID: 2078504835851390731, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4117370452658914838, guid: fad69c244cae21b4eb29865f07c38a48, type: 3}
       propertyPath: m_Name
       value: Angel
@@ -26997,6 +27176,8 @@ GameObject:
   - component: {fileID: 797657492276343478}
   - component: {fileID: 6512914140651635164}
   - component: {fileID: 551182465326437862}
+  - component: {fileID: 6550317931268677431}
+  - component: {fileID: 6550317931268677432}
   m_Layer: 0
   m_Name: border2
   m_TagString: Untagged
@@ -27004,6 +27185,43 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6550317931268677431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6550317931268677430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010e738023eff1c479eddd90bacf2014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceSound
+  footstepSounds:
+  - {fileID: 8300000, guid: ee4f6edef2fa43e41bccb00d7c5c08e0, type: 3}
+  - {fileID: 8300000, guid: 2cca85b0a40eb2543ab103e747719c36, type: 3}
+  - {fileID: 8300000, guid: 4defcfefe825dd746bd654842580de01, type: 3}
+--- !u!65 &6550317931268677432
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6550317931268677430}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 12.443547, y: 0.018893795, z: 0.010465257}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &6558099437873750072
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -28367,6 +28585,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7022097294607391368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4701623510366029221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010e738023eff1c479eddd90bacf2014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceSound
+  footstepSounds:
+  - {fileID: 8300000, guid: ee4f6edef2fa43e41bccb00d7c5c08e0, type: 3}
+  - {fileID: 8300000, guid: 2cca85b0a40eb2543ab103e747719c36, type: 3}
+  - {fileID: 8300000, guid: 4defcfefe825dd746bd654842580de01, type: 3}
 --- !u!1 &7027459343930929704
 GameObject:
   m_ObjectHideFlags: 0
@@ -29419,6 +29653,43 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8664635873693453186}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: -90}
+--- !u!65 &7471418876249917280
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5229754343560021940}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 12.443547, y: 0.018893795, z: 0.010465257}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7471418876249917281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5229754343560021940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010e738023eff1c479eddd90bacf2014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceSound
+  footstepSounds:
+  - {fileID: 8300000, guid: ee4f6edef2fa43e41bccb00d7c5c08e0, type: 3}
+  - {fileID: 8300000, guid: 2cca85b0a40eb2543ab103e747719c36, type: 3}
+  - {fileID: 8300000, guid: 4defcfefe825dd746bd654842580de01, type: 3}
 --- !u!33 &7481038079539034622
 MeshFilter:
   m_ObjectHideFlags: 0

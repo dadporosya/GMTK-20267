@@ -82,6 +82,8 @@ public class SinCutsceneBase : CutSceneBase
     private Color angelFeelOriginalColor;
     private bool angelFeelColorCaptured = false;
 
+    private AudioClip bgmBeforeCutscene;
+
     // One entry per recolored eye renderer, holding what CutsceneEnd needs to put it back.
     private class EyeTintState
     {
@@ -413,6 +415,7 @@ public class SinCutsceneBase : CutSceneBase
         // Bring in this sin's soundtrack (crossfades up from the silence left by OnWin's fade-out) and
         // loop it through the cutscene. What happens when the cutscene ends is decided in CutsceneEnd
         // based on continuePlayingOst.
+        bgmBeforeCutscene = BGMManager.Instance.current.clip;
         if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusic(soundtrack, fadeTime:ostFadeIn);
 
         // The placeholder is for repeats *within the same run* only: the first time a sin comes up in
@@ -479,7 +482,9 @@ public class SinCutsceneBase : CutSceneBase
 
         // Unless the sin's soundtrack is meant to keep playing, hand the music back to a random
         // background track from BGMManager now the cutscene has ended.
-        if (!continuePlayingOst && BGMManager.Instance) BGMManager.Instance.PlayRandomBgTrack();
+        if (Taximeter.Instance.sequenceOst) BGMManager.Instance.PlayMusic(bgmBeforeCutscene);
+        else if (!continuePlayingOst && BGMManager.Instance) BGMManager.Instance.PlayRandomBgTrack();
+        
 
         yield return null;
 
