@@ -20,7 +20,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: <anim:wave>WRATH...<anim:none>
+    text: "<anim:wave>\u0433\u043D\u0435\u0432...<anim:none>"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -42,7 +42,12 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: it was tuesday, around eight in the morning.
+    text: "\u044D\u0442\u043E \u0431\u044B\u043B \u0432\u0442\u043E\u0440\u043D\u0438\u043A,
+      \u0438 \u0447\u0430\u0441\u043E\u0432 \u0432\u043E\u0441\u0435\u043C\u044C
+      \u0443\u0442\u0440\u0430, \u0442\u044B \u0432\u0441\u0442\u0430\u043B \u0432
+      \u043F\u043E\u043B\u0443\u0441\u043E\u043D\u043D\u043E\u043C \u043D\u0435\u0430\u0434\u0435\u043A\u0432\u0430\u0442\u0435
+      \u0438 \u043F\u043E\u0431\u0440\u0451\u043B \u0432 \u043A\u043E\u043C\u043D\u0430\u0442\u0443
+      \u0434\u043B\u044F \u0447\u0438\u0441\u0442\u043A\u0438 \u0437\u0443\u0431\u043E\u0432"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -64,8 +69,13 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: half asleep and barely aware of yourself, you dragged your feet toward
-      the room where you brushed your teeth.
+    text: "\u043C\u0435\u0431\u0435\u043B\u044C \u0441\u0432\u043E\u0438\u043C\u0438
+      \u043D\u0435\u0432\u0438\u0434\u0438\u043C\u044B\u043C\u0438 \u0433\u043B\u0430\u0437\u0430\u043C\u0438
+      \u043D\u0430\u0431\u043B\u044E\u0434\u0430\u043B\u0430 \u0437\u0430 \u043A\u0430\u0436\u0434\u044B\u043C
+      \u043E\u0442\u043A\u043B\u0435\u0438\u0432\u0430\u043D\u0438\u0435\u043C \u0442\u0432\u043E\u0435\u0439
+      \u043A\u043E\u0436\u0438 \u043E\u0442 \u043F\u043E\u043B\u0430, \u043F\u043E\u043A\u0430
+      \u0437\u043B\u043E\u0431\u043D\u044B\u0439 \u043A\u043E\u043C\u043E\u0434 \u043D\u0435
+      \u043F\u043E\u0441\u0442\u0430\u0432\u0438\u043B \u043F\u043E\u0434\u043D\u043E\u0436\u043A\u0443"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -87,8 +97,9 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: the furniture watched every reluctant peel of your feet from the floor
-      with invisible eyes, until the spiteful chest of drawers stuck out a leg.
+    text: "\u0442\u044B \u0443\u043F\u0430\u043B \u043D\u0430 \u0445\u043E\u043B\u043E\u0434\u043D\u0443\u044E
+      \u043F\u043B\u0438\u0442\u043A\u0443 \u0432\u0430\u043D\u043D\u043E\u0439 \u0438
+      \u0440\u0430\u0437\u0431\u0438\u043B \u0441\u0432\u043E\u0438 \u043D\u043E\u0437\u0434\u0440\u0438"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -110,7 +121,10 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: you crashed onto the bathroom's cold tile, splitting your nostrils open.
+    text: "\u043A\u0440\u043E\u0432\u044C \u043F\u043E\u0442\u0435\u043A\u043B\u0430
+      \u0441\u043A\u0432\u043E\u0437\u044C \u0449\u0435\u043B\u0438, \u0441\u043E\u0437\u0434\u0430\u0432\u0430\u044F
+      \u0432 \u043A\u0432\u0430\u0440\u0442\u0438\u0440\u0435 \u043D\u0438\u0436\u043D\u0438\u0445
+      \u0441\u043E\u0441\u0435\u0434\u0435\u0439 \u0430\u043B\u044B\u0439 \u043F\u043E\u0442\u043E\u043F"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -132,8 +146,12 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: blood streamed into the cracks between the tiles, flooding the apartment
-      below in a crimson deluge.
+    text: "\u043F\u044B\u0442\u0430\u044F\u0441\u044C \u0434\u044B\u0448\u0430\u0442\u044C,
+      \u0442\u044B \u0432\u0434\u044B\u0445\u0430\u043B \u0441\u043E\u0431\u0441\u0442\u0432\u0435\u043D\u043D\u0443\u044E
+      \u043A\u0440\u043E\u0432\u044C, \u043D\u043E \u043E\u043D\u0430 \u0440\u0430\u0437\u043B\u0438\u0432\u0430\u043B\u0430\u0441\u044C
+      \u043F\u043E \u0432\u0441\u0435\u043C\u0443 \u0442\u0432\u043E\u0435\u043C\u0443
+      \u0442\u0435\u043B\u0443 \u0438 \u0437\u0430\u043B\u0438\u043B\u0430 \u0441\u0432\u043E\u0438\u043C
+      \u0446\u0432\u0435\u0442\u043E\u043C \u0442\u0432\u043E\u0438 \u0433\u043B\u0430\u0437\u0430"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -155,7 +173,8 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: you tried to breathe, but every breath drew your own blood into your lungs.
+    text: "\u0442\u044B \u0437\u043D\u0430\u043B \u043A\u0442\u043E \u044D\u0442\u043E
+      \u0441\u0434\u0435\u043B\u0430\u043B."
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -177,7 +196,14 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: it spread through your body until even your eyes drowned in red.
+    text: "\u0434\u0432\u0438\u0436\u0435\u043D\u0438\u044F\u043C\u0438 \u043D\u043E\u0433
+      \u0442\u044B \u043F\u043E\u0434\u043D\u044F\u043B\u0441\u044F \u0441 \u043E\u0431\u043B\u0438\u0442\u043E\u0433\u043E
+      \u043F\u043E\u043B\u0430 \u0438, \u043A\u0440\u0438\u0447\u0430, \u0440\u0430\u0437\u043E\u0440\u0432\u0430\u043B
+      \u0441\u0432\u043E\u0438 \u0440\u0443\u043A\u0438, \u0447\u0442\u043E\u0431\u044B
+      \u0438\u0441\u0442\u043E\u0447\u0438\u0442\u044C \u0438\u0437 \u0441\u0432\u043E\u0438\u0445
+      \u043A\u043E\u0441\u0442\u0435\u0439 \u0441\u0430\u043C\u043E\u0435 \u043E\u0441\u0442\u0440\u043E\u0435
+      \u0438\u0437 \u0442\u0435\u0445 \u0447\u0442\u043E \u0442\u044B \u0437\u043D\u0430\u0435\u0448\u044C
+      \u043A\u043E\u043F\u044C\u0435"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -199,7 +225,14 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: you knew who had done this.
+    text: "\u0442\u044B \u0443\u0436\u0435 \u0438\u043C \u0437\u0430\u043C\u0430\u0445\u043D\u0443\u043B\u0441\u044F
+      \u043D\u0430 \u0442\u043E\u0442 \u0441\u0430\u043C\u044B\u0439 \u043A\u043E\u043C\u043E\u0434,
+      \u043D\u043E \u0442\u0443\u0442 \u0438\u0437 \u0435\u0433\u043E \u044F\u0449\u0438\u043A\u043E\u0432
+      \u0432\u044B\u043B\u0435\u0437\u043B\u0430 \u0435\u0433\u043E \u043C\u044F\u0441\u043D\u0430\u044F
+      \u0434\u0443\u0448\u0430 \u0441 \u0441\u043B\u044E\u043D\u044F\u0432\u044B\u043C
+      \u044F\u0437\u044B\u043A\u043E\u043C, \u0447\u0442\u043E \u043E\u0431\u0445\u0432\u0430\u0442\u0438\u043B\u043E
+      \u0442\u0432\u043E\u0451 \u0442\u0435\u043B\u043E, \u043F\u044B\u0442\u0430\u044F\u0441\u044C
+      \u0437\u0430\u0434\u0443\u0448\u0438\u0442\u044C"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -221,8 +254,12 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: forcing yourself upright with unsteady legs, you rose from the blood-soaked
-      floor.
+    text: "\u0442\u044B \u043D\u0430\u0447\u0430\u043B \u0435\u0449\u0435 \u0441\u0438\u043B\u044C\u043D\u0435\u0435
+      \u043A\u0440\u0438\u0447\u0430\u0442\u044C \u0438 \u0440\u0430\u0437\u0440\u044B\u0432\u0430\u0442\u044C
+      \u0440\u0443\u043A\u0430\u043C\u0438 \u0435\u0433\u043E \u0436\u0438\u043B\u0438\u0441\u0442\u044B\u0435
+      \u0438 \u0431\u0435\u0441\u043A\u043E\u0441\u0442\u043D\u044B\u0435 \u0442\u043A\u0430\u043D\u0438,
+      \u043F\u0440\u043E\u0440\u0435\u0437\u0430\u044F \u0441\u0435\u0431\u0435 \u0432\u044B\u0445\u043E\u0434
+      \u0438\u0437 \u0435\u0433\u043E \u0442\u0435\u043B\u0430"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -244,8 +281,11 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: 'with a scream of pure rage, you tore your own arms apart, wrenching from
-      your bones the sharpest spear you knew how to make. '
+    text: "\u0442\u044B \u043E\u0441\u0442\u0430\u0432\u0438\u043B \u0432 \u0435\u0433\u043E
+      \u0432\u0435\u043D\u0430\u0445 \u0442\u044B\u0441\u044F\u0447\u0438 \u0434\u044B\u0440
+      \u0438 \u043F\u0440\u043E\u0445\u043E\u0434\u043E\u0432, \u0441\u0434\u0435\u043B\u0430\u0432
+      \u043F\u043E\u0445\u043E\u0436\u0438\u043C \u0435\u0433\u043E \u044F\u0437\u044B\u043A
+      \u043D\u0430 \u0449\u0443\u043F\u0430\u043B\u044C\u0446\u044B \u043E\u0441\u044C\u043C\u0438\u043D\u043E\u0433\u0430"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -267,123 +307,13 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: "you had already swung it at the chest of drawers when its fleshly soul
-      slithered out from between the drawers\u2014a drooling tongue of raw meat that
-      coiled around your body, tightening as it tried to strangle you."
-    initFromScriptableObject: 0
-    speaker: {fileID: 0}
-    speakerGameObject: {fileID: 0}
-    speakerName: 
-    speakerPortrait: {fileID: 0}
-    useSpriteAtlas: 0
-    spriteAtlas: []
-    spriteId: 0
-    _speakerVoiceClips: []
-    material: {fileID: 0}
-    onNodeStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onNodeEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - nodeId: 12
-    speakerId: 
-    initialized: 0
-    speakerIsThis: 0
-    overWriteValues: 0
-    text: you screamed louder still and ripped at its sinewy, boneless flesh with
-      your bare hands, clawing yourself a way out of its body.
-    initFromScriptableObject: 0
-    speaker: {fileID: 0}
-    speakerGameObject: {fileID: 0}
-    speakerName: 
-    speakerPortrait: {fileID: 0}
-    useSpriteAtlas: 0
-    spriteAtlas: []
-    spriteId: 0
-    _speakerVoiceClips: []
-    material: {fileID: 0}
-    onNodeStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onNodeEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - nodeId: 13
-    speakerId: 
-    initialized: 0
-    speakerIsThis: 0
-    overWriteValues: 0
-    text: you left thousands of punctures and tunnels through its veins, shredding
-      its tongue until it resembled the tentacles of an octopus.
-    initFromScriptableObject: 0
-    speaker: {fileID: 0}
-    speakerGameObject: {fileID: 0}
-    speakerName: 
-    speakerPortrait: {fileID: 0}
-    useSpriteAtlas: 0
-    spriteAtlas: []
-    spriteId: 0
-    _speakerVoiceClips: []
-    material: {fileID: 0}
-    onNodeStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onNodeEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - nodeId: 14
-    speakerId: 
-    initialized: 0
-    speakerIsThis: 0
-    overWriteValues: 0
-    text: even after you broke free, you kept driving the spear into that mass of
-      meat, over and over, determined that it would never again be able to speak
-      your name.
-    initFromScriptableObject: 0
-    speaker: {fileID: 0}
-    speakerGameObject: {fileID: 0}
-    speakerName: 
-    speakerPortrait: {fileID: 0}
-    useSpriteAtlas: 0
-    spriteAtlas: []
-    spriteId: 0
-    _speakerVoiceClips: []
-    material: {fileID: 0}
-    onNodeStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onNodeEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - nodeId: 15
-    speakerId: 
-    initialized: 0
-    speakerIsThis: 0
-    overWriteValues: 0
-    text: so, the haze of memory is clearing now, isn't it?
-    initFromScriptableObject: 0
-    speaker: {fileID: 0}
-    speakerGameObject: {fileID: 0}
-    speakerName: 
-    speakerPortrait: {fileID: 0}
-    useSpriteAtlas: 0
-    spriteAtlas: []
-    spriteId: 0
-    _speakerVoiceClips: []
-    material: {fileID: 0}
-    onNodeStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onNodeEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - nodeId: 16
-    speakerId: 
-    initialized: 0
-    speakerIsThis: 0
-    overWriteValues: 0
-    text: the rest will be forgotten. choose your three.
+    text: "\u0434\u0430\u0436\u0435 \u0432\u044B\u0431\u0440\u0430\u0432\u0448\u0438\u0441\u044C,
+      \u0442\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0430\u043B \u043E\u0441\u0442\u0430\u0432\u043B\u044F\u0442\u044C
+      \u043F\u0440\u043E\u043A\u043E\u043B\u044B \u0432 \u0442\u043E\u043C \u043C\u044F\u0441\u0435,
+      \u043B\u0438\u0448\u044C \u0431\u044B \u043E\u043D\u043E \u043D\u0438\u043A\u043E\u0433\u0434\u0430
+      \u0431\u043E\u043B\u044C\u0448\u0435 \u043D\u0435 \u0441\u043C\u043E\u0433\u043B\u043E
+      \u043F\u0440\u043E\u0438\u0437\u043D\u0435\u0441\u0442\u0438 \u0442\u0432\u043E\u0451
+      \u0438\u043C\u044F"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -403,36 +333,6 @@ MonoBehaviour:
   objects:
   - {fileID: 0}
   nodeSettings:
-  - speakerObjectIndex: 0
-    objectSettings:
-    - enableObject: 1
-      modelId: 0
-      enableEyes: 0
-      talk: 1
-  - speakerObjectIndex: 0
-    objectSettings:
-    - enableObject: 1
-      modelId: 0
-      enableEyes: 0
-      talk: 1
-  - speakerObjectIndex: 0
-    objectSettings:
-    - enableObject: 1
-      modelId: 0
-      enableEyes: 0
-      talk: 1
-  - speakerObjectIndex: 0
-    objectSettings:
-    - enableObject: 1
-      modelId: 0
-      enableEyes: 0
-      talk: 1
-  - speakerObjectIndex: 0
-    objectSettings:
-    - enableObject: 1
-      modelId: 0
-      enableEyes: 0
-      talk: 1
   - speakerObjectIndex: 0
     objectSettings:
     - enableObject: 1

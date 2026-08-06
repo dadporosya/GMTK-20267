@@ -20,7 +20,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: <anim:wave>GLUTTONY...<anim:none>
+    text: "<anim:wave>\u0447\u0440\u0435\u0432\u043E\u0443\u0433\u043E\u0434\u0438\u0435...<anim:none>"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -42,9 +42,14 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: the blue glow from the refrigerator fell so grotesquely across your face,
-      and i watched you from inside the trash bin, the one where you usually toss
-      empty chip bags and the wrappings of wayward winds.
+    text: "\u0441\u0438\u043D\u0438\u0439 \u0441\u0432\u0435\u0442 \u0445\u043E\u043B\u043E\u0434\u0438\u043B\u044C\u043D\u0438\u043A\u0430
+      \u0442\u0430\u043A \u0443\u0440\u043E\u0434\u043B\u0438\u0432\u043E \u043F\u0430\u0434\u0430\u043B
+      \u043D\u0430 \u0442\u0432\u043E\u0451 \u043B\u0438\u0446\u043E, \u0430 \u044F
+      \u043D\u0430\u0431\u043B\u044E\u0434\u0430\u043B \u0437\u0430 \u0442\u043E\u0431\u043E\u0439
+      \u0438\u0437 \u0443\u0440\u043D\u044B, \u0432 \u043A\u043E\u0442\u043E\u0440\u0443\u044E
+      \u0442\u044B \u043E\u0431\u044B\u0447\u043D\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u0448\u044C
+      \u0443\u043F\u0430\u043A\u043E\u0432\u043A\u0438 \u043E\u0442 \u0447\u0438\u043F\u0441\u043E\u0432
+      \u0438 \u043E\u0431\u0451\u0440\u0442\u043A\u0438 \u043E\u0442 \u044D\u0441\u043A\u0438\u043C\u043E"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -66,11 +71,14 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: 'the tips of my wings showed through the wire mesh, but all you saw was
-      whatever might silence the bottomless void inside your head for another evening
-      in front of the television.
-
-'
+    text: "\u0443\u0433\u043E\u043B\u043A\u0438 \u043C\u043E\u0438\u0445 \u043A\u0440\u044B\u043B\u044C\u0435\u0432
+      \u043F\u0440\u043E\u0441\u0442\u0443\u043F\u0430\u043B\u0438 \u0441\u043A\u0432\u043E\u0437\u044C
+      \u0435\u0451 \u0441\u0435\u0442\u043A\u0443, \u0430 \u0442\u044B \u0432\u0438\u0434\u0435\u043B
+      \u043F\u0435\u0440\u0435\u0434 \u0441\u043E\u0431\u043E\u0439 \u043B\u0438\u0448\u044C
+      \u0442\u043E, \u0447\u0442\u043E \u0437\u0430\u0433\u043B\u0443\u0448\u0438\u0442
+      \u0442\u0432\u043E\u044E \u0431\u0435\u0437\u0434\u043E\u043D\u043D\u0443\u044E
+      \u0433\u043E\u043B\u043E\u0432\u0443 \u043D\u0430 \u043E\u0441\u0442\u0430\u0432\u0448\u0438\u0439\u0441\u044F
+      \u0432\u0435\u0447\u0435\u0440 \u043F\u0435\u0440\u0435\u0434 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u043E\u043C"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -92,9 +100,15 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: the room smelled of a damp rag gone moldy, and i watched you shovel down
-      yogurts and sweet cheese bars you'd picked up at twenty percent off in the
-      cats' clearance sale.
+    text: "\u043F\u0430\u0445\u043B\u043E \u0441\u044B\u0440\u043E\u0439 \u0442\u0440\u044F\u043F\u043A\u043E\u0439
+      \u0441 \u043F\u0440\u0438\u0432\u043A\u0443\u0441\u043E\u043C \u043F\u043B\u0435\u0441\u0435\u043D\u0438,
+      \u0438 \u044F \u043D\u0430\u0431\u043B\u044E\u0434\u0430\u043B, \u043A\u0430\u043A
+      \u0442\u044B \u0432\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u0448\u044C
+      \u0432 \u0441\u0435\u0431\u044F \u0439\u043E\u0433\u0443\u0440\u0442\u044B
+      \u0438 \u0441\u044B\u0440\u043A\u0438, \u0447\u0442\u043E \u043A\u0443\u043F\u0438\u043B
+      \u043F\u043E \u0434\u0432\u0430\u0434\u0446\u0430\u0442\u0438\u043F\u0440\u043E\u0446\u0435\u043D\u0442\u043D\u043E\u0439
+      \u0441\u043A\u0438\u0434\u043A\u0435 \u043D\u0430 \u0440\u0430\u0441\u043F\u0440\u043E\u0434\u0430\u0436\u0435
+      \u043A\u043E\u0442\u043E\u0432"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -116,8 +130,13 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: 'when that white, poisonous delight was gone, you set to work with practiced
-      precision, slicing sausage and piling it onto thick, greasy slices of toast. '
+    text: "\u043A\u043E\u0433\u0434\u0430 \u044D\u0442\u0430 \u0431\u0435\u043B\u0430\u044F
+      \u044F\u0434\u043E\u0432\u0438\u0442\u0430\u044F \u0440\u0430\u0434\u043E\u0441\u0442\u044C
+      \u0437\u0430\u043A\u043E\u043D\u0447\u0438\u043B\u0430\u0441\u044C, \u0442\u044B
+      \u043D\u0430\u0447\u0430\u043B \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E
+      \u0440\u0435\u0437\u0430\u0442\u044C \u043A\u043E\u043B\u0431\u0430\u0441\u0443
+      \u0438 \u043D\u0430\u043A\u0438\u0434\u044B\u0432\u0430\u0442\u044C \u043D\u0430
+      \u0436\u0438\u0440\u043D\u044B\u0435 \u0442\u043E\u0441\u0442\u044B \u0445\u043B\u0435\u0431\u0430"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -139,8 +158,14 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: mayonnaise dripped from your mustache, splattering your worn house shorts
-      in foul little stains while you kept feeding your gut.
+    text: "\u043C\u0430\u0439\u043E\u043D\u0435\u0437 \u0441\u0442\u0435\u043A\u0430\u043B
+      \u043F\u043E \u0442\u0432\u043E\u0438\u043C \u0443\u0441\u0430\u043C \u0438
+      \u043A\u0430\u043F\u0430\u043B \u043C\u0435\u0440\u0437\u043A\u0438\u043C\u0438
+      \u043F\u044F\u0442\u043D\u0430\u043C\u0438 \u043D\u0430 \u0442\u0432\u043E\u0438
+      \u0434\u043E\u043C\u0430\u0448\u043D\u0438\u0435 \u0448\u043E\u0440\u0442\u044B,
+      \u043F\u043E\u043A\u0430 \u0442\u044B \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0430\u043B
+      \u0437\u0430\u043F\u043E\u043B\u043D\u044F\u0442\u044C \u0441\u0432\u043E\u0451
+      \u0447\u0440\u0435\u0432\u043E"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -162,30 +187,14 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: when you were finished, you buried my face beneath bread crumbs, scraps
-      of stale sausage, and the empty wrappers from the yogurts and cheese bars.
-    initFromScriptableObject: 0
-    speaker: {fileID: 0}
-    speakerGameObject: {fileID: 0}
-    speakerName: 
-    speakerPortrait: {fileID: 0}
-    useSpriteAtlas: 0
-    spriteAtlas: []
-    spriteId: 0
-    _speakerVoiceClips: []
-    material: {fileID: 0}
-    onNodeStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onNodeEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - nodeId: 7
-    speakerId: 
-    initialized: 0
-    speakerIsThis: 0
-    overWriteValues: 0
-    text: but when the dust settles, only three can remain. which three?
+    text: "\u0437\u0430\u043A\u043E\u043D\u0447\u0438\u0432, \u0442\u044B \u0443\u0441\u044B\u043F\u0430\u043B
+      \u043C\u043E\u0451 \u043B\u0438\u0446\u043E \u0445\u043B\u0435\u0431\u043D\u044B\u043C\u0438
+      \u043A\u0440\u043E\u0448\u043A\u0430\u043C\u0438 \u0438 \u043E\u0431\u0440\u0435\u0437\u043A\u0430\u043C\u0438
+      \u043E\u0431\u0432\u0435\u0442\u0440\u0435\u043D\u043D\u043E\u0439 \u043A\u043E\u043B\u0431\u0430\u0441\u044B
+      \u0432\u043F\u0435\u0440\u0435\u043C\u0435\u0448\u043A\u0443 \u0441 \u0443\u043F\u0430\u043A\u043E\u0432\u043A\u0430\u043C\u0438
+      \u0439\u043E\u0433\u0443\u0440\u0442\u043E\u0432 \u0438 \u0441\u043B\u0430\u0434\u043A\u043E\u0433\u043E
+      \u0442\u0432\u043E\u0440\u043E\u0433\u0430 \u0432 \u0448\u043E\u043A\u043E\u043B\u0430\u0434\u043D\u043E\u0439
+      \u0433\u043B\u0430\u0437\u0443\u0440\u0438"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -205,12 +214,6 @@ MonoBehaviour:
   objects:
   - {fileID: 0}
   nodeSettings:
-  - speakerObjectIndex: 0
-    objectSettings:
-    - enableObject: 1
-      modelId: 0
-      enableEyes: 0
-      talk: 1
   - speakerObjectIndex: 0
     objectSettings:
     - enableObject: 1

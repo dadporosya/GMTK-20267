@@ -399,7 +399,7 @@ public class Card : MonoBehaviour
         if (!cardData) yield break;
         
         int vp = cardData.GenerateVP();
-        Vector2 desiredPitch = vp == 0 ? new Vector2(0.333f, 0.67f): new Vector2(0.9f, 1.1f);
+        Vector2 desiredPitch = vp == 0 ? new Vector2(0.333f, 0.777f): new Vector2(0.9f, 1.1f);
         
         SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
         {

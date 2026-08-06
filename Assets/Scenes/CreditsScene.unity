@@ -152,7 +152,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 66d2e61148bb8a9419aeae779f4d2a98, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 11e0c30e67a8cf84784ca9f4f1c4aec4, type: 2}
 --- !u!4 &35951960
 Transform:
   m_ObjectHideFlags: 0
@@ -194,16 +194,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182817768}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.09680122, z: 0, w: 0.99530375}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalScale: {x: 7, y: 7, z: 7}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1734929610}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 11.11, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 698, y: -263}
+  m_AnchoredPosition: {x: 506, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &182817770
@@ -304,7 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b23077ff41b944948cbf187ba9985205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BGMManagerController
-  deafultBGMusic: {fileID: 8300000, guid: b79e8ba700abe934d9fbd88d5801d9e2, type: 3}
+  deafultBGMusic: {fileID: 8300000, guid: 463a6b541f72b534ea215d44a5efe730, type: 3}
   bgTracks: []
 --- !u!4 &228680583
 Transform:
@@ -5356,30 +5356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16f0b0b6d0b7542bfbd20a3e05b04ff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Coffee.UIParticle::Coffee.UIExtensions.UIParticle
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_IsTrail: 0
-  m_IgnoreCanvasScaler: 0
-  m_AbsoluteMode: 0
-  m_Scale3D: {x: 10, y: 10, z: 10}
-  m_AnimatableProperties: []
-  m_Particles:
-  - {fileID: 446318050}
-  m_MeshSharing: 0
-  m_GroupId: 0
-  m_GroupMaxId: 0
-  m_PositionMode: 0
-  m_AutoScaling: 0
-  m_AutoScalingMode: 2
-  m_UseCustomView: 0
-  m_CustomViewSize: 10
-  m_TimeScaleMultiplier: 1
 --- !u!222 &702931091
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5711,6 +5687,8 @@ MonoBehaviour:
   defaultAudioSource: {fileID: 0}
   deafultBGMusic: {fileID: 0}
   bgTracks: []
+  current: {fileID: 0}
+  next: {fileID: 0}
 --- !u!4 &1677230005
 Transform:
   m_ObjectHideFlags: 0
@@ -6036,16 +6014,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1996480433}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.09680113, z: 0, w: 0.99530375}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1734929610}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -11.11, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -394.6, y: 16.8}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1996480435
@@ -6169,7 +6147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FadeImageController
   image: {fileID: 0}
   enableStartFadeOut: 1
-  startFadeDurationOut: 5
+  startFadeDurationOut: 7.77
 --- !u!114 &2105813606
 MonoBehaviour:
   m_ObjectHideFlags: 0

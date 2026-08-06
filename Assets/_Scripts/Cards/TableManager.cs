@@ -315,6 +315,14 @@ public class TableManager : MonoBehaviour
     /// </summary>
     public bool IsScoreCounting() => _scoreTween.isAlive;
 
+    /// <summary>
+    /// True once <see cref="OnScoreReached"/> has fired for the current round, i.e. the win flow
+    /// owns the round. Stays true until the score leaves the goal state or
+    /// <see cref="ResetScoreForRound"/> re-arms it. Lets the loss check tell "the goal was hit and
+    /// the win is already running" apart from "the score simply isn't there yet".
+    /// </summary>
+    public bool ScoreReachedFired => _scoreReached;
+
     // Fires OnScoreReached once when the goal condition becomes true, and re-arms
     // if the score later leaves that state.
     private void CheckScoreReached()

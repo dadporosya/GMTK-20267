@@ -20,7 +20,7 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: <anim:wave>LUST...<anim:none>
+    text: "<anim:wave>\u043F\u043E\u0445\u043E\u0442\u044C...<anim:none>"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -42,8 +42,11 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: across the fallen leaves of the autumn park, you followed the echo of her
-      voice without ever knowing her name.
+    text: "\u043F\u043E \u043B\u0438\u0441\u0442\u044C\u044F\u043C \u043E\u0441\u0435\u043D\u043D\u0435\u0433\u043E
+      \u043F\u0430\u0440\u043A\u0430 \u0442\u044B \u0448\u0430\u0433\u0430\u043B
+      \u043F\u043E \u044D\u0445\u043E \u0435\u0451 \u0433\u043E\u043B\u043E\u0441\u0430,
+      \u0434\u0430\u0436\u0435 \u043D\u0435 \u0437\u043D\u0430\u044F, \u043A\u0430\u043A
+      \u0435\u0451 \u0437\u043E\u0432\u0443\u0442"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -65,8 +68,11 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: silken hair and the graceful curve of her body drew your mortal flesh toward
-      hers.
+    text: "\u0448\u0435\u043B\u043A\u043E\u0432\u0438\u0441\u0442\u044B\u0435 \u0432\u043E\u043B\u043E\u0441\u044B
+      \u0438 \u043A\u0440\u0430\u0441\u0438\u0432\u044B\u0435 \u0444\u043E\u0440\u043C\u044B
+      \u0437\u0430\u0432\u043B\u0435\u043A\u043B\u0438 \u0442\u0432\u043E\u0451 \u0431\u0440\u0435\u043D\u043D\u043E\u0435
+      \u0442\u0435\u043B\u043E \u043A \u0435\u0451 \u0431\u0440\u0435\u043D\u043D\u043E\u043C\u0443
+      \u0442\u0435\u043B\u0443"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -88,8 +94,11 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: you let every stop where the sunsets were at their most beautiful slip
-      past, unwilling to lose the rhythm of her footsteps.
+    text: "\u0442\u044B \u043F\u0440\u043E\u043F\u0443\u0441\u0442\u0438\u043B \u0432\u0441\u0435
+      \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438 \u0443 \u043A\u0440\u0430\u0441\u0438\u0432\u044B\u0445
+      \u0437\u0430\u043A\u0430\u0442\u043E\u0432, \u043B\u0438\u0448\u044C \u0431\u044B
+      \u043D\u0435 \u043F\u043E\u0442\u0435\u0440\u044F\u0442\u044C \u0440\u0438\u0442\u043C
+      \u0435\u0451 \u0448\u0430\u0433\u043E\u0432"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -111,7 +120,10 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: you kept following until she turned onto a path you had never walked before.
+    text: "\u0442\u044B \u0448\u0451\u043B \u0437\u0430 \u043D\u0435\u0439, \u043F\u043E\u043A\u0430
+      \u043E\u043D\u0430 \u043D\u0435 \u0441\u0432\u0435\u0440\u043D\u0443\u043B\u0430
+      \u043D\u0430 \u043D\u0435\u0438\u0437\u0432\u0435\u0434\u0430\u043D\u043D\u0443\u044E
+      \u0442\u043E\u0431\u043E\u044E \u0442\u0440\u043E\u043F\u0443"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -133,53 +145,13 @@ MonoBehaviour:
     initialized: 0
     speakerIsThis: 0
     overWriteValues: 0
-    text: watching her disappear with a hungry, slavering gaze, you turned your flesh,
-      and your legs, slick with clammy sweat, toward another enticing scent, in search
-      of yet another pair of eyes.
-    initFromScriptableObject: 0
-    speaker: {fileID: 0}
-    speakerGameObject: {fileID: 0}
-    speakerName: 
-    speakerPortrait: {fileID: 0}
-    useSpriteAtlas: 0
-    spriteAtlas: []
-    spriteId: 0
-    _speakerVoiceClips: []
-    material: {fileID: 0}
-    onNodeStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onNodeEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - nodeId: 6
-    speakerId: 
-    initialized: 0
-    speakerIsThis: 0
-    overWriteValues: 0
-    text: so... your memories are coming back to you now, aren't they?
-    initFromScriptableObject: 0
-    speaker: {fileID: 0}
-    speakerGameObject: {fileID: 0}
-    speakerName: 
-    speakerPortrait: {fileID: 0}
-    useSpriteAtlas: 0
-    spriteAtlas: []
-    spriteId: 0
-    _speakerVoiceClips: []
-    material: {fileID: 0}
-    onNodeStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onNodeEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - nodeId: 7
-    speakerId: 
-    initialized: 0
-    speakerIsThis: 0
-    overWriteValues: 0
-    text: choose your three. The rest are already gone.
+    text: "\u043F\u0440\u043E\u0432\u043E\u0434\u044F \u0435\u0451 \u0441\u043B\u044E\u043D\u044F\u0432\u044B\u043C
+      \u0432\u0437\u0433\u043B\u044F\u0434\u043E\u043C, \u0442\u044B \u043D\u0430\u043F\u0440\u0430\u0432\u0438\u043B
+      \u0441\u0432\u043E\u044E \u043F\u043B\u043E\u0442\u044C \u0438 \u043E\u0431\u0432\u043E\u043B\u0430\u043A\u0438\u0432\u0430\u0435\u043C\u044B\u0435
+      \u043B\u0438\u043F\u043A\u0438\u043C \u043F\u043E\u0442\u043E\u043C \u043D\u043E\u0433\u0438
+      \u043D\u0430 \u043C\u0430\u043D\u044F\u0449\u0438\u0439 \u0437\u0430\u043F\u0430\u0445
+      \u0432 \u043F\u043E\u0438\u0441\u043A\u0430\u0445 \u0435\u0449\u0451 \u043E\u0434\u043D\u0438\u0445
+      \u0433\u043B\u0430\u0437"
     initFromScriptableObject: 0
     speaker: {fileID: 0}
     speakerGameObject: {fileID: 0}
@@ -199,18 +171,6 @@ MonoBehaviour:
   objects:
   - {fileID: 0}
   nodeSettings:
-  - speakerObjectIndex: 0
-    objectSettings:
-    - enableObject: 1
-      modelId: 0
-      enableEyes: 0
-      talk: 1
-  - speakerObjectIndex: 0
-    objectSettings:
-    - enableObject: 1
-      modelId: 0
-      enableEyes: 0
-      talk: 1
   - speakerObjectIndex: 0
     objectSettings:
     - enableObject: 1

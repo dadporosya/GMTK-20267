@@ -38,6 +38,10 @@ public class CardManager : MonoBehaviour
     // True while CheckForLossCoroutine is waiting for effects/score to settle, so the deferred
     // loss check is never started twice at once. Cleared in ResetRound.
     private bool lossCheckPending = false;
+    // How many OnCardPlacedCoroutine runs are still in flight. A placement is only fully resolved
+    // once its effects AND its countdown phase are done, and both can still add score — so the
+    // out-of-cards verdict must wait for this to hit 0 (see CheckForLossCoroutine).
+    private int placementsResolving = 0;
 
     [Header("Add cards (folding extra cards in from additional piles)")]
     [Tooltip("How many cards the most-present / primary suit adds when extending the pile.")]
@@ -124,6 +128,9 @@ public class CardManager : MonoBehaviour
              "as smaller / further away (spacing is still laid out at previewDistance, so the whole " +
              "spread shrinks together). Values below 1 pull them closer.")]
     [SerializeField] private float lossDraftDistanceMultiplier = 1.5f;
+    [Tooltip("Beat given to the camera to settle in free view before the loss draft cards appear. " +
+             "The camera only turns back to the table once the player has picked.")]
+    [SerializeField] private float lossDraftCameraSettleDelay = 0.5f;
 
     [Header("Debug")]
     [Tooltip("When ON, K instantly wins the current round and J instantly loses it. Turn OFF for builds.")]
@@ -259,6 +266,7 @@ public class CardManager : MonoBehaviour
         pile = fullPile ? Instantiate(fullPile) : null;
         lost = false;
         lossCheckPending = false;
+        placementsResolving = 0;   // no turn from the previous round can still be in flight
         if (!gameStarted)
         {
             ProgressionManager.Instance.level -= 1;
@@ -311,8 +319,7 @@ public class CardManager : MonoBehaviour
         {
             R.PROJECT.Audio.Cards.TakeCard.takeCard1,
             R.PROJECT.Audio.Cards.TakeCard.takeCard2,
-            R.PROJECT.Audio.Cards.TakeCard.takeCard3,
-            // R.PROJECT.Audio.Cards.TakeCard.takeCard4,
+            R.PROJECT.Audio.Cards.TakeCard.takeCard3
         });
 
         Card card = Instantiate(cardPrefab, cardsSpawnPoint.transform.position, Quaternion.identity,cardsParent);
@@ -339,6 +346,12 @@ public class CardManager : MonoBehaviour
     /// </summary>
     public void OnCardPlaced(Card placedCard)
     {
+        // Marked BEFORE DealFullHand: with an empty pile that call reaches its trailing
+        // CheckForLoss synchronously, i.e. before OnCardPlacedCoroutine below has queued a single
+        // effect. Without this flag already set, the loss check would judge the round out-of-cards
+        // while the winning play is still unresolved and run the loss flow alongside the win.
+        placementsResolving++;
+
         DealFullHand();
         StartCoroutine(OnCardPlacedCoroutine(placedCard));
     }
@@ -398,6 +411,10 @@ public class CardManager : MonoBehaviour
 
         // --- Countdown phase. ---
         yield return ReduceCountdownsCoroutine(placedCard);
+
+        // The turn is fully resolved now — nothing else from this placement can add score, so a
+        // pending out-of-cards check is free to reach its verdict.
+        placementsResolving = Mathf.Max(0, placementsResolving - 1);
     }
 
     public void DealFullHand()
@@ -461,32 +478,48 @@ public class CardManager : MonoBehaviour
     /// land instantly: effects resolve one at a time (<see cref="EffectResolverManager"/>) and the
     /// number then counts up/down over time (<see cref="TableManager.SetScore"/>). Calling the loss
     /// flow right away would cut the win off mid-count. So this waits until:
-    ///   1. every queued effect has resolved (they can still add score), and
-    ///   2. the score has finished counting.
+    ///   1. the placement itself has finished resolving (<see cref="OnCardPlacedCoroutine"/> — its
+    ///      effect and countdown phases both still add score),
+    ///   2. every queued effect has resolved (they can still add score), and
+    ///   3. the score has finished counting.
     ///
     /// Then it asks <see cref="TableManager.IsScoreReached"/> — which reads currentScore, i.e. the
     /// value the count was heading for, so it answers "is the goal reached, or would it be once the
     /// animation finishes". If it is, the win flow (OnScoreReached) owns the round and no loss
     /// cutscene is played. Otherwise the out-of-cards condition is re-checked (cards may have been
     /// drawn or played meanwhile) and only then does <see cref="OnLoss"/> run.
+    ///
+    /// The three waits are run as one re-checking loop rather than in sequence, because they feed
+    /// each other: a placement queues effects, an effect adds score, and adding score starts a new
+    /// count. Waiting on them one after another lets a later stage start after its own wait has
+    /// already been passed — which is how a winning last card used to be scored as a loss AND a win.
     /// </summary>
     private IEnumerator CheckForLossCoroutine()
     {
-        // 1. Let every queued card effect resolve — any of them may still push the score to the goal.
-        while (EffectResolverManager.Instance
-               && EffectResolverManager.Instance.cardsToResolve.Count > 0)
-            yield return null;
-
         TableManager table = TableManager.Instance;
+
+        // Wait until the turn is completely settled: no placement still resolving, no effect left
+        // in the queue, and no score count in flight. Re-checked every frame until all three hold
+        // at once, so a stage that kicks off a later stage can never sneak past.
+        while (true)
+        {
+            if (placementsResolving > 0) { yield return null; continue; }
+
+            if (EffectResolverManager.Instance
+                && EffectResolverManager.Instance.cardsToResolve.Count > 0) { yield return null; continue; }
+
+            if (table && table.IsScoreCounting()) { yield return null; continue; }
+
+            break;
+        }
+
         if (table)
         {
-            // 2. Wait out the score count-up/-down animation.
-            while (table.IsScoreCounting())
-                yield return null;
-
             // The goal was (or will be) reached: this is a win, not a loss. OnScoreReached fires from
             // the count's completion callback and drives the win flow, so just bow out here.
-            if (table.IsScoreReached())
+            // ScoreReachedFired also covers the case where the win flow has already started and the
+            // score has since been reset for the next round.
+            if (table.IsScoreReached() || table.ScoreReachedFired)
             {
                 h.Out("CardManager: out of cards, but the score goal is reached — no loss.");
                 lossCheckPending = false;
@@ -520,6 +553,9 @@ public class CardManager : MonoBehaviour
     /// <see cref="lossDialogues"/> (same StartDialogue / onDialogueEnd pattern as
     /// <see cref="SinCutsceneBase.DialogueStart"/>), waits for it to close, then restarts the SAME
     /// level via <see cref="ResetRound"/>. Card dragging is locked out while the dialogue plays.
+    ///
+    /// Camera: the consolation draft is shown in free view, and the camera is only turned back to
+    /// the table once the player has actually picked their cards.
     /// </summary>
     private IEnumerator OnLoss()
     {
@@ -545,9 +581,21 @@ public class CardManager : MonoBehaviour
             List<CardDataBase> candidates = CollectRandomCards(lossDraftCandidateCount);
             if (candidates.Count > 0)
             {
+                // Pull back to free view so the draft cards are read on a clear screen rather than
+                // over the table, and give the camera a beat to settle before they appear.
+                if (TableTopCameraController.Instance)
+                    TableTopCameraController.Instance.SwitchToFree();
+                if (lossDraftCameraSettleDelay > 0f)
+                    yield return new WaitForSeconds(lossDraftCameraSettleDelay);
+
                 if (lossDraftDialogue) yield return PlayDialogueAndWait(lossDraftDialogue);
                 yield return DraftCardsCoroutine(candidates, lossDraftPickCount,
                                                  lossDraftDistanceMultiplier);
+
+                // Cards are chosen and folded in — only now turn back down to the table for the
+                // retried round.
+                if (TableTopCameraController.Instance)
+                    TableTopCameraController.Instance.SwitchToHandView();
             }
         }
 
@@ -618,6 +666,7 @@ public class CardManager : MonoBehaviour
         pile = fullPile ? Instantiate(fullPile) : null;
         lost = false;
         lossCheckPending = false;
+        placementsResolving = 0;   // no turn from the previous round can still be in flight
         if (!gameStarted)
         {
             ProgressionManager.Instance.level -= 1;

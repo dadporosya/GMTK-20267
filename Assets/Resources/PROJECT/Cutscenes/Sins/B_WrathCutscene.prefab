@@ -72,7 +72,7 @@ MonoBehaviour:
   eyeLightenAmount: 0
   eyeColorIntensity: 3
   eyeTag: AngelEye
-  soundtrack: {fileID: 8300000, guid: 9cfaa01ed1b5c2c4c98538356c423fe4, type: 3}
+  soundtrack: {fileID: 8300000, guid: bf5596e8da85cb049be90faa1e94a2a4, type: 3}
   ostFadeIn: 2.67
   continuePlayingOst: 0
   sinDialogue: {fileID: 11400000, guid: 302be0e52d9e6844c914a66335102821, type: 2}

@@ -189,6 +189,6 @@ MonoBehaviour:
   delayBeforeBlackScreen: 0
   blackScreenDuration: 5
   creditsSceneName: CreditsScene
-  ost: {fileID: 8300000, guid: 2e066b9a00386c84f98f02fcbb1d1e1e, type: 3}
-  taxometerEndingSound: {fileID: 8300000, guid: 40831d9cd79fa9343937820683969209, type: 3}
+  ost: {fileID: 8300000, guid: 1b8ae17ba7bdd0b4d8fe9f1c687dbcff, type: 3}
+  taxometerEndingSound: {fileID: 8300000, guid: 46ebbef113feca544a07b59ce739a965, type: 3}
   taxometerEndingAS: {fileID: 2487634628705089616}

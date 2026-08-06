@@ -437,10 +437,7 @@ public class DialogueManager : MonoBehaviour
             //     SFXManager.Instance.PlayClip(clip, volumeIn:1);
             // }
             
-            if (i%2==1)SFXManager.Instance.PlayClipIndependently(
-                R.PROJECT.Audio.Voices.voiceLPF5000,
-                volumeIn:0.67f,
-                randomPitchRange:new Vector2(1.5f, 1.7f));
+
             
             if (alphaIndex == filteredText.Length)
             {

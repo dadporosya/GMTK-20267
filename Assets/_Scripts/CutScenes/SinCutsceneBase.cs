@@ -22,7 +22,7 @@ public class SinCutsceneBase : CutSceneBase
              "The first time a sin comes up in a run it always plays its normal dialogue, even if " +
              "earlier runs already showed it. Leave empty to always use the normal dialogue.")]
     [SerializeField] private List<DialogueContainer> placeholderDialogues;
-    
+
     [Header("After Win")]
     [SerializeField] private float delayAfterWin = 2f;
     [Tooltip("Delay between each card starting to burn, so the table and hand clear in a cascade " +
@@ -44,7 +44,7 @@ public class SinCutsceneBase : CutSceneBase
     [Tooltip("Light whose color is faded to lightColor. Falls back to RenderSettings.sun, then the " +
              "first Light in the scene, if left empty.")]
     [SerializeField] private Light environmentLight;
-    [SerializeField] private Color lightColor=Color.white;
+    [SerializeField] private Color lightColor = Color.white;
     [SerializeField] private float colorFadeDuration = 3f;
     [SerializeField] private float delayAfterColorChange = 1f;
     [Tooltip("If on, lightColor is overwritten with this sin's color (CP.SuitColor) before the fade, " +
@@ -82,7 +82,10 @@ public class SinCutsceneBase : CutSceneBase
     private Color angelFeelOriginalColor;
     private bool angelFeelColorCaptured = false;
 
+    // The BGM that was playing when the cutscene started, captured in OnWin right before the fade-out
+    // (after the fade the source is cleared, so it has to be read first), plus how far into it we were.
     private AudioClip bgmBeforeCutscene;
+    private float bgmBeforeCutsceneTime;
 
     // One entry per recolored eye renderer, holding what CutsceneEnd needs to put it back.
     private class EyeTintState
@@ -95,9 +98,19 @@ public class SinCutsceneBase : CutSceneBase
 
     [SerializeField] private AudioClip soundtrack;
     [SerializeField] private float ostFadeIn = 2.67f;
-    [Tooltip("If off, when the cutscene ends the sin's soundtrack is replaced by a random track from " +
-             "BGMManager.bgTracks. If on, the soundtrack is left playing as-is after the cutscene.")]
+    [Tooltip("If off, when the cutscene ends the sin's soundtrack is faded out and replaced. If on, the " +
+             "soundtrack is left playing as-is after the cutscene and the two settings below do nothing.")]
     [SerializeField] private bool continuePlayingOst = false;
+    [Tooltip("If on, when the sin's soundtrack fades away at the end of the cutscene it is replaced by " +
+             "the track that BGMManager was playing before the cutscene started. If off, a random " +
+             "track from BGMManager.bgTracks is used instead.")]
+    [SerializeField] private bool playPreviousTrackAfterCutscene = true;
+    [Tooltip("Only used when 'Play Previous Track After Cutscene' is on. If on, the previous track " +
+             "resumes from the position it was interrupted at; if off, it restarts from the beginning.")]
+    [SerializeField] private bool continueFromSavedPosition = true;
+    [Tooltip("Crossfade duration used when the previous track (or the random replacement) is brought " +
+             "back in at the end of the cutscene.")]
+    [SerializeField] private float afterCutsceneFadeIn = 1.5f;
 
     [Header("Dialogue")]
     [SerializeField] private DialogueContainer sinDialogue;
@@ -131,12 +144,12 @@ public class SinCutsceneBase : CutSceneBase
     /// -> after dialogue gp starts again
     /// </summary>
     /// <returns></returns>
-    
+
     public virtual IEnumerator DefaultStep()
     {
         yield return null;
-        
-        
+
+
         yield return OnWin();
         // yield return TurnCameraToWindow();
         StartCoroutine(ChangeEnvironment());
@@ -145,11 +158,11 @@ public class SinCutsceneBase : CutSceneBase
 
         yield return null;
     }
-    
-    
+
+
     public virtual IEnumerator OnWin()
     {
-        
+
         // Burn every card on the table and in hand.
 
         // Lock out card interaction for the whole cutscene — re-enabled in CutsceneEnd.
@@ -160,6 +173,10 @@ public class SinCutsceneBase : CutSceneBase
 
         // With the table cleared, turn to it and let this sin's tracker react before moving on.
         yield return ShowSuitTracker();
+
+        // Remember what was playing (and where) BEFORE fading out — FadeOutMusic clears the source's
+        // clip, so this has to be read first if CutsceneEnd is to restore the track afterwards.
+        RememberCurrentBgm();
 
         // Fade the current background music out to silence so the win lands in quiet before the
         // sin's soundtrack comes in during DialogueStart.
@@ -190,12 +207,12 @@ public class SinCutsceneBase : CutSceneBase
             // to GamePlusManager.achivedCardColor (alongside this animation) and the sin is
             // written to the save file. On a repeat, only the animation plays.
             tracker.PlayCountChangeAnimation(true);
-            SFXManager.Instance.PlayRandomClip( new List<AudioClip>()
+            SFXManager.Instance.PlayRandomClip(new List<AudioClip>()
             {
-                R.PROJECT.Audio.Cards.Activate.activateFaded1   
+                R.PROJECT.Audio.Cards.Activate.activateFaded1
             },
-                randomPitchRange: new Vector2(-3,-2)
-                
+                randomPitchRange: new Vector2(-3, -2)
+
                 );
         }
         else
@@ -259,8 +276,8 @@ public class SinCutsceneBase : CutSceneBase
         if (!TableTopCameraController.Instance) yield break;
         TableTopCameraController.Instance.SwitchToWindowView();
         yield return new WaitForSeconds(2f);
-        
-        yield return null;    
+
+        yield return null;
     }
 
     /// <summary>
@@ -285,7 +302,7 @@ public class SinCutsceneBase : CutSceneBase
         {
             Tween fade = Tween.Custom(target, target.color, lightColor, colorFadeDuration,
                 (Light l, Color c) => l.color = c);
-            
+
             // yield return fade.ToYieldInstruction();
         }
 
@@ -369,8 +386,7 @@ public class SinCutsceneBase : CutSceneBase
 
     /// <summary>
     /// Washes <paramref name="c"/> towards white by <see cref="eyeLightenAmount"/> and then scales the
-    /// RGB by <see cref="eyeColorIntensity"/>. Alpha is passed through untouched — the caller decides
-    /// the eye's transparency.
+    /// RGB by <see cref="eyeColorIntensity"/>. Alpha is passed through untouched — the caller decides    /// the eye's transparency.
     /// </summary>
     protected Color Lighten(Color c)
     {
@@ -412,11 +428,14 @@ public class SinCutsceneBase : CutSceneBase
 
     public virtual IEnumerator DialogueStart()
     {
+        // Tell Taximeter we're starting a cutscene - prevents it from changing music during the dialogue
+        if (Taximeter.Instance) Taximeter.Instance.OnCutsceneStart();
+
         // Bring in this sin's soundtrack (crossfades up from the silence left by OnWin's fade-out) and
         // loop it through the cutscene. What happens when the cutscene ends is decided in CutsceneEnd
-        // based on continuePlayingOst.
-        bgmBeforeCutscene = BGMManager.Instance.current.clip;
-        if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusic(soundtrack, fadeTime:ostFadeIn);
+        // based on continuePlayingOst / playPreviousTrackAfterCutscene. The pre-cutscene track was
+        // already captured in OnWin, before the fade-out wiped it.
+        if (soundtrack && BGMManager.Instance) BGMManager.Instance.PlayMusic(soundtrack, fadeTime: ostFadeIn);
 
         // The placeholder is for repeats *within the same run* only: the first time a sin comes up in
         // a run it always gets its normal dialogue, no matter how many earlier runs already showed it.
@@ -435,12 +454,52 @@ public class SinCutsceneBase : CutSceneBase
             StartCoroutine(CutsceneEnd());
             DialogueManager.Instance.onDialogueEnd.RemoveListener(OnDialogueEnd);
         }
-        
+
         DialogueManager.Instance.onDialogueEnd.AddListener(OnDialogueEnd);
         DialogueManager.Instance.StartDialogue(desiredDialogue);
-        
+
         yield return null;
         // 
+    }
+
+    /// <summary>
+    /// Snapshots the clip BGMManager is currently playing and how far into it playback is, so
+    /// <see cref="RestoreMusic"/> can bring that same track back when the cutscene ends. Must be
+    /// called before <see cref="BGMManager.FadeOutMusic"/>, which clears the source's clip.
+    /// </summary>
+    protected virtual void RememberCurrentBgm()
+    {
+        bgmBeforeCutscene = null;
+        bgmBeforeCutsceneTime = 0f;
+
+        if (!BGMManager.Instance || !BGMManager.Instance.current) return;
+
+        bgmBeforeCutscene = BGMManager.Instance.current.clip;
+        bgmBeforeCutsceneTime = BGMManager.Instance.current.time;
+    }
+
+    /// <summary>
+    /// Decides what plays once the sin's soundtrack fades away at the end of the cutscene:
+    /// nothing (the sin OST keeps playing) when <see cref="continuePlayingOst"/> is on, otherwise the
+    /// pre-cutscene track when <see cref="playPreviousTrackAfterCutscene"/> is on — resumed from the
+    /// remembered position if <see cref="continueFromSavedPosition"/> is on, from the start if not —
+    /// and a random background track as the fallback.
+    /// </summary>
+    protected virtual void RestoreMusic()
+    {
+        if (continuePlayingOst || !BGMManager.Instance) return;
+
+        if (playPreviousTrackAfterCutscene && bgmBeforeCutscene)
+        {
+            float startTime = continueFromSavedPosition ? bgmBeforeCutsceneTime : 0f;
+            BGMManager.Instance.PlayMusic(bgmBeforeCutscene, afterCutsceneFadeIn, startTime);
+            return;
+        }
+
+        if (playPreviousTrackAfterCutscene)
+            h.Out("SinCutsceneBase: no pre-cutscene track was captured — falling back to a random bg track.");
+
+        BGMManager.Instance.PlayRandomBgTrack(afterCutsceneFadeIn);
     }
 
     public virtual IEnumerator CutsceneEnd()
@@ -472,7 +531,6 @@ public class SinCutsceneBase : CutSceneBase
         // Fold the sin-based extra cards into the pile and show them full-screen; this waits for the
         // player to dismiss the preview and for the cards to burn away before the round begins.
         yield return CardManager.Instance.ExtendPileAccordingToSins(true);
-        
 
         TableTopCameraController.Instance.SwitchToHandView();
         CardManager.Instance.RoundStart();
@@ -480,11 +538,27 @@ public class SinCutsceneBase : CutSceneBase
         // Hand card interaction back to the player now the cutscene is over.
         if (CardDragController.Instance) CardDragController.Instance.SetDraggingEnabled(true);
 
-        // Unless the sin's soundtrack is meant to keep playing, hand the music back to a random
-        // background track from BGMManager now the cutscene has ended.
-        if (Taximeter.Instance.sequenceOst) BGMManager.Instance.PlayMusic(bgmBeforeCutscene);
-        else if (!continuePlayingOst && BGMManager.Instance) BGMManager.Instance.PlayRandomBgTrack();
-        
+        // Tell Taximeter the cutscene is over - it will play the correct OST based on current distance
+        // ONLY if the sin's soundtrack isn't set to continue playing
+        if (Taximeter.Instance)
+        {
+            if (continuePlayingOst)
+            {
+                // Sin OST keeps playing - just tell Taximeter to resume tracking (but don't change music)
+                Taximeter.Instance.OnCutsceneEnd_KeepCurrentMusic();
+            }
+            else
+            {
+                // Let Taximeter play whatever should be at this distance
+                Taximeter.Instance.OnCutsceneEnd();
+            }
+        }
+
+        // Only restore pre-cutscene music if we're not continuing the sin OST AND Taximeter has no OST sequence
+        if (!continuePlayingOst && (!Taximeter.Instance || !Taximeter.Instance.sequenceOst))
+        {
+            RestoreMusic();
+        }
 
         yield return null;
 

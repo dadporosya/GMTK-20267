@@ -74,11 +74,16 @@ public class BGMManager : AudioManagerBase
             yield return null;
     }
 
-    public void PlayMusic(AudioClip newClip, float fadeTime = 1.5f)
+    /// <summary>
+    /// Crossfades <paramref name="newClip"/> in over <paramref name="fadeTime"/> seconds.
+    /// <paramref name="startTime"/> is the playback position (in seconds) the clip starts from, so a
+    /// caller that remembered where a track was interrupted can resume it instead of restarting it.
+    /// </summary>
+    public void PlayMusic(AudioClip newClip, float fadeTime = 1.5f, float startTime = 0f)
     {
         if (current.clip == newClip) return;
         StopAllCoroutines();
-        StartCoroutine(CrossFade(newClip, fadeTime));
+        StartCoroutine(CrossFade(newClip, fadeTime, startTime: startTime));
     }
 
     /// <summary>
@@ -161,7 +166,8 @@ public class BGMManager : AudioManagerBase
         current.volume = 1f;
     }
     
-    private IEnumerator CrossFade(AudioClip newClip, float fadeTime, bool changeSource=true, bool loop=true)
+    private IEnumerator CrossFade(AudioClip newClip, float fadeTime, bool changeSource=true, bool loop=true,
+        float startTime=0f)
     {
         // Make sure the clip is fully resident before Play(), otherwise Unity decompresses it
         // synchronously on the main thread and the game hitches.
@@ -170,6 +176,14 @@ public class BGMManager : AudioManagerBase
         next.clip = newClip;
         next.volume = 0f;
         next.loop = loop;
+
+        // Resume from a remembered position when asked. Clamped just short of the clip's end so a
+        // stale/overlong offset can't start the source at (or past) EOF and stop immediately.
+        if (startTime > 0f && newClip)
+            next.time = Mathf.Clamp(startTime, 0f, Mathf.Max(0f, newClip.length - 0.05f));
+        else
+            next.time = 0f;
+
         next.Play();
 
         // Give the streamer a frame to fill its buffer before the fade starts.
