@@ -56,7 +56,31 @@ public class EngingCutscene : CutSceneBase
     [Header("hoarime edited this shittt")]
     [SerializeField] AudioClip taxometerEndingSound;
     [SerializeField] AudioSource taxometerEndingAS;
+    
+    
+    [Tooltip("If on, the object(s) tagged with eyeTag have their SpriteRenderer color set to the " +
+             "sin's color during the cutscene, then restored on cutscene end.")]
+    [SerializeField] private bool lightenEye = true;
+    [Tooltip("If on, the eye is colored with this sin's color (CP.SuitColor). If off, eyeColor is used.")]
+    [SerializeField] private bool eyeUseSinColor = true;
+    [Tooltip("Color the eye's SpriteRenderer is set to when eyeUseSinColor is off.")]
+    [SerializeField] private Color eyeColor = Color.white;
+    [Tooltip("How much the eye's target color is washed out towards white. 0 = the raw sin/eye color, " +
+             "1 = pure white. Use this to make the eye read brighter without changing the sin's palette.")]
+    [Range(0f, 1f)]
+    [SerializeField] private float eyeLightenAmount = 0f;
+    [Tooltip("Multiplies the eye's target RGB after lightening. 1 = unchanged, >1 pushes the color " +
+             "into HDR territory so it can bloom. Alpha is never touched.")]
+    [SerializeField] private float eyeColorIntensity = 1f;
+    [Tooltip("Tag used to find the eye object(s).")]
+    [SerializeField] private string eyeTag = "AngelEye";
+    private class EyeTintState
+    {
+        public SpriteRenderer renderer;
+        public Color originalColor;
+    }
 
+    private readonly List<EyeTintState> eyeStates = new List<EyeTintState>();
     public override void Init()
     {
         base.Init();
@@ -89,6 +113,7 @@ public class EngingCutscene : CutSceneBase
 
     public virtual IEnumerator DefaultStep()
     {
+        ChangeEyeColor(Color.white);
         yield return null;
         BGMManager.Instance.FadeOutMusic(1f);
         TableTopCameraController.Instance.ChangeMainState(TableTopCameraController.State.TaxometerView);
@@ -175,5 +200,60 @@ public class EngingCutscene : CutSceneBase
         return secretEndingDialogue;
     }
 
+    /// <summary>
+/// Находит все объекты с тегом <see cref="eyeTag"/> ("AngelEye") и плавно перекрашивает их
+/// SpriteRenderer.color в цвет текущего sin'а (или в eyeColor, если eyeUseSinColor выключен),
+/// с учётом осветления (eyeLightenAmount) и интенсивности (eyeColorIntensity).
+/// Исходные цвета сохраняются в eyeStates, чтобы позже их можно было восстановить.
+/// </summary>
+private void ChangeEyeColor(Color colorIn)
+{
+    eyeStates.Clear();
 
+    if (string.IsNullOrEmpty(eyeTag))
+    {
+        h.Out("SinCutsceneBase: eyeTag is empty — eye color skipped.");
+        return;
+    }
+
+    // --- Определяем целевой цвет (аналог Lighten) ---
+    Color baseColor = colorIn;
+    Color target = Color.Lerp(baseColor, Color.white, Mathf.Clamp01(eyeLightenAmount));
+
+    float intensity = Mathf.Max(0f, eyeColorIntensity);
+    target.r *= intensity;
+    target.g *= intensity;
+    target.b *= intensity;
+    target.a = baseColor.a;
+
+    // --- Находим все рендереры глаза (аналог ResolveEyeRenderers) ---
+    List<SpriteRenderer> eyeRenderers = new List<SpriteRenderer>();
+    foreach (GameObject go in GameObject.FindGameObjectsWithTag(eyeTag))
+    {
+        if (!go) continue;
+        foreach (SpriteRenderer sr in go.GetComponentsInChildren<SpriteRenderer>(true))
+            if (sr && !eyeRenderers.Contains(sr)) eyeRenderers.Add(sr);
+    }
+
+    if (eyeRenderers.Count == 0)
+    {
+        h.Out($"SinCutsceneBase: no object tagged '{eyeTag}' with a SpriteRenderer found — eye color skipped.");
+        return;
+    }
+
+    // --- Перекрашиваем каждый найденный рендерер, запоминая исходный цвет ---
+    foreach (SpriteRenderer sr in eyeRenderers)
+    {
+        if (!sr) continue;
+
+        eyeStates.Add(new EyeTintState { renderer = sr, originalColor = sr.color });
+
+        // Alpha оставляем как было у рендерера — меняем только RGB.
+        Color finalTarget = target;
+        finalTarget.a = sr.color.a;
+
+        Tween.Custom(sr, sr.color, finalTarget, 1,
+            (SpriteRenderer r, Color c) => { if (r) r.color = c; });
+    }
+}
 }
